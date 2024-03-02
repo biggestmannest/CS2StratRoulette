@@ -1,0 +1,10 @@
+<Project>
+
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageVersion Include="CounterStrikeSharp.API" Version="1.0.179"/>
+    </ItemGroup>
+</Project>
