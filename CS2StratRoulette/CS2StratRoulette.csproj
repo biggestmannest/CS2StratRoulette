@@ -8,5 +8,6 @@
 
     <ItemGroup>
         <PackageReference Include="CounterStrikeSharp.API"/>
+        <PackageReference Include="JetBrains.Annotations"/>
     </ItemGroup>
 </Project>

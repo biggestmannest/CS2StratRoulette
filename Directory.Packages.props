@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageVersion Include="CounterStrikeSharp.API" Version="1.0.179"/>
+        <PackageVersion Include="CounterStrikeSharp.API" Version="1.0.188"/>
+        <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0"/>
     </ItemGroup>
 </Project>
