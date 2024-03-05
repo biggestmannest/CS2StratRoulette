@@ -141,13 +141,11 @@ namespace CS2StratRoulette
 		/// </example>
 		public bool TryInvokeStrategy(System.Type type, [NotNullWhen(true)] out IStrategy? strategy)
 		{
-			var plugin = this;
-
 			strategy = null;
 
 			try
 			{
-				var @object = System.Activator.CreateInstance(type, new object?[] { plugin });
+				var @object = System.Activator.CreateInstance(type);
 
 				if (@object is IStrategy strat2)
 				{
