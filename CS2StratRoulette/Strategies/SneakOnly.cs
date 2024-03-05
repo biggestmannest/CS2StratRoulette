@@ -4,30 +4,62 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class SneakOnly : Strategy
+	public class SneakOnly : IStrategy
 	{
-		/// <inheritdoc cref="Strategy.Name"/>
-		public override string Name => "Sneak Only";
+		/// <inheritdoc cref="IStrategy.Name"/>
+		public string Name => "Sneak Only";
 
-		/// <inheritdoc cref="Strategy.Description"/>
-		public override string Description => "You're not allowed to run. Any footstep noises will kill you.";
+		/// <inheritdoc cref="IStrategy.Description"/>
+		public string Description => "You're not allowed to run. Any footstep noises will kill you.";
 
-		/// <summary>
-		/// Register required event listeners in order to enforce the strategy
-		/// TODO: dispose of the event listeners!
-		/// </summary>
-		/// <param name="plugin">Reference to <see cref="CS2StratRoulettePlugin"/></param>
-		public SneakOnly(ref CS2StratRoulettePlugin plugin) : base(ref plugin)
+		/// <inheritdoc cref="IStrategy.Running"/>
+		public bool Running { get; private set; }
+
+		/// <inheritdoc cref="IStrategy.Start"/>
+		public bool Start(ref CS2StratRoulettePlugin plugin)
 		{
-			plugin.RegisterEventHandler<EventPlayerSound>((@event, _) =>
+			if (this.Running)
 			{
-				if (@event.Userid.IsValid && @event.Step)
-				{
-					@event.Userid.CommitSuicide(false, true);
-				}
+				return false;
+			}
 
+			plugin.RegisterEventHandler<EventPlayerSound>(this.OnPlayerSound);
+
+			this.Running = true;
+
+			return true;
+		}
+
+		/// <inheritdoc cref="IStrategy.Stop"/>
+		public bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!this.Running)
+			{
+				return false;
+			}
+
+			this.Running = false;
+
+			const string playerSound = "player_sound";
+
+			plugin.DeregisterEventHandler(playerSound, this.OnPlayerSound, true);
+
+			return true;
+		}
+
+		private HookResult OnPlayerSound(EventPlayerSound @event, GameEventInfo _)
+		{
+			if (!this.Running)
+			{
 				return HookResult.Continue;
-			});
+			}
+
+			if (@event.Userid.IsValid && @event.Step)
+			{
+				@event.Userid.CommitSuicide(false, true);
+			}
+
+			return HookResult.Continue;
 		}
 	}
 }

@@ -17,28 +17,117 @@ namespace CS2StratRoulette
 		public override string ModuleAuthor => "the guys";
 
 		public required List<System.Type> Strategies = new();
-		public required Strategy? ActiveStrategy;
+		public required IStrategy? ActiveStrategy;
 
 		/// <summary>
 		/// Main entry point of plugin
-		/// Get all classes of type <see cref="Strategy"/> and store for later use
+		/// Get all classes of type <see cref="IStrategy"/> and store for later use
 		/// </summary>
 		/// <param name="hotReload"></param>
 		public override void Load(bool hotReload)
 		{
-			foreach (var strat in typeof(Strategy).Assembly.GetTypes())
+			this.Strategies.Clear();
+
+			if (this.ActiveStrategy is not null)
 			{
-				if (strat.IsClass && !strat.IsAbstract && strat.IsSubclassOf(typeof(Strategy)))
+				var plugin = this;
+
+				this.ActiveStrategy.Stop(ref plugin);
+
+				this.ActiveStrategy = null;
+			}
+
+			foreach (var strat in typeof(IStrategy).Assembly.GetTypes())
+			{
+				if (strat.IsClass && !strat.IsAbstract && strat.IsSubclassOf(typeof(IStrategy)))
 				{
 					this.Strategies.Add(strat);
 				}
 			}
 		}
 
+		public void CycleStrategy()
+		{
+			var idx = System.Random.Shared.Next(0, this.Strategies.Count);
+
+			this.StopActiveStrategy();
+
+			// Try to invoke a random chosen strategy
+			if (!this.TryInvokeStrategy(this.Strategies[idx], out var strategy))
+			{
+				// If it fails don't use a strategy for this round and pretend as if nothing happened :)
+				this.ActiveStrategy = null;
+
+				System.Console.WriteLine("[CycleStrategy]: failed invoking strategy");
+
+				return;
+			}
+
+			this.ActiveStrategy = strategy;
+
+			if (!this.StartActiveStrategy())
+			{
+				return;
+			}
+
+			this.AnnounceStrategy(this.ActiveStrategy);
+			System.Console.WriteLine("[CycleStrategy]: picked {0}", strategy.Name);
+		}
+
+		public bool StartActiveStrategy()
+		{
+			if (this.ActiveStrategy is null)
+			{
+				return false;
+			}
+
+			var plugin = this;
+			var result = this.ActiveStrategy.Start(ref plugin);
+
+			if (!result)
+			{
+				System.Console.WriteLine(
+					"[StartActiveStrategy]: failed starting {0}",
+					this.ActiveStrategy.GetType().Name
+				);
+			}
+
+			return result;
+		}
+
+		public bool StopActiveStrategy()
+		{
+			if (this.ActiveStrategy is null)
+			{
+				return true;
+			}
+
+			var plugin = this;
+			var result = this.ActiveStrategy.Stop(ref plugin);
+
+			if (!result)
+			{
+				System.Console.WriteLine(
+					"[StopActiveStrategy]: failed stopping {0}",
+					this.ActiveStrategy.GetType().Name
+				);
+			}
+
+			return result;
+		}
+
+		[GameEventHandler]
+		public HookResult OnRoundStart(EventRoundAnnounceMatchStart @event, GameEventInfo _2)
+		{
+			this.CycleStrategy();
+
+			return HookResult.Continue;
+		}
+
 		/// <summary>
-		/// Try to invoke a class of subtype <see cref="Strategy"/>
+		/// Try to invoke a class of subtype <see cref="IStrategy"/>
 		/// </summary>
-		/// <param name="type">The class inheriting from <see cref="Strategy"/></param>
+		/// <param name="type">The class inheriting from <see cref="IStrategy"/></param>
 		/// <param name="strategy">Only <see langword="null"/> if invoking failed</param>
 		/// <returns><see langword="false"/> when invoking failed and <see langword="true"/> when successful</returns>
 		/// <example>
@@ -50,7 +139,7 @@ namespace CS2StratRoulette
 		/// // invoking worked, you can use strat
 		/// </code>
 		/// </example>
-		public bool TryInvokeStrategy(System.Type type, [NotNullWhen(true)] out Strategy? strategy)
+		public bool TryInvokeStrategy(System.Type type, [NotNullWhen(true)] out IStrategy? strategy)
 		{
 			var plugin = this;
 
@@ -60,7 +149,7 @@ namespace CS2StratRoulette
 			{
 				var @object = System.Activator.CreateInstance(type, new object?[] { plugin });
 
-				if (@object is Strategy strat2)
+				if (@object is IStrategy strat2)
 				{
 					strategy = strat2;
 
@@ -77,35 +166,10 @@ namespace CS2StratRoulette
 			return false;
 		}
 
-		[GameEventHandler]
-		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
-		{
-			var idx = System.Random.Shared.Next(0, this.Strategies.Count);
-
-			// Try to invoke a random chosen strategy
-			if (!this.TryInvokeStrategy(this.Strategies[idx], out var strategy))
-			{
-				// If it fails don't use a strategy for this round and pretend as if nothing happened :)
-				this.ActiveStrategy = null;
-
-				System.Console.WriteLine("[OnRoundStart]: failed invoking strategy");
-
-				return HookResult.Continue;
-			}
-
-			this.ActiveStrategy = strategy;
-
-			CS2StratRoulettePlugin.Announce(this.ActiveStrategy);
-
-			System.Console.WriteLine("[OnRoundStart]: picked {0}", strategy.Name);
-
-			return HookResult.Continue;
-		}
-
 		/// <summary>
 		/// Announces a strategy in global chat
 		/// </summary>
-		private static void Announce(Strategy strategy)
+		private void AnnounceStrategy(IStrategy strategy)
 		{
 			CounterStrikeSharp.API.Server.PrintToChatAll(
 				$"{ChatColors.Red}[StratRoulette]:{ChatColors.Default} the chosen strategy for this round will be {ChatColors.Blue}{strategy.Name}"
