@@ -26,10 +26,6 @@ namespace CS2StratRoulette
 		/// <param name="hotReload"></param>
 		public override void Load(bool hotReload)
 		{
-			this.Strategies.Clear();
-
-			this.StopActiveStrategy();
-
 			var types = typeof(IStrategy).Assembly.GetTypes();
 
 			foreach (var type in types)
@@ -48,10 +44,20 @@ namespace CS2StratRoulette
 			}
 		}
 
-		[GameEventHandler]
-		public HookResult OnRoundAnnounceStart(EventRoundStart _, GameEventInfo _2)
+		/// <summary>
+		/// Get all classes of type <see cref="IStrategy"/> and store for later use
+		/// </summary>
+		/// <param name="hotReload"></param>
+		public override void Unload(bool hotReload)
 		{
-			System.Console.WriteLine($"Round objective: {_.Objective}");
+			this.Strategies.Clear();
+
+			this.StopActiveStrategy();
+		}
+
+		[GameEventHandler]
+		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
+		{
 			this.CycleStrategy();
 
 			return HookResult.Continue;
