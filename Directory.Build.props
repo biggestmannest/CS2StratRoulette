@@ -1,0 +1,57 @@
+<Project>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<Features>strict</Features>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<NoWarn>$(NoWarn);MA0016;RCS1032;MA0003;RCS1001;RCS1196</NoWarn>
+		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+		<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+		<InvariantGlobalization>true</InvariantGlobalization>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<UseSystemResourceKeys>true</UseSystemResourceKeys>
+		<MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+		<DebuggerSupport>false</DebuggerSupport>
+	</PropertyGroup>
+
+	<ItemGroup Condition=" '$(Configuration)' != 'Release' ">
+		<PackageReference Include="AsyncFixer">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Asyncify">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="ErrorProne.NET.CoreAnalyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="ErrorProne.NET.Structs">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Meziantou.Analyzer">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Roslynator.Analyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="JetBrains.Annotations"/>
+	</ItemGroup>
+</Project>
