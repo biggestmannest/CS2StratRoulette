@@ -87,8 +87,6 @@ namespace CS2StratRoulette
 
 			var idx = System.Random.Shared.Next(0, this.Strategies.Count);
 
-			System.Console.WriteLine("{0}/{1}", idx, this.Strategies.Count);
-
 			// Try to invoke a random chosen strategy
 			if (!this.TryInvokeStrategy(this.Strategies[idx], out var strategy))
 			{
