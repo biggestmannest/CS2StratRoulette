@@ -108,6 +108,8 @@ namespace CS2StratRoulette
 		{
 			if (this.ActiveStrategy is null)
 			{
+				System.Console.WriteLine("[StartActiveStrategy]: ActiveStrategy is null");
+
 				return false;
 			}
 
