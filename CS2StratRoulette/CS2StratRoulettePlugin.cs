@@ -26,10 +26,6 @@ namespace CS2StratRoulette
 		/// <param name="hotReload"></param>
 		public override void Load(bool hotReload)
 		{
-			this.Strategies.Clear();
-
-			this.StopActiveStrategy();
-
 			var types = typeof(IStrategy).Assembly.GetTypes();
 
 			foreach (var type in types)
@@ -46,6 +42,17 @@ namespace CS2StratRoulette
 
 				this.Strategies.Add(type);
 			}
+		}
+
+		/// <summary>
+		/// Get all classes of type <see cref="IStrategy"/> and store for later use
+		/// </summary>
+		/// <param name="hotReload"></param>
+		public override void Unload(bool hotReload)
+		{
+			this.Strategies.Clear();
+
+			this.StopActiveStrategy();
 		}
 
 		[GameEventHandler]
