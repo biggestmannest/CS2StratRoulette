@@ -10,7 +10,7 @@ namespace CS2StratRoulette
 {
 	[UsedImplicitly(ImplicitUseTargetFlags.Members)]
 	// ReSharper disable once InconsistentNaming
-	public sealed class CS2StratRoulette : BasePlugin
+	public sealed class CS2StratRoulettePlugin : BasePlugin
 	{
 		public override string ModuleName => "CS2StratRoulette";
 		public override string ModuleVersion => "0.0.1";
@@ -78,7 +78,7 @@ namespace CS2StratRoulette
 		}
 
 		[GameEventHandler]
-		public HookResult OnRoundStart(EventRoundStart @event, GameEventInfo info)
+		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
 		{
 			var idx = System.Random.Shared.Next(0, this.Strategies.Count);
 
@@ -95,7 +95,7 @@ namespace CS2StratRoulette
 
 			this.ActiveStrategy = strategy;
 
-			CS2StratRoulette.Announce(this.ActiveStrategy);
+			CS2StratRoulettePlugin.Announce(this.ActiveStrategy);
 
 			System.Console.WriteLine("[OnRoundStart]: picked {0}", strategy.Name);
 

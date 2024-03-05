@@ -16,8 +16,8 @@ namespace CS2StratRoulette.Strategies
 		/// Register required event listeners in order to enforce the strategy
 		/// TODO: dispose of the event listeners!
 		/// </summary>
-		/// <param name="plugin">Reference to <see cref="CS2StratRoulette"/></param>
-		public SneakOnly(ref CS2StratRoulette plugin) : base(ref plugin)
+		/// <param name="plugin">Reference to <see cref="CS2StratRoulettePlugin"/></param>
+		public SneakOnly(ref CS2StratRoulettePlugin plugin) : base(ref plugin)
 		{
 			plugin.RegisterEventHandler<EventPlayerSound>((@event, _) =>
 			{

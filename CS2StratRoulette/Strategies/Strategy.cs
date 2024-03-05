@@ -1,5 +1,3 @@
-using CounterStrikeSharp.API.Modules.Utils;
-
 namespace CS2StratRoulette.Strategies
 {
 	// TODO: Add a state to discern whether the strategy should be enforced
@@ -15,8 +13,8 @@ namespace CS2StratRoulette.Strategies
 		/// </summary>
 		public abstract string Description { get; }
 
-		/// <param name="plugin">Reference to <see cref="CS2StratRoulette"/></param>
-		protected Strategy(ref CS2StratRoulette plugin)
+		/// <param name="plugin">Reference to <see cref="CS2StratRoulettePlugin"/></param>
+		protected Strategy(ref CS2StratRoulettePlugin plugin)
 		{
 			System.Console.WriteLine("[Strategy]: {0} initializing...", this.GetType().Name);
 		}
