@@ -28,29 +28,59 @@ namespace CS2StratRoulette
 		{
 			this.Strategies.Clear();
 
-			if (this.ActiveStrategy is not null)
+			this.StopActiveStrategy();
+
+			var types = typeof(IStrategy).Assembly.GetTypes();
+
+			foreach (var type in types)
 			{
-				var plugin = this;
+				if (!type.IsClass || type.IsAbstract)
+				{
+					continue;
+				}
 
-				this.ActiveStrategy.Stop(ref plugin);
+				if (type.FindInterfaces((i, _) => i == typeof(IStrategy), null).Length == 0)
+				{
+					continue;
+				}
 
+				this.Strategies.Add(type);
+			}
+		}
+
+		[GameEventHandler]
+		public HookResult OnRoundAnnounceStart(EventRoundAnnounceMatchStart _, GameEventInfo _2)
+		{
+			this.CycleStrategy();
+
+			return HookResult.Continue;
+		}
+
+		[GameEventHandler]
+		public HookResult OnRoundEnd(EventRoundEnd _, GameEventInfo _2)
+		{
+			if (this.StopActiveStrategy())
+			{
 				this.ActiveStrategy = null;
 			}
 
-			foreach (var strat in typeof(IStrategy).Assembly.GetTypes())
-			{
-				if (strat.IsClass && !strat.IsAbstract && strat.IsSubclassOf(typeof(IStrategy)))
-				{
-					this.Strategies.Add(strat);
-				}
-			}
+			return HookResult.Continue;
 		}
 
 		public void CycleStrategy()
 		{
+			this.StopActiveStrategy();
+
+			if (this.Strategies.Count == 0)
+			{
+				System.Console.WriteLine("[CycleStrategy]: Strategies list is empty");
+
+				return;
+			}
+
 			var idx = System.Random.Shared.Next(0, this.Strategies.Count);
 
-			this.StopActiveStrategy();
+			System.Console.WriteLine("{0}/{1}", idx, this.Strategies.Count);
 
 			// Try to invoke a random chosen strategy
 			if (!this.TryInvokeStrategy(this.Strategies[idx], out var strategy))
@@ -114,14 +144,6 @@ namespace CS2StratRoulette
 			}
 
 			return result;
-		}
-
-		[GameEventHandler]
-		public HookResult OnRoundStart(EventRoundAnnounceMatchStart @event, GameEventInfo _2)
-		{
-			this.CycleStrategy();
-
-			return HookResult.Continue;
 		}
 
 		/// <summary>
