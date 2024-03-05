@@ -49,9 +49,8 @@ namespace CS2StratRoulette
 		}
 
 		[GameEventHandler]
-		public HookResult OnRoundAnnounceStart(EventRoundStart _, GameEventInfo _2)
+		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
 		{
-			System.Console.WriteLine($"Round objective: {_.Objective}");
 			this.CycleStrategy();
 
 			return HookResult.Continue;
