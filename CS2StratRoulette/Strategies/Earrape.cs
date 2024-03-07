@@ -46,6 +46,10 @@ namespace CS2StratRoulette.Strategies
             {
                 if (randomPlayer.PlayerPawn.Value?.TeamNum is 2) // 2 = T, 3 = CT
                 {
+                    /*
+                    for whatever reason, you can give ANY weapon in the game without sv_cheats being enabled
+                    except the c4...
+                    */
                     Server.ExecuteCommand("sv_cheats 1");
                     randomPlayer.GiveNamedItem("weapon_c4");
                     Server.ExecuteCommand("sv_cheats 0");
