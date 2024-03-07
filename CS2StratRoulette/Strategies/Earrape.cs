@@ -1,8 +1,5 @@
 using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Entities;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Serialization.Formatters;
 
 namespace CS2StratRoulette.Strategies
 {
