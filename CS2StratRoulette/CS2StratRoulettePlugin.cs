@@ -19,6 +19,8 @@ namespace CS2StratRoulette
 		public required List<System.Type> Strategies = new();
 		public required IStrategy? ActiveStrategy;
 
+		public char NewLine = '\u2029';
+
 		/// <summary>
 		/// Main entry point of plugin
 		/// Get all classes of type <see cref="IStrategy"/> and store for later use
@@ -200,11 +202,9 @@ namespace CS2StratRoulette
 		/// </summary>
 		private void AnnounceStrategy(IStrategy strategy)
 		{
-			CounterStrikeSharp.API.Server.PrintToChatAll(
-				$"{ChatColors.Red}[StratRoulette]:{ChatColors.Default} the chosen strategy for this round will be {ChatColors.Blue}{strategy.Name}"
-			);
 
-			CounterStrikeSharp.API.Server.PrintToChatAll(strategy.Description);
+			string stratFull = $" {ChatColors.Blue}-------------------------------------------------------------------------------{NewLine}{ChatColors.White}Chosen Strategy{ChatColors.Blue}: {ChatColors.White}{strategy.Name}{NewLine}{strategy.Description}{NewLine}{ChatColors.Blue}-------------------------------------------------------------------------------";
+			CounterStrikeSharp.API.Server.PrintToChatAll(stratFull);
 		}
 	}
 }
