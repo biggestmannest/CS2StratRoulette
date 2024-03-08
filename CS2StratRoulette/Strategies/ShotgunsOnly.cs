@@ -7,10 +7,10 @@ namespace CS2StratRoulette.Strategies
     public class ShotgunsOnly : IStrategy
     {
         /// <inheritdoc cref="IStrategy.Name"/>
-        public string Name => "Rifles Only";
+        public string Name => "Shotguns Only";
 
         /// <inheritdoc cref="IStrategy.Description"/>
-        public string Description => "You're only allowed to buy rifles.";
+        public string Description => "You're only allowed to buy shotguns.";
 
         /// <inheritdoc cref="IStrategy.Running"/>
         public bool Running { get; private set; }

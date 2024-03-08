@@ -11,7 +11,7 @@ namespace CS2StratRoulette.Strategies
         private readonly System.Random random = new();
 
         /// <inheritdoc cref="IStrategy.Description"/>
-        public string Description => "Everyone gets a Negev and decoy grenades with infinite ammo, succesfully ruining the enemies ears.";
+        public string Description => "Everyone gets a Negev and decoy grenades, succesfully ruining the enemies ears.";
 
         /// <inheritdoc cref="IStrategy.Running"/>
         public bool Running { get; private set; }
@@ -34,26 +34,7 @@ namespace CS2StratRoulette.Strategies
                 playerController.GiveNamedItem("weapon_decoy");
 
             }
-
-            /* 
-            TODO: fix the fact that it sometimes doesn't give the player the bomb 
-            likely due to sv_cheats either not executing quickly enough, or too quick.
-            */
-            if (randomPlayer.IsValid)
-            {
-                if (randomPlayer.PlayerPawn.Value?.TeamNum is 2) // 2 = T, 3 = CT
-                {
-                    /*
-                    for whatever reason, you can give ANY weapon in the game without sv_cheats being enabled
-                    except the c4...
-                    */
-                    Server.ExecuteCommand("sv_cheats 1");
-                    randomPlayer.GiveNamedItem("weapon_c4");
-                    Server.ExecuteCommand("sv_cheats 0");
-                }
-            }
             Server.ExecuteCommand("mp_buytime 0");
-
             this.Running = true;
 
             return true;
@@ -65,11 +46,6 @@ namespace CS2StratRoulette.Strategies
             if (!this.Running)
             {
                 return false;
-            }
-            var allPlayers = Utilities.GetPlayers();
-            foreach (var playerController in allPlayers)
-            {
-                playerController.RemoveItemByDesignerName("weapon_negev");
             }
             Server.ExecuteCommand("mp_buytime 20");
 
