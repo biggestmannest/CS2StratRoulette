@@ -10,7 +10,8 @@ namespace CS2StratRoulette.Strategies
 		public string Name => "Sneak Only";
 
 		/// <inheritdoc cref="IStrategy.Description"/>
-		public string Description => "You're not allowed to run. Any footstep noises will kill you.";
+		public string Description =>
+			"Any footstep noises will kill you. Falling counts too.";
 
 		/// <inheritdoc cref="IStrategy.Running"/>
 		public bool Running { get; private set; }
