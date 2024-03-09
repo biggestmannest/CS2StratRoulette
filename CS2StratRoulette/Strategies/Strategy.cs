@@ -15,7 +15,7 @@ namespace CS2StratRoulette.Strategies
 		/// <summary>
 		/// Is the strategy active?
 		/// </summary>
-		protected bool Running { get; private set; }
+		public bool Running { get; private set; }
 
 		/// <summary>
 		/// Register required event listeners in order to enforce the strategy
