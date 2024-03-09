@@ -124,6 +124,13 @@ namespace CS2StratRoulette
 				}
 
 				commandInfo.ReplyToCommand($"[OnStratCommand] set active strategy to {strategy.Name}");
+
+				if (this.ActiveStrategy is not null)
+				{
+					this.AnnounceStrategy(this.ActiveStrategy);
+				}
+
+				return;
 			}
 
 			commandInfo.ReplyToCommand("[OnStratCommand] strategy not found");
