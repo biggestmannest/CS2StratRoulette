@@ -50,7 +50,7 @@ namespace CS2StratRoulette.Strategies
 
 			this.timer = new Timer(FakeCheats.Interval, () =>
 			{
-				if (this.random.Next(1) == 0)
+				if (this.random.Next(2) == 0)
 				{
 					return;
 				}
