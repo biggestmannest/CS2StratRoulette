@@ -22,14 +22,14 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(Strike.Enable);
+			CounterStrikeSharp.API.Server.ExecuteCommand(Strike.Disable);
 
 			return true;
 		}
 
 		public void PostStop()
 		{
-			CounterStrikeSharp.API.Server.ExecuteCommand(Strike.Disable);
+			CounterStrikeSharp.API.Server.ExecuteCommand(Strike.Enable);
 		}
 	}
 }
