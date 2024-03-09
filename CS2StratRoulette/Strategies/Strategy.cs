@@ -1,34 +1,44 @@
 namespace CS2StratRoulette.Strategies
 {
-	public interface IStrategy
+	public abstract class Strategy
 	{
 		/// <summary>
 		/// Human readable strategy name
 		/// </summary>
-		public string Name { get; }
+		public abstract string Name { get; }
 
 		/// <summary>
 		/// Short description explaining the strategy
 		/// </summary>
-		public string Description { get; }
+		public abstract string Description { get; }
 
 		/// <summary>
 		/// Is the strategy active?
 		/// </summary>
-		protected bool Running { get; }
+		protected bool Running { get; private set; }
 
 		/// <summary>
 		/// Register required event listeners in order to enforce the strategy
 		/// </summary>
 		/// <param name="plugin">Reference to <see cref="CS2StratRoulettePlugin"/></param>
 		/// <returns><see langword="true"/> if all events register successfully</returns>
-		public bool Start(ref CS2StratRoulettePlugin plugin);
+		public virtual bool Start(ref CS2StratRoulettePlugin plugin)
+		{
+			this.Running = true;
+
+			return true;
+		}
 
 		/// <summary>
 		/// Register required event listeners in order to enforce the strategy
 		/// </summary>
 		/// <param name="plugin">Reference to <see cref="CS2StratRoulettePlugin"/></param>
 		/// <returns><see langword="true"/> if all events deregister successfully</returns>
-		public bool Stop(ref CS2StratRoulettePlugin plugin);
+		public virtual bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			this.Running = false;
+
+			return true;
+		}
 	}
 }

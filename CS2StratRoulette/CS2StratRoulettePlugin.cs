@@ -1,4 +1,5 @@
-﻿using CS2StratRoulette.Strategies;
+﻿using CS2StratRoulette.Interfaces;
+using CS2StratRoulette.Strategies;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
@@ -17,35 +18,28 @@ namespace CS2StratRoulette
 		public override string ModuleAuthor => "the guys";
 
 		public required List<System.Type> Strategies = new();
-		public required IStrategy? ActiveStrategy;
+		public required Strategy? ActiveStrategy;
 
 		/// <summary>
 		/// Main entry point of plugin
-		/// Get all classes of type <see cref="IStrategy"/> and store for later use
+		/// Get all classes of type <see cref="Strategy"/> and store for later use
 		/// </summary>
 		/// <param name="hotReload"></param>
 		public override void Load(bool hotReload)
 		{
-			var types = typeof(IStrategy).Assembly.GetTypes();
+			var types = typeof(Strategy).Assembly.GetTypes();
 
 			foreach (var type in types)
 			{
-				if (!type.IsClass || type.IsAbstract)
+				if (type.IsClass || !type.IsAbstract || type.IsSubclassOf(typeof(Strategy)))
 				{
-					continue;
+					this.Strategies.Add(type);
 				}
-
-				if (type.FindInterfaces((i, _) => i == typeof(IStrategy), null).Length == 0)
-				{
-					continue;
-				}
-
-				this.Strategies.Add(type);
 			}
 		}
 
 		/// <summary>
-		/// Get all classes of type <see cref="IStrategy"/> and store for later use
+		/// Get all classes of type <see cref="Strategy"/> and store for later use
 		/// </summary>
 		/// <param name="hotReload"></param>
 		public override void Unload(bool hotReload)
@@ -58,7 +52,17 @@ namespace CS2StratRoulette
 		[GameEventHandler]
 		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
 		{
+			if (this.ActiveStrategy is IStrategyPostStop strategy)
+			{
+				strategy.PostStop();
+			}
+
 			this.CycleStrategy();
+
+			if (this.StartActiveStrategy() && this.ActiveStrategy is not null)
+			{
+				this.AnnounceStrategy(this.ActiveStrategy);
+			}
 
 			return HookResult.Continue;
 		}
@@ -66,9 +70,17 @@ namespace CS2StratRoulette
 		[GameEventHandler]
 		public HookResult OnRoundEnd(EventRoundEnd _, GameEventInfo _2)
 		{
-			if (this.StopActiveStrategy())
+			this.StopActiveStrategy();
+
+			return HookResult.Continue;
+		}
+
+		[GameEventHandler(HookMode.Pre)]
+		public HookResult OnRoundEndPre(EventRoundEnd _, GameEventInfo _2)
+		{
+			if (this.ActiveStrategy is not null && this.ActiveStrategy is IStrategyPreStop strategy)
 			{
-				this.ActiveStrategy = null;
+				strategy.PreStop();
 			}
 
 			return HookResult.Continue;
@@ -76,8 +88,6 @@ namespace CS2StratRoulette
 
 		public void CycleStrategy()
 		{
-			this.StopActiveStrategy();
-
 			if (this.Strategies.Count == 0)
 			{
 				System.Console.WriteLine("[CycleStrategy]: Strategies list is empty");
@@ -100,12 +110,6 @@ namespace CS2StratRoulette
 
 			this.ActiveStrategy = strategy;
 
-			if (!this.StartActiveStrategy())
-			{
-				return;
-			}
-
-			this.AnnounceStrategy(this.ActiveStrategy);
 			System.Console.WriteLine("[CycleStrategy]: picked {0}", strategy.Name);
 		}
 
@@ -154,9 +158,9 @@ namespace CS2StratRoulette
 		}
 
 		/// <summary>
-		/// Try to invoke a class of subtype <see cref="IStrategy"/>
+		/// Try to invoke a class of subtype <see cref="Strategy"/>
 		/// </summary>
-		/// <param name="type">The class inheriting from <see cref="IStrategy"/></param>
+		/// <param name="type">The class inheriting from <see cref="Strategy"/></param>
 		/// <param name="strategy">Only <see langword="null"/> if invoking failed</param>
 		/// <returns><see langword="false"/> when invoking failed and <see langword="true"/> when successful</returns>
 		/// <example>
@@ -168,7 +172,7 @@ namespace CS2StratRoulette
 		/// // invoking worked, you can use strat
 		/// </code>
 		/// </example>
-		public bool TryInvokeStrategy(System.Type type, [NotNullWhen(true)] out IStrategy? strategy)
+		public bool TryInvokeStrategy(System.Type type, [NotNullWhen(true)] out Strategy? strategy)
 		{
 			strategy = null;
 
@@ -176,7 +180,7 @@ namespace CS2StratRoulette
 			{
 				var @object = System.Activator.CreateInstance(type);
 
-				if (@object is IStrategy strat2)
+				if (@object is Strategy strat2)
 				{
 					strategy = strat2;
 
@@ -196,7 +200,7 @@ namespace CS2StratRoulette
 		/// <summary>
 		/// Announces a strategy in global chat
 		/// </summary>
-		private void AnnounceStrategy(IStrategy strategy)
+		private void AnnounceStrategy(Strategy strategy)
 		{
 			CounterStrikeSharp.API.Server.PrintToChatAll(
 				$"{ChatColors.Red}[StratRoulette]:{ChatColors.Default} the chosen strategy for this round will be {ChatColors.Blue}{strategy.Name}"

@@ -6,42 +6,32 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class HospitalBill : IStrategy
+	public sealed class HospitalBill : Strategy
 	{
-		/// <inheritdoc cref="IStrategy.Name"/>
-		public string Name => "Hospital bills";
+		public override string Name =>
+			"Hospital bills";
 
-		/// <inheritdoc cref="IStrategy.Description"/>
-		public string Description =>
+		public override string Description =>
 			"When you die all other players in your team will lose $500 to pay for your hospital bills.";
 
-		/// <inheritdoc cref="IStrategy.Running"/>
-		public bool Running { get; private set; }
-
-		/// <inheritdoc cref="IStrategy.Start"/>
-		public bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
-			if (this.Running)
+			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
 
 			plugin.RegisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
 
-			this.Running = true;
-
 			return true;
 		}
 
-		/// <inheritdoc cref="IStrategy.Stop"/>
-		public bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
 		{
-			if (!this.Running)
+			if (!base.Stop(ref plugin))
 			{
 				return false;
 			}
-
-			this.Running = false;
 
 			const string playerDeath = "player_death";
 

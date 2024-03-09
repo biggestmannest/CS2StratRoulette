@@ -4,42 +4,32 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class SneakOnly : IStrategy
+	public sealed class SneakOnly : Strategy
 	{
-		/// <inheritdoc cref="IStrategy.Name"/>
-		public string Name => "Sneak Only";
+		public override string Name =>
+			"Sneak Only";
 
-		/// <inheritdoc cref="IStrategy.Description"/>
-		public string Description =>
+		public override string Description =>
 			"Any footstep noises will kill you. Falling counts too.";
 
-		/// <inheritdoc cref="IStrategy.Running"/>
-		public bool Running { get; private set; }
-
-		/// <inheritdoc cref="IStrategy.Start"/>
-		public bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
-			if (this.Running)
+			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
 
 			plugin.RegisterEventHandler<EventPlayerSound>(this.OnPlayerSound);
 
-			this.Running = true;
-
 			return true;
 		}
 
-		/// <inheritdoc cref="IStrategy.Stop"/>
-		public bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
 		{
-			if (!this.Running)
+			if (!base.Stop(ref plugin))
 			{
 				return false;
 			}
-
-			this.Running = false;
 
 			const string playerSound = "player_sound";
 
