@@ -150,7 +150,7 @@ namespace CS2StratRoulette
 			var plugin = this;
 			var result = this.ActiveStrategy.Stop(ref plugin);
 
-			if (!result)
+			if (!result && !this.ActiveStrategy.Running)
 			{
 				System.Console.WriteLine(
 					"[StopActiveStrategy]: failed stopping {0}",
