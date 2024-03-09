@@ -3,6 +3,7 @@ using CS2StratRoulette.Interfaces;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -35,15 +36,13 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.RemoveWeaponsByType(
-					true,
-					CSWeaponType.WEAPONTYPE_C4,
+				pawn.KeepWeaponsByType(
 					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_MELEE,
+					CSWeaponType.WEAPONTYPE_C4,
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
 
-				controller.GiveNamedItem("weapon_ssg08");
+				controller.GiveNamedItem(CsItem.SSG08);
 			}
 
 			Server.ExecuteCommand(FlyingScoutsman.EnableFs);
@@ -60,7 +59,7 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.RemoveWeaponsByType(false, CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
+				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
 			}
 
 			Server.ExecuteCommand(FlyingScoutsman.DisabledFs);
