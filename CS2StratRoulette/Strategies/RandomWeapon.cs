@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class RandomWeapon : IStrategy
+	public sealed class RandomWeapon : IStrategy
 	{
 		private const int PistolMin = (int)CsItem.Deagle;
 		private const int PistolMax = (int)CsItem.Revolver;
