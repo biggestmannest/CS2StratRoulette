@@ -80,7 +80,7 @@ namespace CS2StratRoulette.Strategies
 
 				moneyServices.Account -= 500;
 
-				Utilities.SetStateChanged(player, "CCSPlayerController_InGameMoneyServices", "m_iAccount");
+				Utilities.SetStateChanged(player, "CPlayerControllerComponent", "m_iAccount");
 			}
 
 			return HookResult.Continue;

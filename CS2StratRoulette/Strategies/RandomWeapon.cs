@@ -26,8 +26,6 @@ namespace CS2StratRoulette.Strategies
 
 		public bool Running { get; private set; }
 
-		private CsItem item = CsItem.Frag;
-
 		private readonly System.Random random = new();
 
 		public bool Start(ref CS2StratRoulettePlugin plugin)
@@ -39,22 +37,9 @@ namespace CS2StratRoulette.Strategies
 
 			this.Running = true;
 
-			Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.None}");
+			Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.None.Str()}");
 			Server.ExecuteCommand("mp_buy_allow_grenades 0");
 			Server.ExecuteCommand("mp_weapons_allow_zeus 0");
-
-			if ((this.random.Next() & 1) == 0)
-			{
-				this.item = (CsItem)this.random.Next(RandomWeapon.PistolMin, RandomWeapon.PistolMax);
-			}
-			else if ((this.random.Next() & 1) == 0)
-			{
-				this.item = (CsItem)this.random.Next(RandomWeapon.MidMin, RandomWeapon.MidMax);
-			}
-			else
-			{
-				this.item = (CsItem)this.random.Next(RandomWeapon.RifleMin, RandomWeapon.RifleMax);
-			}
 
 			foreach (var player in Utilities.GetPlayers())
 			{
@@ -68,26 +53,20 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				var weapons = pawn.WeaponServices.MyWeapons;
+				pawn.RemoveWeaponsByType(
+					CSWeaponType.WEAPONTYPE_KNIFE,
+					CSWeaponType.WEAPONTYPE_C4,
+					CSWeaponType.WEAPONTYPE_EQUIPMENT
+				);
 
-				foreach (var weapon in weapons)
+				var item = this.random.Next(0, 3) switch
 				{
-					if (!weapon.IsValid || weapon.Value is null || !weapon.Value.IsValid || weapon.Value.VData is null)
-					{
-						continue;
-					}
+					0 => (CsItem)this.random.Next(RandomWeapon.PistolMin, RandomWeapon.PistolMax),
+					1 => (CsItem)this.random.Next(RandomWeapon.MidMin, RandomWeapon.MidMax),
+					_ => (CsItem)this.random.Next(RandomWeapon.RifleMin, RandomWeapon.RifleMax),
+				};
 
-					var data = new CCSWeaponBaseVData(weapon.Value.VData.Handle);
-
-					if (data.WeaponType is CSWeaponType.WEAPONTYPE_KNIFE or
-					                       CSWeaponType.WEAPONTYPE_C4 or
-					                       CSWeaponType.WEAPONTYPE_EQUIPMENT)
-					{
-						pawn.RemovePlayerItem(weapon.Value);
-					}
-				}
-
-				player.GiveNamedItem(this.item);
+				player.GiveNamedItem(item);
 			}
 
 			return true;
@@ -102,7 +81,7 @@ namespace CS2StratRoulette.Strategies
 
 			this.Running = false;
 
-			Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.All}");
+			Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.All.Str()}");
 			Server.ExecuteCommand("mp_buy_allow_grenades 1");
 			Server.ExecuteCommand("mp_weapons_allow_zeus 1");
 
