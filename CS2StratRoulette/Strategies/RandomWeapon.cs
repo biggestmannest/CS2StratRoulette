@@ -51,6 +51,7 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				pawn.RemoveWeaponsByType(
+					true,
 					CSWeaponType.WEAPONTYPE_KNIFE,
 					CSWeaponType.WEAPONTYPE_C4,
 					CSWeaponType.WEAPONTYPE_EQUIPMENT

@@ -1,53 +1,69 @@
-using CounterStrikeSharp.API;
+using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Interfaces;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
-    [SuppressMessage("ReSharper", "UnusedType.Global")]
-    public sealed class FlyingScoutsman : Strategy
-    {
-        /// <inheritdoc cref="IStrategy.Name"/>
-        public override string Name => "Flying Scoutsman";
+	[SuppressMessage("ReSharper", "UnusedType.Global")]
+	public sealed class FlyingScoutsman : Strategy, IStrategyPostStop
+	{
+		private const string EnableFS =
+			"sv_cheats 1;sv_gravity 230;sv_airaccelerate 20000; sv_maxspeed 420; sv_friction 4; sv_cheats 0";
 
-        /// <inheritdoc cref="IStrategy.Description"/>
-        public override string Description =>
-            "Low gravity + Scouts";
+		private const string DisabledFS =
+			"sv_cheats1;sv_gravity 800;sv_airaccelerate 12;sv_maxspeed 320;sv_friction 5.2;sv_cheats 0";
 
-        /// <inheritdoc cref="IStrategy.Start"/>
-        public override bool Start(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Start(ref plugin))
-            {
-                return false;
-            }
+		public override string Name =>
+			"Flying Scoutsman";
 
-            foreach (var playerController in Utilities.GetPlayers())
-            {
-                //todo: remove only primary and secondary because of C4
-                playerController.RemoveWeapons();
-                playerController.GiveNamedItem("weapon_ssg08");
-            }
-            Server.ExecuteCommand("sv_cheats 1;sv_gravity 230;sv_airaccelerate 20000; sv_maxspeed 420; sv_friction 4; sv_cheats 0");
+		public override string Description =>
+			"Low gravity + Scouts";
 
-            return true;
-        }
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Start(ref plugin))
+			{
+				return false;
+			}
 
-        /// <inheritdoc cref="IStrategy.Stop"/>
-        public override bool Stop(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Start(ref plugin))
-            {
-                return false;
-            }
-            foreach (var playerController in Utilities.GetPlayers())
-            {
-                playerController.RemoveWeapons();
-            }
-            Server.ExecuteCommand("sv_cheats1;sv_gravity 800;sv_airaccelerate 12;sv_maxspeed 320;sv_friction 5.2;sv_cheats 0");
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
 
-            return true;
-        }
+				pawn.RemoveWeaponsByType(
+					true,
+					CSWeaponType.WEAPONTYPE_C4,
+					CSWeaponType.WEAPONTYPE_KNIFE,
+					CSWeaponType.WEAPONTYPE_MELEE,
+					CSWeaponType.WEAPONTYPE_EQUIPMENT
+				);
 
-    }
+				controller.GiveNamedItem("weapon_ssg08");
+			}
+
+			Server.ExecuteCommand(FlyingScoutsman.EnableFS);
+
+			return true;
+		}
+
+		public void PostStop()
+		{
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				pawn.RemoveWeaponsByType(false, CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
+			}
+
+			Server.ExecuteCommand(FlyingScoutsman.DisabledFS);
+		}
+	}
 }

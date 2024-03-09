@@ -5,40 +5,38 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
-    [SuppressMessage("ReSharper", "UnusedType.Global")]
-    public class SMGOnly : Strategy
-    {
-        /// <inheritdoc cref="IStrategy.Name"/>
-        public override string Name => "SMGs Only";
+	[SuppressMessage("ReSharper", "UnusedType.Global")]
+	public class SmgOnly : Strategy
+	{
+		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.SubMachineGuns.Str()}";
+		private static readonly string Disable = $"mp_buy_allow_guns {BuyAllow.All.Str()}";
 
-        /// <inheritdoc cref="IStrategy.Description"/>
-        public override string Description => "You're only allowed to buy SMGs.";
+		public override string Name => "SMGs Only";
 
-        /// <inheritdoc cref="IStrategy.Start"/>
-        public override bool Start(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Start(ref plugin))
-            {
-                return false;
-            }
+		public override string Description => "You're only allowed to buy SMGs.";
 
-            Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.SubMachineGuns.Str()}");
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Start(ref plugin))
+			{
+				return false;
+			}
 
-            return true;
-        }
+			Server.ExecuteCommand(SmgOnly.Enable);
 
-        /// <inheritdoc cref="IStrategy.Stop"/>
-        public override bool Stop(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Start(ref plugin))
-            {
-                return false;
-            }
+			return true;
+		}
 
-            Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.All.Str()}");
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
 
-            return true;
-        }
+			Server.ExecuteCommand(SmgOnly.Disable);
 
-    }
+			return true;
+		}
+	}
 }

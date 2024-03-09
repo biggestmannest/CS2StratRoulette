@@ -5,6 +5,9 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class StopHittingYourself : Strategy
 	{
+		private const string Half = "mp_weapon_self_inflict_amount 0.5";
+		private const string Reset = "mp_weapon_self_inflict_amount 0";
+
 		public override string Name =>
 			"Stop Hitting Yourself!";
 
@@ -18,7 +21,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand("mp_weapon_self_inflict_amount 0.5");
+			CounterStrikeSharp.API.Server.ExecuteCommand(StopHittingYourself.Half);
 
 			return true;
 		}
@@ -30,7 +33,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand("mp_weapon_self_inflict_amount 0");
+			CounterStrikeSharp.API.Server.ExecuteCommand(StopHittingYourself.Reset);
 
 			return true;
 		}
