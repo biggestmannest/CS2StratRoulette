@@ -33,7 +33,7 @@ namespace CS2StratRoulette
 
 			foreach (var type in types)
 			{
-				if (type.IsClass || !type.IsAbstract || type.IsSubclassOf(typeof(Strategy)))
+				if (type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(Strategy)))
 				{
 					this.Strategies.Add(type);
 				}
@@ -90,22 +90,26 @@ namespace CS2StratRoulette
 
 		public void CycleStrategy()
 		{
+			// We stop the strategy again just in case it didn't stop before.
+			this.StopActiveStrategy();
+
 			if (this.Strategies.Count == 0)
 			{
-				System.Console.WriteLine("[CycleStrategy]: Strategies list is empty");
+				System.Console.WriteLine("[CycleStrategy]: there no strategies");
 
 				return;
 			}
 
 			var idx = System.Random.Shared.Next(0, this.Strategies.Count);
+			var type = this.Strategies[idx];
 
 			// Try to invoke a random chosen strategy
-			if (!this.TryInvokeStrategy(this.Strategies[idx], out var strategy))
+			if (!this.TryInvokeStrategy(type, out var strategy))
 			{
 				// If it fails don't use a strategy for this round and pretend as if nothing happened :)
 				this.ActiveStrategy = null;
 
-				System.Console.WriteLine("[CycleStrategy]: failed invoking strategy");
+				System.Console.WriteLine("[CycleStrategy]: failed invoking {0} strategy", type.Name);
 
 				return;
 			}
@@ -148,7 +152,7 @@ namespace CS2StratRoulette
 			var plugin = this;
 			var result = this.ActiveStrategy.Stop(ref plugin);
 
-			if (!result)
+			if (!result && !this.ActiveStrategy.Running)
 			{
 				System.Console.WriteLine(
 					"[StopActiveStrategy]: failed stopping {0}",

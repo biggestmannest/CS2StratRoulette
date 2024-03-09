@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace CS2StratRoulette.Enums
 {
 	/*
@@ -11,6 +13,7 @@ namespace CS2StratRoulette.Enums
 	 */
 
 	[System.Flags]
+	[SuppressMessage("Design", "MA0062")]
 	public enum BuyAllow : byte
 	{
 		None = 0,
