@@ -62,7 +62,7 @@ namespace CS2StratRoulette.Strategies
         /// <inheritdoc cref="IStrategy.Stop"/>
         public override bool Stop(ref CS2StratRoulettePlugin plugin)
         {
-            if (!this.Running)
+            if (!base.Stop(ref plugin))
             {
                 return false;
             }
