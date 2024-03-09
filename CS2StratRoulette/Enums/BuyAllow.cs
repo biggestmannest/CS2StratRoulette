@@ -45,6 +45,6 @@ namespace CS2StratRoulette.Enums
 		/// </summary>
 		Heavy = 1 << 5,
 
-		All = 0xff,
+		All = 0b10000000,
 	}
 }
