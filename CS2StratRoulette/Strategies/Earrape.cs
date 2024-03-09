@@ -66,7 +66,7 @@ namespace CS2StratRoulette.Strategies
 				}
 			}
 
-			var giveC4 = ts[this.random.Next(0, ts.Count)];
+			var giveC4 = ts[this.random.Next(ts.Count)];
 
 			if (giveC4.IsValid)
 			{

@@ -100,7 +100,7 @@ namespace CS2StratRoulette
 				return;
 			}
 
-			var idx = System.Random.Shared.Next(0, this.Strategies.Count);
+			var idx = System.Random.Shared.Next(this.Strategies.Count);
 			var type = this.Strategies[idx];
 
 			// Try to invoke a random chosen strategy
@@ -208,8 +208,8 @@ namespace CS2StratRoulette
 		/// </summary>
 		private void AnnounceStrategy(Strategy strategy)
 		{
-
-			string stratFull = $" {ChatColors.Blue}-------------------------------------------------------------------------------{NewLine}{ChatColors.White}Chosen Strategy{ChatColors.Blue}: {ChatColors.White}{strategy.Name}{NewLine}{strategy.Description}{NewLine}{ChatColors.Blue}-------------------------------------------------------------------------------";
+			var stratFull =
+				$" {ChatColors.Blue}-------------------------------------------------------------------------------{this.NewLine}{ChatColors.White}Chosen Strategy{ChatColors.Blue}: {ChatColors.White}{strategy.Name}{this.NewLine}{strategy.Description}{this.NewLine}{ChatColors.Blue}-------------------------------------------------------------------------------";
 			CounterStrikeSharp.API.Server.PrintToChatAll(stratFull);
 		}
 	}
