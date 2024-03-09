@@ -52,7 +52,7 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			var ct = cts[this.random.Next(0, cts.Count)];
-			var t = ts[this.random.Next(0, cts.Count)];
+			var t = ts[this.random.Next(0, ts.Count)];
 
 			if (ct.IsValid)
 			{
