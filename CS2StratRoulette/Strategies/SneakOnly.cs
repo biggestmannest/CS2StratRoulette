@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class SneakOnly : IStrategy
+	public sealed class SneakOnly : IStrategy
 	{
 		/// <inheritdoc cref="IStrategy.Name"/>
 		public string Name => "Sneak Only";

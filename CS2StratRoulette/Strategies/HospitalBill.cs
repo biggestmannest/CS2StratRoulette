@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class HospitalBill : IStrategy
+	public sealed class HospitalBill : IStrategy
 	{
 		/// <inheritdoc cref="IStrategy.Name"/>
 		public string Name => "Hospital bills";
