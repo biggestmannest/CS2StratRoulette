@@ -3,40 +3,40 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
-    [SuppressMessage("ReSharper", "UnusedType.Global")]
-    public class HeadshotOnly : Strategy
-    {
-        /// <inheritdoc cref="IStrategy.Name"/>
-        public override string Name => "Headshot Only";
+	[SuppressMessage("ReSharper", "UnusedType.Global")]
+	public class HeadshotOnly : Strategy
+	{
+		private const string EnableHeadshotOnly = "mp_damage_headshot_only 1";
+		private const string DisableHeadshotOnly = "mp_damage_headshot_only 0";
 
-        /// <inheritdoc cref="IStrategy.Description"/>
-        public override string Description => "You can only kill players with a headshot.";
+		public override string Name =>
+			"Headshot Only";
 
-        /// <inheritdoc cref="IStrategy.Start"/>
-        public override bool Start(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Start(ref plugin))
-            {
-                return false;
-            }
+		public override string Description =>
+			"You can only kill players with a headshot.";
 
-            Server.ExecuteCommand("mp_damage_headshot_only 1");
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Start(ref plugin))
+			{
+				return false;
+			}
 
-            return true;
-        }
+			Server.ExecuteCommand(HeadshotOnly.EnableHeadshotOnly);
 
-        /// <inheritdoc cref="IStrategy.Stop"/>
-        public override bool Stop(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Stop(ref plugin))
-            {
-                return false;
-            }
+			return true;
+		}
 
-            Server.ExecuteCommand("mp_damage_headshot_only 0");
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
 
-            return true;
-        }
+			Server.ExecuteCommand(HeadshotOnly.DisableHeadshotOnly);
 
-    }
+			return true;
+		}
+	}
 }

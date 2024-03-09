@@ -1,80 +1,126 @@
-using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API;
-using CS2StratRoulette.Extensions;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
+using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
-using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
-    [SuppressMessage("ReSharper", "UnusedType.Global")]
-    public class Earrape : Strategy
-    {
+	[SuppressMessage("ReSharper", "UnusedType.Global")]
+	public class Earrape : Strategy
+	{
+		private static readonly string StartCommands =
+			$"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; mp_buy_allow_guns {BuyAllow.None.Str()}; mp_buy_allow_grenades 0; mp_weapons_buy_allow_zeus 0";
 
-        private static string startCmds = $"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; mp_buy_allow_guns {BuyAllow.None.Str()}; mp_buy_allow_grenades {BuyAllow.None.Str()}; mp_weapons_buy_allow_zeus {BuyAllow.None.Str()}";
+		private static readonly string StopCommands =
+			$"sv_cheats 1; sv_infinite_ammo 0; sv_cheats 0; mp_buy_allow_guns {BuyAllow.All.Str()}; mp_buy_allow_grenades 1; mp_weapons_buy_allow_zeus 1";
 
-        private static string stopCmds = $"sv_cheats 1; sv_infinite_ammo 0; sv_cheats 0; mp_buy_allow_guns {BuyAllow.All.Str()}; mp_buy_allow_grenades 1; mp_weapons_buy_allow_zeus 1";
-        /// <inheritdoc cref="IStrategy.Name"/>
-        public override string Name => "Earrape";
+		private const float Interval = 5.0f;
 
-        /// <inheritdoc cref="IStrategy.Description"/>
-        public override string Description => "Everyone gets a Negev and decoy grenades, succesfully ruining the enemies ears.";
+		public override string Name =>
+			"Earrape";
 
-        private readonly System.Random random = new();
+		public override string Description =>
+			"Everyone gets a Negev and decoy grenades, successfully ruining the enemies ears.";
 
-        private readonly List<CCSPlayerController> allPlayers = Utilities.GetPlayers();
+		private readonly System.Random random = new();
+		private Timer? timer;
 
-        /// <inheritdoc cref="IStrategy.Start"/>
-        public override bool Start(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Start(ref plugin))
-            {
-                return false;
-            }
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Start(ref plugin))
+			{
+				return false;
+			}
 
-            Server.ExecuteCommand(startCmds);
+			Server.ExecuteCommand(Earrape.StartCommands);
 
-            var randomPlayer = allPlayers[this.random.Next(0, allPlayers.Count)];
+			var players = Utilities.GetPlayers();
+			var ts = new List<CCSPlayerController>(10);
 
+			foreach (var controller in players)
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
 
-            foreach (var playerController in allPlayers)
-            {
-                //TODO: make it easier to remove weapons from inventory instead of removing all items, since c4 dies too
-                playerController.RemoveWeapons();
-                playerController.GiveNamedItem("weapon_negev");
-                playerController.GiveNamedItem("weapon_decoy");
+				pawn.RemoveWeaponsByType(
+					true,
+					CSWeaponType.WEAPONTYPE_C4,
+					CSWeaponType.WEAPONTYPE_KNIFE,
+					CSWeaponType.WEAPONTYPE_MELEE,
+					CSWeaponType.WEAPONTYPE_EQUIPMENT
+				);
 
-            }
+				controller.GiveNamedItem(CsItem.Negev);
+				controller.GiveNamedItem(CsItem.Decoy);
 
-            Server.ExecuteCommand("sv_cheats 1");
+				if (controller.Team is CsTeam.Terrorist)
+				{
+					ts.Add(controller);
+				}
+			}
 
-            if (randomPlayer.IsValid && randomPlayer.Team is CsTeam.Terrorist)
-            {
-                randomPlayer.GiveNamedItem("weapon_c4");
-            }
+			var giveC4 = ts[this.random.Next(0, ts.Count)];
 
-            Server.ExecuteCommand("sv_cheats 0");
+			if (giveC4.IsValid)
+			{
+				giveC4.GiveNamedItem(CsItem.C4);
+			}
 
-            return true;
-        }
+			this.timer = new Timer(Earrape.Interval, this.OnInterval, TimerFlags.REPEAT);
 
-        /// <inheritdoc cref="IStrategy.Stop"/>
-        public override bool Stop(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Stop(ref plugin))
-            {
-                return false;
-            }
-            Server.ExecuteCommand(stopCmds);
-            foreach (var playerController in allPlayers)
-            {
-                //TODO: make it easier to remove weapons from inventory instead of removing all items, since c4 dies too
-                playerController.RemoveWeapons();
-            }
+			return true;
+		}
 
-            return true;
-        }
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
 
-    }
+			this.timer?.Kill();
+
+			Server.ExecuteCommand(Earrape.StopCommands);
+
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				pawn.RemoveWeaponsByType(
+					false,
+					CSWeaponType.WEAPONTYPE_MACHINEGUN
+				);
+			}
+
+			return true;
+		}
+
+		private void OnInterval()
+		{
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				pawn.RemoveWeaponsByType(
+					false,
+					CSWeaponType.WEAPONTYPE_GRENADE
+				);
+
+				controller.GiveNamedItem(CsItem.Decoy);
+			}
+		}
+	}
 }

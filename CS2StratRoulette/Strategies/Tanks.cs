@@ -1,9 +1,10 @@
-using CounterStrikeSharp.API;
-using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
-using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -30,33 +31,37 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Tanks.EnableHeavyAssaultSuite);
 
-			const uint max = (uint)CsTeam.CounterTerrorist + 1;
-			var added = new bool[max];
+			var cts = new List<CCSPlayerController>(10);
+			var ts = new List<CCSPlayerController>(10);
 
 			foreach (var player in Utilities.GetPlayers())
 			{
-				if (player.IsValid || player.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist))
+				if (player.IsValid)
 				{
 					continue;
 				}
 
-				var team = (uint)player.Team;
-
-				if (added[team])
+				if (player.Team is CsTeam.Terrorist)
 				{
-					continue;
+					ts.Add(player);
 				}
-
-				var shouldAdd = this.random.Next(0, 5) == 3;
-
-				if (!shouldAdd)
+				else if (player.Team is CsTeam.CounterTerrorist)
 				{
-					continue;
+					cts.Add(player);
 				}
+			}
 
-				added[team] = true;
+			var ct = cts[this.random.Next(0, cts.Count)];
+			var t = ts[this.random.Next(0, cts.Count)];
 
-				player.GiveNamedItem(CsItem.AssaultSuit);
+			if (ct.IsValid)
+			{
+				ct.GiveNamedItem(CsItem.AssaultSuit);
+			}
+
+			if (t.IsValid)
+			{
+				t.GiveNamedItem(CsItem.AssaultSuit);
 			}
 
 			return true;

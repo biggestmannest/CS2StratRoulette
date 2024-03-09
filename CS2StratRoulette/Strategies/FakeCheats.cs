@@ -7,7 +7,7 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public class FakeCheats : Strategy
 	{
-		private const float Interval = 3.0f;
+		private const float Interval = 1.0f;
 
 		private static readonly string[] Messages =
 		{
@@ -29,17 +29,16 @@ namespace CS2StratRoulette.Strategies
 			"UNDISCOVERED CHEAT METHODS @ GOGlobal.cheat",
 		};
 
-		/// <inheritdoc cref="IStrategy.Name"/>
-		public override string Name => "Fake Cheats";
+		public override string Name =>
+			"Fake Cheats";
 
-		/// <inheritdoc cref="IStrategy.Description"/>
-		public override string Description => "Spams fake cheat advertisements in the chat.";
+		public override string Description =>
+			"Spams fake cheat advertisements in the chat.";
 
 		private readonly System.Random random = new();
 
 		private Timer? timer;
 
-		/// <inheritdoc cref="IStrategy.Start"/>
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -51,20 +50,26 @@ namespace CS2StratRoulette.Strategies
 
 			this.timer = new Timer(FakeCheats.Interval, () =>
 			{
+				if (this.random.Next(0, 1) == 0)
+				{
+					return;
+				}
+
 				var player = players[this.random.Next(0, players.Count)];
 
-				if (player.IsValid)
+				if (!player.IsValid)
 				{
-					var message = FakeCheats.Messages[this.random.Next(FakeCheats.Messages.Length)];
-
-					player.ExecuteClientCommandFromServer($"say {message}");
+					return;
 				}
+
+				var message = FakeCheats.Messages[this.random.Next(FakeCheats.Messages.Length)];
+
+				player.ExecuteClientCommandFromServer($"say {message}");
 			}, TimerFlags.REPEAT);
 
 			return true;
 		}
 
-		/// <inheritdoc cref="IStrategy.Stop"/>
 		public override bool Stop(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Stop(ref plugin))
