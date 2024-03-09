@@ -21,7 +21,6 @@ namespace CS2StratRoulette.Strategies
 			"Every team gets a tank.";
 
 		private readonly System.Random random = new();
-		private float defaultMaxSpeed = 0.0f;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -105,9 +104,12 @@ namespace CS2StratRoulette.Strategies
 			pawn.Health = 999;
 			pawn.ArmorValue = 999;
 
-			Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
-			Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
-			Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
+			Server.NextFrame(() =>
+			{
+				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
+				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
+				Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
+			});
 		}
 	}
 }

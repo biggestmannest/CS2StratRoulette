@@ -47,21 +47,10 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			if (!@event.Step)
+			if (@event.Userid.IsValid && @event.Step)
 			{
-				return HookResult.Continue;
+				@event.Userid.CommitSuicide(false, true);
 			}
-
-			var controller = @event.Userid;
-
-			if (!controller.TryGetPlayerPawn(out var pawn))
-			{
-				return HookResult.Continue;
-			}
-
-			pawn.Health -= 20;
-
-			Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
 
 			return HookResult.Continue;
 		}
