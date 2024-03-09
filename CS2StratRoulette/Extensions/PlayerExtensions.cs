@@ -62,7 +62,7 @@ namespace CS2StratRoulette.Extensions
 		/// </code>
 		/// </example>
 		public static void RemoveWeaponsByType(this CCSPlayerPawn pawn,
-		                                       bool except = false,
+		                                       bool except,
 		                                       params CSWeaponType[] types)
 		{
 			if (pawn.WeaponServices is null)

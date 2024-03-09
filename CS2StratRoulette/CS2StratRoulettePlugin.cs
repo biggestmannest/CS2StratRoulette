@@ -2,6 +2,8 @@
 using CS2StratRoulette.Strategies;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Admin;
+using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
 using JetBrains.Annotations;
 using System.Collections.Generic;
@@ -91,6 +93,42 @@ namespace CS2StratRoulette
 			return HookResult.Continue;
 		}
 
+		[ConsoleCommand("css_set_strat", "Sets the active strategy")]
+		[CommandHelper(1, "[strat]")]
+		[RequiresPermissions("@css/root")]
+		public void OnStratCommand(CCSPlayerController? player, CommandInfo commandInfo)
+		{
+			var name = commandInfo.GetArg(1);
+
+			this.StopActiveStrategy();
+
+			foreach (var strategy in this.Strategies)
+			{
+				if (!string.Equals(strategy.Name, name, System.StringComparison.OrdinalIgnoreCase))
+				{
+					continue;
+				}
+
+				if (!this.SetActiveStrategy(strategy))
+				{
+					commandInfo.ReplyToCommand($"[OnStratCommand] failed setting {strategy.Name} as active strategy");
+
+					return;
+				}
+
+				if (!this.StartActiveStrategy())
+				{
+					commandInfo.ReplyToCommand("[OnStratCommand] failed starting strategy");
+
+					return;
+				}
+
+				commandInfo.ReplyToCommand($"[OnStratCommand] set active strategy to {strategy.Name}");
+			}
+
+			commandInfo.ReplyToCommand("[OnStratCommand] strategy not found");
+		}
+
 		public void CycleStrategy()
 		{
 			// We stop the strategy again just in case it didn't stop before.
@@ -104,22 +142,7 @@ namespace CS2StratRoulette
 			}
 
 			var idx = System.Random.Shared.Next(this.Strategies.Count);
-			var type = this.Strategies[idx];
-
-			// Try to invoke a random chosen strategy
-			if (!this.TryInvokeStrategy(type, out var strategy))
-			{
-				// If it fails don't use a strategy for this round and pretend as if nothing happened :)
-				this.ActiveStrategy = null;
-
-				System.Console.WriteLine("[CycleStrategy]: failed invoking {0} strategy", type.Name);
-
-				return;
-			}
-
-			this.ActiveStrategy = strategy;
-
-			System.Console.WriteLine("[CycleStrategy]: picked {0}", strategy.Name);
+			this.SetActiveStrategy(this.Strategies[idx]);
 		}
 
 		public bool StartActiveStrategy()
@@ -164,6 +187,26 @@ namespace CS2StratRoulette
 			}
 
 			return result;
+		}
+
+		private bool SetActiveStrategy(System.Type type)
+		{
+			// Try to invoke a random chosen strategy
+			if (!this.TryInvokeStrategy(type, out var strategy))
+			{
+				// If it fails don't use a strategy for this round and pretend as if nothing happened :)
+				this.ActiveStrategy = null;
+
+				System.Console.WriteLine("[CycleStrategy]: failed invoking {0} strategy", type.Name);
+
+				return false;
+			}
+
+			this.ActiveStrategy = strategy;
+
+			System.Console.WriteLine("[CycleStrategy]: picked {0}", strategy.Name);
+
+			return true;
 		}
 
 		/// <summary>
@@ -214,16 +257,16 @@ namespace CS2StratRoulette
 			this.builder.Clear();
 
 			this.builder.Append(' ');
-			this.builder.Append(ChatColors.DarkBlue);
+			this.builder.Append(ChatColors.Blue);
 			this.builder.Append('-', 80);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
-			this.builder.Append(ChatColors.Red);
+			this.builder.Append(ChatColors.Green);
 			this.builder.Append(strategy.Name);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
 			this.builder.Append(ChatColors.Silver);
 			this.builder.Append(strategy.Description);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
-			this.builder.Append(ChatColors.DarkBlue);
+			this.builder.Append(ChatColors.Blue);
 			this.builder.Append('-', 80);
 
 			CounterStrikeSharp.API.Server.PrintToChatAll(this.builder.ToString());
