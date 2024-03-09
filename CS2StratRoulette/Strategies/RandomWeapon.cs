@@ -22,7 +22,7 @@ namespace CS2StratRoulette.Strategies
 		public string Name => "Random weapon";
 
 		public string Description =>
-			"You will receive a random weapon and may only use that weapon.";
+			"I hope you like your new weapon :)";
 
 		public bool Running { get; private set; }
 
