@@ -11,7 +11,7 @@ namespace CS2StratRoulette.Enums
 	 */
 
 	[System.Flags]
-	public enum BuyAllow
+	public enum BuyAllow : byte
 	{
 		None = 0,
 

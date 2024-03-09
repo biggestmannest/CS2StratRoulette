@@ -25,21 +25,52 @@ namespace CS2StratRoulette.Extensions
 		{
 			pawn = null;
 
-			if (!controller.PlayerPawn.IsValid || controller.PlayerPawn.Value is null)
+			if (!controller.PlayerPawn.TryGetValue(out var entity))
 			{
 				return false;
 			}
 
-			var tmp = controller.PlayerPawn.Value!;
-
-			if (!tmp.IsValid)
+			if (!entity.IsValid)
 			{
 				return false;
 			}
 
-			pawn = tmp;
+			pawn = entity;
 
 			return true;
+		}
+
+		public static void RemoveWeaponsByType(this CCSPlayerPawn pawn, params CSWeaponType[] types)
+		{
+			if (pawn.WeaponServices is null)
+			{
+				return;
+			}
+
+			var weapons = pawn.WeaponServices.MyWeapons;
+
+			foreach (var weapon in weapons)
+			{
+				if (!weapon.TryGetValue(out var entity))
+				{
+					continue;
+				}
+
+				if (!entity.IsValid || weapon.Value!.VData is null)
+				{
+					continue;
+				}
+
+				var data = new CCSWeaponBaseVData(weapon.Value.VData.Handle);
+
+				foreach (var type in types)
+				{
+					if (data.WeaponType == type)
+					{
+						pawn.RemovePlayerItem(weapon.Value);
+					}
+				}
+			}
 		}
 	}
 }
