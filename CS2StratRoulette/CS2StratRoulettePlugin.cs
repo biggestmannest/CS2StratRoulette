@@ -111,7 +111,16 @@ namespace CS2StratRoulette
 
 				if (!this.SetActiveStrategy(strategy))
 				{
-					continue;
+					commandInfo.ReplyToCommand($"[OnStratCommand] failed setting {strategy.Name} as active strategy");
+
+					return;
+				}
+
+				if (!this.StartActiveStrategy())
+				{
+					commandInfo.ReplyToCommand("[OnStratCommand] failed starting strategy");
+
+					return;
 				}
 
 				commandInfo.ReplyToCommand($"[OnStratCommand] set active strategy to {strategy.Name}");
