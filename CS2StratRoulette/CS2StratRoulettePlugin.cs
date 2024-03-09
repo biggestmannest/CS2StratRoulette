@@ -6,6 +6,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace CS2StratRoulette
 {
@@ -13,6 +14,8 @@ namespace CS2StratRoulette
 	// ReSharper disable once InconsistentNaming
 	public sealed class CS2StratRoulettePlugin : BasePlugin
 	{
+		private const char NewLine = '\u2029';
+
 		public override string ModuleName => "CS2StratRoulette";
 		public override string ModuleVersion => "0.0.1";
 		public override string ModuleAuthor => "the guys";
@@ -20,7 +23,7 @@ namespace CS2StratRoulette
 		public required List<System.Type> Strategies = new();
 		public required Strategy? ActiveStrategy;
 
-		public char NewLine = '\u2029';
+		private readonly StringBuilder builder = new();
 
 		/// <summary>
 		/// Main entry point of plugin
@@ -208,9 +211,24 @@ namespace CS2StratRoulette
 		/// </summary>
 		private void AnnounceStrategy(Strategy strategy)
 		{
-			var stratFull =
-				$" {ChatColors.Blue}-------------------------------------------------------------------------------{this.NewLine}{ChatColors.White}Chosen Strategy{ChatColors.Blue}: {ChatColors.White}{strategy.Name}{this.NewLine}{strategy.Description}{this.NewLine}{ChatColors.Blue}-------------------------------------------------------------------------------";
-			CounterStrikeSharp.API.Server.PrintToChatAll(stratFull);
+			this.builder.Clear();
+
+			this.builder.Append(' ');
+			this.builder.Append(ChatColors.DarkBlue);
+			this.builder.Append('-', 80);
+			this.builder.Append(CS2StratRoulettePlugin.NewLine);
+			this.builder.Append(ChatColors.Red);
+			this.builder.Append(strategy.Name);
+			this.builder.Append(CS2StratRoulettePlugin.NewLine);
+			this.builder.Append(ChatColors.Silver);
+			this.builder.Append(strategy.Description);
+			this.builder.Append(CS2StratRoulettePlugin.NewLine);
+			this.builder.Append(ChatColors.DarkBlue);
+			this.builder.Append('-', 80);
+
+			CounterStrikeSharp.API.Server.PrintToChatAll(this.builder.ToString());
+
+			this.builder.Clear();
 		}
 	}
 }
