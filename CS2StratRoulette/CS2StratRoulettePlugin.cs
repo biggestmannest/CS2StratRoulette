@@ -33,7 +33,7 @@ namespace CS2StratRoulette
 
 			foreach (var type in types)
 			{
-				if (type.IsClass || !type.IsAbstract || type.IsSubclassOf(typeof(Strategy)))
+				if (type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(Strategy)))
 				{
 					this.Strategies.Add(type);
 				}
