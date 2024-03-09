@@ -4,45 +4,36 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
-    public class HeadshotOnly : IStrategy
+    public class HeadshotOnly : Strategy
     {
         /// <inheritdoc cref="IStrategy.Name"/>
-        public string Name => "Headshot Only";
+        public override string Name => "Headshot Only";
 
         /// <inheritdoc cref="IStrategy.Description"/>
-        public string Description => "You can only kill players with a headshot.";
-
-        /// <inheritdoc cref="IStrategy.Running"/>
-        public bool Running { get; private set; }
+        public override string Description => "You can only kill players with a headshot.";
 
         /// <inheritdoc cref="IStrategy.Start"/>
-        public bool Start(ref CS2StratRoulettePlugin plugin)
+        public override bool Start(ref CS2StratRoulettePlugin plugin)
         {
-            if (this.Running)
+            if (!base.Start(ref plugin))
             {
                 return false;
             }
 
             Server.ExecuteCommand("mp_damage_headshot_only 1");
 
-
-            this.Running = true;
-
             return true;
         }
 
         /// <inheritdoc cref="IStrategy.Stop"/>
-        public bool Stop(ref CS2StratRoulettePlugin plugin)
+        public override bool Stop(ref CS2StratRoulettePlugin plugin)
         {
-            if (!this.Running)
+            if (!base.Start(ref plugin))
             {
                 return false;
             }
 
             Server.ExecuteCommand("mp_damage_headshot_only 0");
-
-            this.Running = false;
-
 
             return true;
         }

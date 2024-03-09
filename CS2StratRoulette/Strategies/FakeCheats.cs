@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class FakeCheats : IStrategy
+	public class FakeCheats : Strategy
 	{
 		private const float Interval = 3.0f;
 
@@ -30,22 +30,19 @@ namespace CS2StratRoulette.Strategies
 		};
 
 		/// <inheritdoc cref="IStrategy.Name"/>
-		public string Name => "Fake Cheats";
+		public override string Name => "Fake Cheats";
 
 		/// <inheritdoc cref="IStrategy.Description"/>
-		public string Description => "Spams fake cheat advertisements in the chat.";
-
-		/// <inheritdoc cref="IStrategy.Running"/>
-		public bool Running { get; private set; }
+		public override string Description => "Spams fake cheat advertisements in the chat.";
 
 		private readonly System.Random random = new();
 
 		private Timer? timer;
 
 		/// <inheritdoc cref="IStrategy.Start"/>
-		public bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
-			if (this.Running)
+			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
@@ -64,20 +61,16 @@ namespace CS2StratRoulette.Strategies
 				}
 			}, TimerFlags.REPEAT);
 
-			this.Running = true;
-
 			return true;
 		}
 
 		/// <inheritdoc cref="IStrategy.Stop"/>
-		public bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
 		{
-			if (!this.Running)
+			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
-
-			this.Running = false;
 
 			this.timer?.Kill();
 

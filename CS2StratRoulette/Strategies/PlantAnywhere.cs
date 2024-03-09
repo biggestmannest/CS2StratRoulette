@@ -9,7 +9,7 @@ namespace CS2StratRoulette.Strategies
 			"Plant Anywhere";
 
 		public override string Description =>
-			"The may be planted anywhere.";
+			"The bomb may be planted anywhere.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
