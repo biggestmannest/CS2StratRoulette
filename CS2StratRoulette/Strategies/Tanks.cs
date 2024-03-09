@@ -55,29 +55,18 @@ namespace CS2StratRoulette.Strategies
 
 			if (cts.Count > 0)
 			{
-				var ct = cts[this.random.Next(cts.Count)];
-
-				if (ct.IsValid)
-				{
-					ct.GiveNamedItem(CsItem.AssaultSuit);
-				}
+				Tanks.MakeTank(cts[this.random.Next(cts.Count)]);
 			}
 
 			// ReSharper disable once InvertIf
 			if (ts.Count > 0)
 			{
-				var t = ts[this.random.Next(ts.Count)];
-
-				if (t.IsValid)
-				{
-					t.GiveNamedItem(CsItem.AssaultSuit);
-				}
+				Tanks.MakeTank(ts[this.random.Next(ts.Count)]);
 			}
 
 			return true;
 		}
 
-		// TODO: remove assault suit from players or just kill them if we can't remove it
 		public override bool Stop(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Stop(ref plugin))
@@ -87,24 +76,33 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Tanks.DisableHeavyAssaultSuite);
 
-			foreach (var player in Utilities.GetPlayers())
+			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (player.IsValid || !player.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
 
-				if (pawn.ItemServices is null)
-				{
-					continue;
-				}
+				pawn.ArmorValue = 0;
 
-				var itemServices = new CCSPlayer_ItemServices(pawn.ItemServices.Handle);
-
-				System.Console.WriteLine($"[Tanks]: {player.Globalname}: {itemServices.HasHeavyArmor}");
+				Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
 			}
 
 			return true;
+		}
+
+		private static void MakeTank(CCSPlayerController controller)
+		{
+			if (!controller.TryGetPlayerPawn(out var pawn))
+			{
+				return;
+			}
+
+			controller.GiveNamedItem(CsItem.AssaultSuit);
+
+			pawn.ArmorValue = 999;
+
+			Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
 		}
 	}
 }

@@ -214,16 +214,16 @@ namespace CS2StratRoulette
 			this.builder.Clear();
 
 			this.builder.Append(' ');
-			this.builder.Append(ChatColors.DarkBlue);
+			this.builder.Append(ChatColors.Blue);
 			this.builder.Append('-', 80);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
-			this.builder.Append(ChatColors.Red);
+			this.builder.Append(ChatColors.Green);
 			this.builder.Append(strategy.Name);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
 			this.builder.Append(ChatColors.Silver);
 			this.builder.Append(strategy.Description);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
-			this.builder.Append(ChatColors.DarkBlue);
+			this.builder.Append(ChatColors.Blue);
 			this.builder.Append('-', 80);
 
 			CounterStrikeSharp.API.Server.PrintToChatAll(this.builder.ToString());
