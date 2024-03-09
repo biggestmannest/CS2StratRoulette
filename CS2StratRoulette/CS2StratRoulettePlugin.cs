@@ -93,7 +93,7 @@ namespace CS2StratRoulette
 			return HookResult.Continue;
 		}
 
-		[ConsoleCommand("css_set_strat", "Sets the active strategy")]
+		[ConsoleCommand("set_strat", "Sets the active strategy")]
 		[CommandHelper(1, "[strat]")]
 		[RequiresPermissions("@css/root")]
 		public void OnStratCommand(CCSPlayerController? player, CommandInfo commandInfo)
@@ -124,6 +124,13 @@ namespace CS2StratRoulette
 				}
 
 				commandInfo.ReplyToCommand($"[OnStratCommand] set active strategy to {strategy.Name}");
+
+				if (this.ActiveStrategy is not null)
+				{
+					this.AnnounceStrategy(this.ActiveStrategy);
+				}
+
+				return;
 			}
 
 			commandInfo.ReplyToCommand("[OnStratCommand] strategy not found");

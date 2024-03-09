@@ -1,5 +1,7 @@
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
+using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -45,10 +47,21 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			if (@event.Userid.IsValid && @event.Step)
+			if (!@event.Step)
 			{
-				@event.Userid.CommitSuicide(false, true);
+				return HookResult.Continue;
 			}
+
+			var controller = @event.Userid;
+
+			if (!controller.TryGetPlayerPawn(out var pawn))
+			{
+				return HookResult.Continue;
+			}
+
+			pawn.Health -= 20;
+
+			Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
 
 			return HookResult.Continue;
 		}
