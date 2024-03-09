@@ -10,7 +10,7 @@ namespace CS2StratRoulette.Strategies
 			"Janitors on Strike";
 
 		public override string Description =>
-			"Since the janitors are on strike dropped items won't disappear from the map after this round.";
+			"The janitors are on strike so dropped items won't disappear after this round.";
 
 		public void PreStop()
 		{
