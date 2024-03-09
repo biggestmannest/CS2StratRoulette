@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class RandomWeapon : IStrategy
+	public sealed class RandomWeapon : Strategy
 	{
 		private const int PistolMin = (int)CsItem.Deagle;
 		private const int PistolMax = (int)CsItem.Revolver;
@@ -19,23 +19,20 @@ namespace CS2StratRoulette.Strategies
 		private const int RifleMin = (int)CsItem.AK47;
 		private const int RifleMax = (int)CsItem.G3SG1;
 
-		public string Name => "Random weapon";
+		public override string Name =>
+			"Random weapon";
 
-		public string Description =>
+		public override string Description =>
 			"I hope you like your new weapon :)";
-
-		public bool Running { get; private set; }
 
 		private readonly System.Random random = new();
 
-		public bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
-			if (this.Running)
+			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
-
-			this.Running = true;
 
 			Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.None.Str()}");
 			Server.ExecuteCommand("mp_buy_allow_grenades 0");
@@ -72,14 +69,12 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		public bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
 		{
-			if (!this.Running)
+			if (!base.Stop(ref plugin))
 			{
 				return false;
 			}
-
-			this.Running = false;
 
 			Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.All.Str()}");
 			Server.ExecuteCommand("mp_buy_allow_grenades 1");
