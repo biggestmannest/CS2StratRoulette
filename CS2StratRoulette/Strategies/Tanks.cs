@@ -30,7 +30,7 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Tanks.EnableHeavyAssaultSuite);
 
-			const uint max = (uint)CsTeam.CounterTerrorist;
+			const uint max = (uint)CsTeam.CounterTerrorist + 1;
 			var added = new bool[max];
 
 			foreach (var player in Utilities.GetPlayers())
