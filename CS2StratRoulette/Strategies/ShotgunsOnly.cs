@@ -1,3 +1,5 @@
+using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 
@@ -22,8 +24,7 @@ namespace CS2StratRoulette.Strategies
             {
                 return false;
             }
-            //TODO: put this in freezetime bool :d
-            Server.ExecuteCommand("mp_buy_allow_guns 8");
+            Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.Shotguns.Str()}");
 
             this.Running = true;
 
@@ -37,7 +38,7 @@ namespace CS2StratRoulette.Strategies
             {
                 return false;
             }
-            Server.ExecuteCommand("mp_buy_allow_guns 255");
+            Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.All.Str()}");
 
             this.Running = false;
 

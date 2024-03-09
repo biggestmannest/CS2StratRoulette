@@ -1,18 +1,16 @@
-using CS2StratRoulette.Enums;
-using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
-    public class RiflesOnly : IStrategy
+    public class HeadshotOnly : IStrategy
     {
         /// <inheritdoc cref="IStrategy.Name"/>
-        public string Name => "Rifles Only";
+        public string Name => "Headshot Only";
 
         /// <inheritdoc cref="IStrategy.Description"/>
-        public string Description => "You're only allowed to buy rifles.";
+        public string Description => "You can only kill players with a headshot.";
 
         /// <inheritdoc cref="IStrategy.Running"/>
         public bool Running { get; private set; }
@@ -25,7 +23,8 @@ namespace CS2StratRoulette.Strategies
                 return false;
             }
 
-            Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.Rifles.Str()}");
+            Server.ExecuteCommand("mp_damage_headshot_only 1");
+
 
             this.Running = true;
 
@@ -39,7 +38,8 @@ namespace CS2StratRoulette.Strategies
             {
                 return false;
             }
-            Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.All.Str()}");
+
+            Server.ExecuteCommand("mp_damage_headshot_only 0");
 
             this.Running = false;
 

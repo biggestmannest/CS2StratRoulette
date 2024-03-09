@@ -1,4 +1,5 @@
 using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Utils;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
@@ -24,17 +25,31 @@ namespace CS2StratRoulette.Strategies
                 return false;
             }
 
+            Server.ExecuteCommand("mp_buy_allow_guns 0");
+            Server.ExecuteCommand("mp_buy_allow_grenades 0");
+            Server.ExecuteCommand("mp_weapons_allow_zeus 0");
+
             var allPlayers = Utilities.GetPlayers();
             var randomPlayer = allPlayers[this.random.Next(0, allPlayers.Count)];
 
+
             foreach (var playerController in allPlayers)
             {
-                playerController.RemoveWeapons();
+                //TODO: make it easier to remove weapons from inventory instead of removing all items, since c4 dies too
                 playerController.GiveNamedItem("weapon_negev");
                 playerController.GiveNamedItem("weapon_decoy");
 
             }
-            Server.ExecuteCommand("mp_buytime 0");
+
+            Server.ExecuteCommand("sv_cheats 1");
+
+            if (randomPlayer.IsValid && randomPlayer.Team is CsTeam.Terrorist)
+            {
+                randomPlayer.GiveNamedItem("weapon_c4");
+            }
+
+            Server.ExecuteCommand("sv_cheats 0");
+
             this.Running = true;
 
             return true;
@@ -47,7 +62,9 @@ namespace CS2StratRoulette.Strategies
             {
                 return false;
             }
-            Server.ExecuteCommand("mp_buytime 20");
+            Server.ExecuteCommand("mp_buy_allow_guns 255");
+            Server.ExecuteCommand("mp_buy_allow_grenades 1");
+            Server.ExecuteCommand("mp_weapons_allow_zeus 1");
 
             this.Running = false;
 
