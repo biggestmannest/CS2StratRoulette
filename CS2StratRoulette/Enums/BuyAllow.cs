@@ -45,11 +45,6 @@ namespace CS2StratRoulette.Enums
 		/// </summary>
 		Heavy = 1 << 5,
 
-		All = BuyAllow.Pistols |
-		      BuyAllow.SubMachineGuns |
-		      BuyAllow.Rifles |
-		      BuyAllow.Shotguns |
-		      BuyAllow.Snipers |
-		      BuyAllow.Heavy,
+		All = 0xff,
 	}
 }
