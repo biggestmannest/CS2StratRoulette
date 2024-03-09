@@ -10,7 +10,7 @@ namespace CS2StratRoulette.Strategies
 			"Sneak Only";
 
 		public override string Description =>
-			"Any footstep noises will kill you. Falling counts too.";
+			"Any footstep noises will kill you. Jumping/falling counts too.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

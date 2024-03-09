@@ -20,6 +20,8 @@ namespace CS2StratRoulette
 		public required List<System.Type> Strategies = new();
 		public required Strategy? ActiveStrategy;
 
+		public char NewLine = '\u2029';
+
 		/// <summary>
 		/// Main entry point of plugin
 		/// Get all classes of type <see cref="Strategy"/> and store for later use
@@ -98,7 +100,7 @@ namespace CS2StratRoulette
 				return;
 			}
 
-			var idx = System.Random.Shared.Next(0, this.Strategies.Count);
+			var idx = System.Random.Shared.Next(this.Strategies.Count);
 			var type = this.Strategies[idx];
 
 			// Try to invoke a random chosen strategy
@@ -206,11 +208,9 @@ namespace CS2StratRoulette
 		/// </summary>
 		private void AnnounceStrategy(Strategy strategy)
 		{
-			CounterStrikeSharp.API.Server.PrintToChatAll(
-				$"{ChatColors.Red}[StratRoulette]:{ChatColors.Default} the chosen strategy for this round will be {ChatColors.Blue}{strategy.Name}"
-			);
-
-			CounterStrikeSharp.API.Server.PrintToChatAll(strategy.Description);
+			var stratFull =
+				$" {ChatColors.Blue}-------------------------------------------------------------------------------{this.NewLine}{ChatColors.White}Chosen Strategy{ChatColors.Blue}: {ChatColors.White}{strategy.Name}{this.NewLine}{strategy.Description}{this.NewLine}{ChatColors.Blue}-------------------------------------------------------------------------------";
+			CounterStrikeSharp.API.Server.PrintToChatAll(stratFull);
 		}
 	}
 }

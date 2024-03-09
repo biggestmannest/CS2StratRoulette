@@ -1,18 +1,19 @@
+using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class StopHittingYourself : Strategy
+	public class HeadshotOnly : Strategy
 	{
-		private const string Half = "mp_weapon_self_inflict_amount 0.5";
-		private const string Reset = "mp_weapon_self_inflict_amount 0";
+		private const string EnableHeadshotOnly = "mp_damage_headshot_only 1";
+		private const string DisableHeadshotOnly = "mp_damage_headshot_only 0";
 
 		public override string Name =>
-			"Stop Hitting Yourself!";
+			"Headshot Only";
 
 		public override string Description =>
-			"If you miss you will receive half damage from your shot.";
+			"You can only kill players with a headshot.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -21,7 +22,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(StopHittingYourself.Half);
+			Server.ExecuteCommand(HeadshotOnly.EnableHeadshotOnly);
 
 			return true;
 		}
@@ -33,7 +34,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(StopHittingYourself.Reset);
+			Server.ExecuteCommand(HeadshotOnly.DisableHeadshotOnly);
 
 			return true;
 		}

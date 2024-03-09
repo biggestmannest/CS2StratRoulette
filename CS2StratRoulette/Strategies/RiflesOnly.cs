@@ -1,18 +1,21 @@
+using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class StopHittingYourself : Strategy
+	public class RiflesOnly : Strategy
 	{
-		private const string Half = "mp_weapon_self_inflict_amount 0.5";
-		private const string Reset = "mp_weapon_self_inflict_amount 0";
+		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.Rifles.Str()}";
+		private static readonly string Disable = $"mp_buy_allow_guns {BuyAllow.All.Str()}";
 
 		public override string Name =>
-			"Stop Hitting Yourself!";
+			"Rifles Only";
 
 		public override string Description =>
-			"If you miss you will receive half damage from your shot.";
+			"You're only allowed to buy rifles.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -21,7 +24,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(StopHittingYourself.Half);
+			Server.ExecuteCommand(RiflesOnly.Enable);
 
 			return true;
 		}
@@ -33,7 +36,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(StopHittingYourself.Reset);
+			Server.ExecuteCommand(RiflesOnly.Disable);
 
 			return true;
 		}

@@ -51,12 +51,13 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				pawn.RemoveWeaponsByType(
+					true,
 					CSWeaponType.WEAPONTYPE_KNIFE,
 					CSWeaponType.WEAPONTYPE_C4,
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
 
-				var item = this.random.Next(0, 3) switch
+				var item = this.random.Next(3) switch
 				{
 					0 => (CsItem)this.random.Next(RandomWeapon.PistolMin, RandomWeapon.PistolMax),
 					1 => (CsItem)this.random.Next(RandomWeapon.MidMin, RandomWeapon.MidMax),

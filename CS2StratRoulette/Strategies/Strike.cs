@@ -6,6 +6,9 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Strike : Strategy, IStrategyPostStop
 	{
+		private const string Enable = "mp_weapons_allow_map_placed 1";
+		private const string Disable = "mp_weapons_allow_map_placed 0";
+
 		public override string Name =>
 			"Janitors on Strike";
 
@@ -19,14 +22,14 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand("mp_weapons_allow_map_placed 1");
+			CounterStrikeSharp.API.Server.ExecuteCommand(Strike.Enable);
 
 			return true;
 		}
 
 		public void PostStop()
 		{
-			CounterStrikeSharp.API.Server.ExecuteCommand("mp_weapons_allow_map_placed 0");
+			CounterStrikeSharp.API.Server.ExecuteCommand(Strike.Disable);
 		}
 	}
 }

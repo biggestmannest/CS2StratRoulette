@@ -25,7 +25,7 @@ namespace CS2StratRoulette.Extensions
 		{
 			pawn = null;
 
-			if (!controller.PlayerPawn.TryGetValue(out var entity))
+			if (!controller.IsValid || !controller.PlayerPawn.TryGetValue(out var entity))
 			{
 				return false;
 			}
@@ -40,7 +40,30 @@ namespace CS2StratRoulette.Extensions
 			return true;
 		}
 
-		public static void RemoveWeaponsByType(this CCSPlayerPawn pawn, params CSWeaponType[] types)
+		/// <summary>
+		/// Remove weapons by type.
+		/// </summary>
+		/// <param name="pawn">The to remove weapons from</param>
+		/// <param name="except">When <see langword="true"/> it will keep the provided types</param>
+		/// <param name="types"></param>
+		/// <example>
+		/// <code>
+		/// // this will remove all weapons except those of type pistol
+		///	pawn.RemoveWeaponsByType(
+		///		true,
+		///		CSWeaponType.WEAPONTYPE_PISTOL
+		/// );
+		///
+		/// // this will remove all weapons of type pistol
+		///	pawn.RemoveWeaponsByType(
+		///		false,
+		///		CSWeaponType.WEAPONTYPE_PISTOL
+		/// );
+		/// </code>
+		/// </example>
+		public static void RemoveWeaponsByType(this CCSPlayerPawn pawn,
+		                                       bool except = false,
+		                                       params CSWeaponType[] types)
 		{
 			if (pawn.WeaponServices is null)
 			{
@@ -65,7 +88,7 @@ namespace CS2StratRoulette.Extensions
 
 				foreach (var type in types)
 				{
-					if (data.WeaponType == type)
+					if (except ? data.WeaponType != type : data.WeaponType == type)
 					{
 						pawn.RemovePlayerItem(weapon.Value);
 					}
