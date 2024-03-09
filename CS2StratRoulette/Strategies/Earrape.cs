@@ -49,11 +49,9 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.RemoveWeaponsByType(
-					true,
-					CSWeaponType.WEAPONTYPE_C4,
+				pawn.KeepWeaponsByType(
 					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_MELEE,
+					CSWeaponType.WEAPONTYPE_C4,
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
 
@@ -73,7 +71,7 @@ namespace CS2StratRoulette.Strategies
 				giveC4.GiveNamedItem(CsItem.C4);
 			}
 
-			this.timer = new Timer(Earrape.Interval, this.OnInterval, TimerFlags.REPEAT);
+			this.timer = new Timer(Earrape.Interval, Earrape.OnInterval, TimerFlags.REPEAT);
 
 			return true;
 		}
@@ -96,16 +94,13 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.RemoveWeaponsByType(
-					false,
-					CSWeaponType.WEAPONTYPE_MACHINEGUN
-				);
+				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_MACHINEGUN);
 			}
 
 			return true;
 		}
 
-		private void OnInterval()
+		private static void OnInterval()
 		{
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -114,10 +109,7 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.RemoveWeaponsByType(
-					false,
-					CSWeaponType.WEAPONTYPE_GRENADE
-				);
+				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_GRENADE);
 
 				controller.GiveNamedItem(CsItem.Decoy);
 			}

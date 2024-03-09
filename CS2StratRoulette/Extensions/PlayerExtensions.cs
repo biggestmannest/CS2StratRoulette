@@ -41,29 +41,76 @@ namespace CS2StratRoulette.Extensions
 		}
 
 		/// <summary>
-		/// Remove weapons by type.
+		/// Remove all weapons from player pawn not included in types.
 		/// </summary>
-		/// <param name="pawn">The to remove weapons from</param>
-		/// <param name="except">When <see langword="true"/> it will keep the provided types</param>
-		/// <param name="types"></param>
-		/// <example>
-		/// <code>
-		/// // this will remove all weapons except those of type pistol
-		///	pawn.RemoveWeaponsByType(
-		///		true,
-		///		CSWeaponType.WEAPONTYPE_PISTOL
-		/// );
-		///
-		/// // this will remove all weapons of type pistol
-		///	pawn.RemoveWeaponsByType(
-		///		false,
-		///		CSWeaponType.WEAPONTYPE_PISTOL
-		/// );
-		/// </code>
-		/// </example>
-		public static void RemoveWeaponsByType(this CCSPlayerPawn pawn,
-		                                       bool except,
-		                                       params CSWeaponType[] types)
+		/// <param name="pawn">The player pawn</param>
+		/// <param name="types">The weapon types to keep</param>
+		public static void KeepWeaponsByType(this CCSPlayerPawn pawn, params CSWeaponType[] types)
+		{
+			pawn.ForEachWeapon((weapon) =>
+			{
+				if (weapon.VData is null)
+				{
+					return;
+				}
+
+				var data = new CCSWeaponBaseVData(weapon.VData.Handle);
+				var remove = true;
+
+				// ReSharper disable once LoopCanBeConvertedToQuery
+				foreach (var type in types)
+				{
+					// ReSharper disable once InvertIf
+					if (type == data.WeaponType)
+					{
+						remove = false;
+						break;
+					}
+				}
+
+				if (remove)
+				{
+					pawn.RemovePlayerItem(weapon);
+				}
+			});
+		}
+
+		/// <summary>
+		/// Remove weapons from player pawn by type.
+		/// </summary>
+		/// <param name="pawn">The player pawn</param>
+		/// <param name="types">The weapon types to remove</param>
+		public static void RemoveWeaponsByType(this CCSPlayerPawn pawn, params CSWeaponType[] types)
+		{
+			pawn.ForEachWeapon((weapon) =>
+			{
+				if (weapon.VData is null)
+				{
+					return;
+				}
+
+				var data = new CCSWeaponBaseVData(weapon.VData.Handle);
+				var remove = false;
+
+				// ReSharper disable once LoopCanBeConvertedToQuery
+				foreach (var type in types)
+				{
+					// ReSharper disable once InvertIf
+					if (type == data.WeaponType)
+					{
+						remove = true;
+						break;
+					}
+				}
+
+				if (remove)
+				{
+					pawn.RemovePlayerItem(weapon);
+				}
+			});
+		}
+
+		public static void ForEachWeapon(this CCSPlayerPawn pawn, System.Action<CBasePlayerWeapon> func)
 		{
 			if (pawn.WeaponServices is null)
 			{
@@ -79,20 +126,12 @@ namespace CS2StratRoulette.Extensions
 					continue;
 				}
 
-				if (!entity.IsValid || weapon.Value!.VData is null)
+				if (!entity.IsValid)
 				{
 					continue;
 				}
 
-				var data = new CCSWeaponBaseVData(weapon.Value.VData.Handle);
-
-				foreach (var type in types)
-				{
-					if (except ? data.WeaponType != type : data.WeaponType == type)
-					{
-						pawn.RemovePlayerItem(weapon.Value);
-					}
-				}
+				func(entity);
 			}
 		}
 	}
