@@ -20,11 +20,6 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var players in Utilities.GetPlayers())
-			{
-				players.ExecuteClientCommand("snd_toolvolume 0.3");
-			}
-
 			plugin.RegisterEventHandler<EventBombPlanted>(this.OnBombPlanted);
 
 			return true;

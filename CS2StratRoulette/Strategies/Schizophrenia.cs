@@ -31,11 +31,6 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var players in Utilities.GetPlayers())
-			{
-				players.ExecuteClientCommand("snd_toolvolume 0.3");
-			}
-
 			this.timer = new Timer(Schizophrenia.Interval, this.OnInterval, TimerFlags.REPEAT);
 
 			return true;
