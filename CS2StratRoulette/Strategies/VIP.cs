@@ -24,6 +24,14 @@ namespace CS2StratRoulette.Strategies
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
+			if (!base.Start(ref plugin))
+			{
+				return false;
+			}
+
+			Server.PrecacheModel(Models.JuggernautCt);
+			Server.PrecacheModel(Models.JuggernautT);
+
 			var cts = new List<CCSPlayerController>(10);
 			var ts = new List<CCSPlayerController>(10);
 
@@ -70,6 +78,20 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
+
+			const string playerDeath = "player_death";
+
+			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
+
+			return true;
+		}
+
 		private HookResult OnPlayerDeath(EventPlayerDeath @event, GameEventInfo _)
 		{
 			var controller = @event.Userid;
@@ -108,6 +130,10 @@ namespace CS2StratRoulette.Strategies
 			{
 				return null;
 			}
+
+			pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+
+			controller.GiveNamedItem(CsItem.CZ);
 
 			pawn.SetModel(controller.Team is CsTeam.CounterTerrorist ? Models.JuggernautCt : Models.JuggernautT);
 
