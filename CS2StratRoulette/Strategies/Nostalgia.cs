@@ -4,55 +4,60 @@ using CounterStrikeSharp.API;
 
 namespace CS2StratRoulette.Strategies
 {
-    [SuppressMessage("ReSharper", "UnusedType.Global")]
-    public sealed class Nostalgia : Strategy
-    {
-        public override string Name =>
-            "Annoying Nostalgia";
+	[SuppressMessage("ReSharper", "UnusedType.Global")]
+	public sealed class Nostalgia : Strategy
+	{
+		public override string Name =>
+			"Nostalgia";
 
-        public override string Description =>
-            "Plant and find out ;)";
+		public override string Description =>
+			"Plant and find out ;) (highly recommended that you type \"snd_toolvolume 0.05\" in console).";
 
-        public override bool Start(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Start(ref plugin))
-            {
-                return false;
-            }
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Start(ref plugin))
+			{
+				return false;
+			}
 
-            plugin.RegisterEventHandler<EventBombPlanted>(this.OnBombPlanted);
+			foreach (var players in Utilities.GetPlayers())
+			{
+				players.ExecuteClientCommand("snd_toolvolume 0.3");
+			}
 
-            return true;
-        }
+			plugin.RegisterEventHandler<EventBombPlanted>(this.OnBombPlanted);
 
-        public override bool Stop(ref CS2StratRoulettePlugin plugin)
-        {
-            if (!base.Stop(ref plugin))
-            {
-                return false;
-            }
+			return true;
+		}
 
-            const string bombPlanted = "bomb_planted";
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
 
-            plugin.DeregisterEventHandler(bombPlanted, this.OnBombPlanted, true);
+			const string bombPlanted = "bomb_planted";
 
-            return true;
-        }
+			plugin.DeregisterEventHandler(bombPlanted, this.OnBombPlanted, true);
 
-        private HookResult OnBombPlanted(EventBombPlanted @event, GameEventInfo _)
-        {
-            if (!this.Running)
-            {
-                return HookResult.Continue;
-            }
+			return true;
+		}
 
-            foreach (var players in Utilities.GetPlayers())
-            {
-                players.ExecuteClientCommand("play sounds/music/theverkkars_01/bombplanted");
-            }
-            
+		private HookResult OnBombPlanted(EventBombPlanted @event, GameEventInfo _)
+		{
+			if (!this.Running)
+			{
+				return HookResult.Continue;
+			}
 
-            return HookResult.Continue;
-        }
-    }
+			foreach (var players in Utilities.GetPlayers())
+			{
+				players.ExecuteClientCommand("play sounds/music/theverkkars_01/bombplanted");
+			}
+
+
+			return HookResult.Continue;
+		}
+	}
 }
