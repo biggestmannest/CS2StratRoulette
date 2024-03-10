@@ -39,21 +39,21 @@ namespace CS2StratRoulette.Strategies
 			var ts = new List<CCSPlayerController>(10);
 
 			// ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-			foreach (var player in Utilities.GetPlayers())
+			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!player.IsValid)
+				if (!controller.IsValid)
 				{
 					continue;
 				}
 
 				// ReSharper disable once ConvertIfStatementToSwitchStatement
-				if (player.Team is CsTeam.CounterTerrorist)
+				if (controller.Team is CsTeam.CounterTerrorist)
 				{
-					cts.Add(player);
+					cts.Add(controller);
 				}
-				else if (player.Team is CsTeam.Terrorist)
+				else if (controller.Team is CsTeam.Terrorist)
 				{
-					ts.Add(player);
+					ts.Add(controller);
 				}
 			}
 
