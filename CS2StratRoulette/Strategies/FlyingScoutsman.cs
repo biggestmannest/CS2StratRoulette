@@ -1,9 +1,10 @@
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 using CS2StratRoulette.Interfaces;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Modules.Entities.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -13,8 +14,14 @@ namespace CS2StratRoulette.Strategies
 		private const string EnableFs =
 			"sv_cheats 1;sv_gravity 230;sv_airaccelerate 20000;sv_maxspeed 420;sv_friction 4;sv_cheats 0";
 
-		private const string DisabledFs =
+		private const string DisableFs =
 			"sv_cheats 1;sv_gravity 800;sv_airaccelerate 12;sv_maxspeed 320;sv_friction 5.2;sv_cheats 0";
+
+		private static readonly string EnableBuy =
+			$"mp_buy_allow_guns {BuyAllow.All.Str()}";
+
+		private static readonly string DisableBuy =
+			$"mp_buy_allow_guns {BuyAllow.None.Str()}";
 
 		public override string Name =>
 			"Flying Scoutsman";
@@ -28,6 +35,8 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
+
+			Server.ExecuteCommand(FlyingScoutsman.DisableBuy);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -50,6 +59,18 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
+
+			Server.ExecuteCommand(FlyingScoutsman.EnableBuy);
+
+			return true;
+		}
+
 		public void PostStop()
 		{
 			foreach (var controller in Utilities.GetPlayers())
@@ -62,7 +83,7 @@ namespace CS2StratRoulette.Strategies
 				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
 			}
 
-			Server.ExecuteCommand(FlyingScoutsman.DisabledFs);
+			Server.ExecuteCommand(FlyingScoutsman.DisableFs);
 		}
 	}
 }
