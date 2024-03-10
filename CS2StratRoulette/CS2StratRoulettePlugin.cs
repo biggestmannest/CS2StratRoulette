@@ -45,9 +45,6 @@ namespace CS2StratRoulette
 					this.Strategies.Add(type);
 				}
 			}
-
-			Server.PrecacheModel(Models.JuggernautCt);
-			Server.PrecacheModel(Models.JuggernautT);
 		}
 
 		/// <summary>

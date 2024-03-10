@@ -30,6 +30,9 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			Server.PrecacheModel(Models.JuggernautCt);
+			Server.PrecacheModel(Models.JuggernautT);
+
 			Server.ExecuteCommand(Tanks.EnableHeavyAssaultSuite);
 
 			var cts = new List<CCSPlayerController>(10);
