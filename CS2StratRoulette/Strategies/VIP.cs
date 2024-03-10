@@ -59,7 +59,7 @@ namespace CS2StratRoulette.Strategies
 
 				if (ct.IsValid)
 				{
-					this.ctVip = VIP.MakeVIP(ct);
+					this.ctVip = VIP.MakeVip(ct);
 				}
 			}
 
@@ -69,7 +69,7 @@ namespace CS2StratRoulette.Strategies
 
 				if (t.IsValid)
 				{
-					this.tVip = VIP.MakeVIP(t);
+					this.tVip = VIP.MakeVip(t);
 				}
 			}
 
@@ -92,8 +92,14 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
+		// ReSharper disable once InconsistentNaming
 		private HookResult OnPlayerDeath(EventPlayerDeath @event, GameEventInfo _)
 		{
+			if (!this.Running)
+			{
+				return HookResult.Continue;
+			}
+
 			var controller = @event.Userid;
 
 			if (!controller.IsValid)
@@ -123,19 +129,27 @@ namespace CS2StratRoulette.Strategies
 			return HookResult.Continue;
 		}
 
-		// ReSharper disable once InconsistentNaming
-		private static CCSPlayerController? MakeVIP(CCSPlayerController controller)
+		private static CCSPlayerController? MakeVip(CCSPlayerController controller)
 		{
 			if (!controller.TryGetPlayerPawn(out var pawn))
 			{
 				return null;
 			}
 
-			pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+			Server.NextFrame(() =>
+			{
+				pawn.KeepWeaponsByType(
+					CSWeaponType.WEAPONTYPE_KNIFE,
+					CSWeaponType.WEAPONTYPE_C4
+				);
+			});
 
-			controller.GiveNamedItem(CsItem.CZ);
+			Server.NextFrame(() =>
+			{
+				controller.GiveNamedItem(CsItem.CZ);
 
-			pawn.SetModel(controller.Team is CsTeam.CounterTerrorist ? Models.JuggernautCt : Models.JuggernautT);
+				pawn.SetModel(controller.Team is CsTeam.CounterTerrorist ? Models.JuggernautCt : Models.JuggernautT);
+			});
 
 			return controller;
 		}
