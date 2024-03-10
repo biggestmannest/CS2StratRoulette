@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -21,7 +22,6 @@ namespace CS2StratRoulette.Strategies
 			"Every team gets a tank.";
 
 		private readonly System.Random random = new();
-		private float defaultMaxSpeed = 0.0f;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -84,9 +84,19 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.ArmorValue = 0;
+				Server.NextFrame(() =>
+				{
+					pawn.MaxHealth = 100;
+					pawn.Health = 100;
+					pawn.ArmorValue = 0;
+				});
 
-				Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
+				Server.NextFrame(() =>
+				{
+					Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
+					Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
+					Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
+				});
 			}
 
 			return true;
@@ -101,13 +111,26 @@ namespace CS2StratRoulette.Strategies
 
 			controller.GiveNamedItem(CsItem.AssaultSuit);
 
-			pawn.MaxHealth = 999;
-			pawn.Health = 999;
-			pawn.ArmorValue = 999;
+			Server.NextFrame(() =>
+			{
+				pawn.MaxHealth = 999;
+				pawn.Health = 999;
+				pawn.ArmorValue = 999;
+			});
 
-			Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
-			Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
-			Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
+			Server.NextFrame(() =>
+			{
+				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
+				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
+				Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
+			});
+
+			Server.NextFrame(() =>
+			{
+				pawn.SetModel(controller.Team is CsTeam.CounterTerrorist
+					              ? Models.JuggernautCt
+					              : Models.JuggernautT);
+			});
 		}
 	}
 }
