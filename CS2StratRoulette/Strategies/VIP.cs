@@ -115,7 +115,11 @@ namespace CS2StratRoulette.Strategies
 				             ? RoundEndReason.TerroristsWin
 				             : RoundEndReason.CTsWin;
 
-			Server.NextFrame(() => entity.GameRules.TerminateRound(1.0f, reason));
+			Server.NextFrame(() =>
+			{
+				entity.GameRules.TerminateRound(1.0f, reason);
+				Utilities.SetStateChanged(entity, "CCSGameRulesProxy", "m_pGameRules");
+			});
 
 			return HookResult.Continue;
 		}
