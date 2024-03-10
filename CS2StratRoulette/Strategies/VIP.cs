@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
@@ -37,7 +38,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.IsValid)
+				if (!controller.IsValid || controller.IsBot)
 				{
 					continue;
 				}
@@ -90,7 +91,6 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			System.Console.WriteLine($"[VIP] triggered OnPlayerDeath");
 			var controller = @event.Userid;
 
 			if (!controller.IsValid)
@@ -98,21 +98,16 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			System.Console.WriteLine($"[VIP] player {controller.PlayerName} died");
-
 			if ((this.ctVip is null || controller.SteamID != this.ctVip.SteamID) &&
 			    (this.tVip is null || controller.SteamID != this.tVip.SteamID))
 			{
 				return HookResult.Continue;
 			}
 
-			System.Console.WriteLine($"[VIP] player {controller.PlayerName} was a VIP");
+			var entity = Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").FirstOrDefault();
 
-			var game = new CCSGameRules(controller.Handle);
-
-			if (game.Handle == System.IntPtr.Zero)
+			if (entity is null || entity.GameRules is null)
 			{
-				System.Console.WriteLine($"[VIP] game is nullptr");
 				return HookResult.Continue;
 			}
 
@@ -120,7 +115,7 @@ namespace CS2StratRoulette.Strategies
 				             ? RoundEndReason.TerroristsWin
 				             : RoundEndReason.CTsWin;
 
-			Server.NextFrame(() => game.TerminateRound(1.0f, reason));
+			Server.NextFrame(() => entity.GameRules.TerminateRound(1.0f, reason));
 
 			return HookResult.Continue;
 		}
