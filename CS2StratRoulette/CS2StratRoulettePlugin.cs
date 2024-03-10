@@ -1,10 +1,12 @@
-﻿using CS2StratRoulette.Interfaces;
+﻿using CS2StratRoulette.Constants;
+using CS2StratRoulette.Interfaces;
 using CS2StratRoulette.Strategies;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
+using CounterStrikeSharp.API;
 using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -43,6 +45,9 @@ namespace CS2StratRoulette
 					this.Strategies.Add(type);
 				}
 			}
+
+			Server.PrecacheModel(Models.JuggernautCt);
+			Server.PrecacheModel(Models.JuggernautT);
 		}
 
 		/// <summary>
@@ -276,7 +281,7 @@ namespace CS2StratRoulette
 			this.builder.Append(ChatColors.Blue);
 			this.builder.Append('-', 80);
 
-			CounterStrikeSharp.API.Server.PrintToChatAll(this.builder.ToString());
+			Server.PrintToChatAll(this.builder.ToString());
 
 			this.builder.Clear();
 		}
