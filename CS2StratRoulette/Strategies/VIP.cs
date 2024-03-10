@@ -55,22 +55,12 @@ namespace CS2StratRoulette.Strategies
 
 			if (cts.Count > 0)
 			{
-				var ct = cts[this.random.Next(cts.Count)];
-
-				if (ct.IsValid)
-				{
-					this.ctVip = VIP.MakeVip(ct);
-				}
+				this.ctVip = VIP.MakeVip(cts[this.random.Next(cts.Count)]);
 			}
 
 			if (ts.Count > 0)
 			{
-				var t = ts[this.random.Next(ts.Count)];
-
-				if (t.IsValid)
-				{
-					this.tVip = VIP.MakeVip(t);
-				}
+				this.tVip = VIP.MakeVip(ts[this.random.Next(ts.Count)]);
 			}
 
 			plugin.RegisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
@@ -100,6 +90,7 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
+			System.Console.WriteLine($"[VIP] triggered OnPlayerDeath");
 			var controller = @event.Userid;
 
 			if (!controller.IsValid)
@@ -107,16 +98,21 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
+			System.Console.WriteLine($"[VIP] player {controller.PlayerName} died");
+
 			if ((this.ctVip is null || controller.SteamID != this.ctVip.SteamID) &&
 			    (this.tVip is null || controller.SteamID != this.tVip.SteamID))
 			{
 				return HookResult.Continue;
 			}
 
+			System.Console.WriteLine($"[VIP] player {controller.PlayerName} was a VIP");
+
 			var game = new CCSGameRules(controller.Handle);
 
 			if (game.Handle == System.IntPtr.Zero)
 			{
+				System.Console.WriteLine($"[VIP] game is nullptr");
 				return HookResult.Continue;
 			}
 
@@ -124,7 +120,7 @@ namespace CS2StratRoulette.Strategies
 				             ? RoundEndReason.TerroristsWin
 				             : RoundEndReason.CTsWin;
 
-			game.TerminateRound(1.0f, reason);
+			Server.NextFrame(() => game.TerminateRound(1.0f, reason));
 
 			return HookResult.Continue;
 		}
