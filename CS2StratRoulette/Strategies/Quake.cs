@@ -64,6 +64,8 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			plugin.DeregisterEventHandler("player_shoot", this.OnPlayerShoot, true);
+
 			Server.ExecuteCommand(Commands.BuyAllowAll);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
 			Server.ExecuteCommand(Quake.Disabled);
@@ -91,6 +93,11 @@ namespace CS2StratRoulette.Strategies
 
 		private HookResult OnPlayerShoot(EventPlayerShoot @event, GameEventInfo _)
 		{
+			if (!this.Running)
+			{
+				return HookResult.Continue;
+			}
+
 			var controller = @event.Userid;
 
 			if (!controller.TryGetPlayerPawn(out var pawn))
