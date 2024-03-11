@@ -1,18 +1,19 @@
+using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class PlantAnywhere : Strategy
+	public sealed class DoT : Strategy
 	{
-		private const string Enable = "mp_plant_c4_anywhere 1; mp_c4timer 60";
-		private const string Disable = "mp_plant_c4_anywhere 0; mp_c4timer 40";
+		private const string Activate = "mp_global_damage_per_second 0";
+		private const string Deactivate = "mp_global_damage_per_second 1";
 
 		public override string Name =>
-			"Plant Anywhere";
+			"Damage over time";
 
 		public override string Description =>
-			"The bomb may be planted anywhere.";
+			"Kill or be killed by The Council.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -21,7 +22,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(PlantAnywhere.Enable);
+			Server.ExecuteCommand(DoT.Activate);
 
 			return true;
 		}
@@ -33,7 +34,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(PlantAnywhere.Disable);
+			Server.ExecuteCommand(DoT.Deactivate);
 
 			return true;
 		}
