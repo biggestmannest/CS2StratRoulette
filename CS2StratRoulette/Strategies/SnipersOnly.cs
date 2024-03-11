@@ -18,6 +18,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"You're only allowed to buy snipers.";
 
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))

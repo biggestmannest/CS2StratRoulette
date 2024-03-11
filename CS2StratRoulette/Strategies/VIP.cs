@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Constants;
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
@@ -17,6 +18,8 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"One player from each team has been made VIP. If the VIP dies you lose the round.";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		private readonly System.Random random = new();
 
@@ -112,8 +115,8 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			var reason = controller.Team is CsTeam.CounterTerrorist
-				             ? RoundEndReason.TerroristsWin
-				             : RoundEndReason.CTsWin;
+				? RoundEndReason.TerroristsWin
+				: RoundEndReason.CTsWin;
 
 			Server.NextFrame(() =>
 			{
