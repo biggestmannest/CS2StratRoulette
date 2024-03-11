@@ -1,5 +1,4 @@
-﻿using CS2StratRoulette.Constants;
-using CS2StratRoulette.Interfaces;
+﻿using CS2StratRoulette.Interfaces;
 using CS2StratRoulette.Strategies;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core;
