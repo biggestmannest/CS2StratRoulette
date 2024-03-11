@@ -10,7 +10,7 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public class SnipersOnly : Strategy
 	{
-		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.Rifles.Str()}";
+		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.Snipers.Str()}";
 
 		public override string Name =>
 			"Snipers Only";
