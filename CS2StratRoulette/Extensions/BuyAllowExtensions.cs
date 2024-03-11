@@ -4,9 +4,7 @@ namespace CS2StratRoulette.Extensions
 {
 	public static class BuyAllowExtensions
 	{
-		public static string Str(this BuyAllow @this)
-		{
-			return ((byte)@this).ToString(System.Globalization.CultureInfo.InvariantCulture);
-		}
+		public static string Str(this BuyAllow @this) =>
+            ((byte)@this).ToString(System.Globalization.CultureInfo.InvariantCulture);
 	}
 }

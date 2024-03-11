@@ -1,3 +1,5 @@
+using CS2StratRoulette.Enums;
+
 namespace CS2StratRoulette.Strategies
 {
 	public abstract class Strategy
@@ -16,6 +18,11 @@ namespace CS2StratRoulette.Strategies
 		/// Is the strategy active?
 		/// </summary>
 		public bool Running { get; private set; }
+
+		/// <summary>
+		/// Strategy settings.
+		/// </summary>
+		public StrategyFlags Flags { get; protected set; } = StrategyFlags.None;
 
 		/// <summary>
 		/// Register required event listeners in order to enforce the strategy
