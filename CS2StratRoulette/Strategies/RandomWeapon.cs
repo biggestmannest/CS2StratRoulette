@@ -1,4 +1,3 @@
-using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
@@ -37,7 +36,6 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Commands.BuyAllowNone);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
-			Server.ExecuteCommand("mp_weapons_allow_zeus 0");
 
 			foreach (var player in Utilities.GetPlayers())
 			{
@@ -79,7 +77,6 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Commands.BuyAllowAll);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
-			Server.ExecuteCommand("mp_weapons_allow_zeus 1");
 
 			return true;
 		}

@@ -7,7 +7,7 @@ namespace CS2StratRoulette.Enums
 	 *
 	 * To restrict armor, use mp_max_armor. Set to 0 to disable all armor purchases, set to 1 to allow only Kevlar or set to 2 to allow both Kevlar and Kevlar + Helmet. As this ConVar affects only purchases, armor can still be equipped with give or game_player_equip for example.
 	 * To restrict the grenade group, use mp_buy_allow_grenades. Set to 0 or 1 to disable or to enable the purchase of grenades.
-	 * To restrict the Zeus x27, use mp_weapons_allow_zeus.
+	 * To restrict the Zeus x27, use mp_weapons_allow_zeus. (though this doesn't work apparently)
 	 * To restrict the Riot Shield, use sv_shield_purchase_restricted_to.
 	 * To restrict any specific item(s), use mp_items_prohibited. For example, mp_items_prohibited ItemDefinition.DEFUSE_KIT
 	 */
