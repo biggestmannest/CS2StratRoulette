@@ -7,6 +7,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -14,10 +15,10 @@ namespace CS2StratRoulette.Strategies
 	public class Earrape : Strategy
 	{
 		private static readonly string StartCommands =
-			$"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; mp_buy_allow_guns {BuyAllow.None.Str()}; mp_buy_allow_grenades 0; mp_weapons_buy_allow_zeus 0";
+			$"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; {Commands.BuyAllowNone}; mp_buy_allow_grenades 0; mp_weapons_buy_allow_zeus 0";
 
 		private static readonly string StopCommands =
-			$"sv_cheats 1; sv_infinite_ammo 0; sv_cheats 0; mp_buy_allow_guns {BuyAllow.All.Str()}; mp_buy_allow_grenades 1; mp_weapons_buy_allow_zeus 1";
+			$"sv_cheats 1; sv_infinite_ammo 0; sv_cheats 0; {Commands.BuyAllowAll}; mp_buy_allow_grenades 1; mp_weapons_buy_allow_zeus 1";
 
 		private const float Interval = 5.0f;
 

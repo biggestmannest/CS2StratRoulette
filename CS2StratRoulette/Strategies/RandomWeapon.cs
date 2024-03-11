@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -34,8 +35,8 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.None.Str()}");
-			Server.ExecuteCommand("mp_buy_allow_grenades 0");
+			Server.ExecuteCommand(Commands.BuyAllowNone);
+			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
 			Server.ExecuteCommand("mp_weapons_allow_zeus 0");
 
 			foreach (var player in Utilities.GetPlayers())
@@ -76,8 +77,8 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand($"mp_buy_allow_guns {BuyAllow.All.Str()}");
-			Server.ExecuteCommand("mp_buy_allow_grenades 1");
+			Server.ExecuteCommand(Commands.BuyAllowAll);
+			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
 			Server.ExecuteCommand("mp_weapons_allow_zeus 1");
 
 			return true;

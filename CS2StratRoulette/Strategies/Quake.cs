@@ -34,27 +34,13 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn) || controller.IsBot)
+				if (!controller.IsValid || controller.IsBot)
 				{
 					continue;
 				}
 
-				if (pawn.CameraServices is null)
-				{
-					continue;
-				}
-
-				var camera = new CCSPlayer_CameraServices(pawn.CameraServices.Handle);
-
-				System.Console.WriteLine($"[Quake]: {camera.FOV}");
-
-				this.FOV ??= camera.FOV;
-
-				Server.NextFrame(() =>
-				{
-					camera.FOV = 90;
-					Utilities.SetStateChanged(controller, "CBasePlayerPawn", "m_pCameraServices");
-				});
+				controller.DesiredFOV = 90u;
+				Utilities.SetStateChanged(controller, "CBasePlayerController", "m_iDesiredFOV");
 			}
 
 			return true;

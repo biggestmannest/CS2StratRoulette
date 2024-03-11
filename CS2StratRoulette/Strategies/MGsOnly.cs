@@ -1,8 +1,9 @@
+using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Core;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -10,7 +11,6 @@ namespace CS2StratRoulette.Strategies
 	public class MGsOnly : Strategy
 	{
 		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.Heavy.Str()}";
-		private static readonly string Disable = $"mp_buy_allow_guns {BuyAllow.All.Str()}";
 
 		public override string Name => "MGs Only";
 
@@ -49,7 +49,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(MGsOnly.Disable);
+			Server.ExecuteCommand(Commands.BuyAllowAll);
 
 			return true;
 		}

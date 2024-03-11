@@ -3,6 +3,7 @@ using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API.Core;
+using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -10,7 +11,6 @@ namespace CS2StratRoulette.Strategies
 	public class ShotgunsOnly : Strategy
 	{
 		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.Shotguns.Str()}";
-		private static readonly string Disable = $"mp_buy_allow_guns {BuyAllow.All.Str()}";
 
 		public override string Name =>
 			"Shotguns Only";
@@ -51,7 +51,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(ShotgunsOnly.Disable);
+			Server.ExecuteCommand(Commands.BuyAllowAll);
 
 			return true;
 		}
