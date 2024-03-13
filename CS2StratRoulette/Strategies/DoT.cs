@@ -7,8 +7,8 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class DoT : Strategy
 	{
-		private const string Activate = "mp_global_damage_per_second 0";
-		private const string Deactivate = "mp_global_damage_per_second 1";
+		private const string Activate = "mp_global_damage_per_second 1";
+		private const string Deactivate = "mp_global_damage_per_second 0";
 
 		public override string Name =>
 			"Damage over time";
