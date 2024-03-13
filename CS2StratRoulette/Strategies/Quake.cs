@@ -52,7 +52,7 @@ namespace CS2StratRoulette.Strategies
 
 				pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
 
-				controller.GiveNamedItem(CsItem.SSG08);
+				controller.GiveNamedItem(CsItem.PPBizon);
 
 				controller.DesiredFOV = Quake.QuakeFov;
 
