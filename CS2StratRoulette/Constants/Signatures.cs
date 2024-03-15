@@ -13,8 +13,8 @@ namespace CS2StratRoulette.Constants
 		public static VirtualFunctionWithReturn<System.IntPtr, string> GetModel =
 			new(
 				System.OperatingSystem.IsLinux()
-					? Signatures.GetModelSignatureWindows
-					: Signatures.GetModelSignatureLinux
+					? Signatures.GetModelSignatureLinux
+					: Signatures.GetModelSignatureWindows
 			);
 	}
 }
