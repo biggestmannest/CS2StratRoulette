@@ -10,7 +10,7 @@ namespace CS2StratRoulette.Constants
 		public const string GetModelSignatureLinux =
 			@"\x55\x48\x89\xE5\x53\x48\x89\xFB\x48\x83\xEC\x08\x48\x8B\x47\x30";
 
-		public static VirtualFunctionWithReturn<System.IntPtr, string> GetModel =
+		public static readonly VirtualFunctionWithReturn<System.IntPtr, string> GetModel =
 			new(
 				System.OperatingSystem.IsLinux()
 					? Signatures.GetModelSignatureLinux
