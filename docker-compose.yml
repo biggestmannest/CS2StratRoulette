@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  cs2-server:
+    image: joedwards32/cs2
+    stdin_open: true
+    tty: true
+    container_name: cs2-dedicated
+    environment:
+      - CS2_PORT=27015 # (CS2 server listen port tcp_udp)
+      - TV_PORT=27020  # Host SourceTV port
+      - CS2_RCON_PORT  # (Optional, use a simple TCP proxy to have RCON listen on an alternative port. Useful for services like AWS Fargate which do not support mixed protocol ports.)
+    env_file: .env
+    volumes:
+      - ../cs2-data:/home/steam/cs2-dedicated
+    ports:
+      - "27015:27015/tcp"
+      - "27015:27015/udp"
+      - "27020:27020/udp"
