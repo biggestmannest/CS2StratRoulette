@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class HeadshotOnly : Strategy
+	public sealed class HeadshotOnly : Strategy
 	{
 		private const string EnableHeadshotOnly = "mp_damage_headshot_only 1";
 		private const string DisableHeadshotOnly = "mp_damage_headshot_only 0";

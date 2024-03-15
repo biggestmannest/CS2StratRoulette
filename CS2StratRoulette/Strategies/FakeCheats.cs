@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class FakeCheats : Strategy
+	public sealed class FakeCheats : Strategy
 	{
 		private const float Interval = 1.0f;
 

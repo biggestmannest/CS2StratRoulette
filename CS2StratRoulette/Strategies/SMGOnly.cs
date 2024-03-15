@@ -8,7 +8,7 @@ using CS2StratRoulette.Constants;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class SmgOnly : Strategy
+	public sealed class SmgOnly : Strategy
 	{
 		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.SubMachineGuns.Str()}";
 
