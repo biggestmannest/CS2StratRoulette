@@ -1,6 +1,6 @@
 ﻿using CounterStrikeSharp.API.Core;
-using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -50,7 +50,6 @@ namespace CS2StratRoulette.Strategies
 			{
 				players.ExecuteClientCommand("play sounds/music/theverkkars_01/bombplanted");
 			}
-
 
 			return HookResult.Continue;
 		}
