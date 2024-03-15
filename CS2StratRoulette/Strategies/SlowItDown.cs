@@ -1,6 +1,6 @@
-using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Modules.Cvars;
+using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
@@ -44,7 +44,7 @@ namespace CS2StratRoulette.Strategies
 
 			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
 
-			Server.ExecuteCommand(SlowItDown.HostTimescale + " 1");
+			ConVar.Find(SlowItDown.HostTimescale)?.SetValue(1f);
 
 			return true;
 		}
@@ -58,7 +58,7 @@ namespace CS2StratRoulette.Strategies
 
 			this.speed = float.Max(this.speed - this.step, 0.1f);
 
-			Server.ExecuteCommand(SlowItDown.HostTimescale + ' ' + this.speed.Str());
+			ConVar.Find(SlowItDown.HostTimescale)?.SetValue(this.step);
 
 			return HookResult.Continue;
 		}
