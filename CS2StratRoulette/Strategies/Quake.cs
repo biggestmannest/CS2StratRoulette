@@ -1,10 +1,10 @@
-using CounterStrikeSharp.API;
-using CS2StratRoulette.Extensions;
-using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CS2StratRoulette.Constants;
-using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Cvars;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
+using CounterStrikeSharp.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -13,6 +13,8 @@ namespace CS2StratRoulette.Strategies
 	{
 		private const uint QuakeFov = 140u;
 		private const uint DefaultFov = 90u;
+
+		private const string WeaponAccuracyNoSpread = "weapon_accuracy_nospread";
 
 		private const string Enable =
 			"sv_cheats 1;sv_enablebunnyhopping 1;sv_maxvelocity 4000;sv_staminamax 0;sv_staminalandcost 0;sv_staminajumpcost 0;sv_accelerate_use_weapon_speed 0;sv_staminarecoveryrate 0;sv_autobunnyhopping 1;sv_airaccelerate 24;sv_cheats 0";
@@ -26,14 +28,16 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"It's Quake.";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
-
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
+
+			var noSpread = ConVar.Find(Quake.WeaponAccuracyNoSpread);
+
+			noSpread?.SetValue(true);
 
 			Server.ExecuteCommand(Commands.BuyAllowNone);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
@@ -55,8 +59,6 @@ namespace CS2StratRoulette.Strategies
 				Utilities.SetStateChanged(controller, "CBasePlayerController", "m_iDesiredFOV");
 			}
 
-			plugin.RegisterEventHandler<EventPlayerShoot>(this.OnPlayerShoot, HookMode.Post);
-
 			return true;
 		}
 
@@ -66,6 +68,10 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
+
+			var noSpread = ConVar.Find(Quake.WeaponAccuracyNoSpread);
+
+			noSpread?.SetValue(false);
 
 			Server.ExecuteCommand(Commands.BuyAllowAll);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
@@ -90,31 +96,6 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			return true;
-		}
-
-		private HookResult OnPlayerShoot(EventPlayerShoot @event, GameEventInfo _)
-		{
-			var controller = @event.Userid;
-
-			if (!controller.TryGetPlayerPawn(out var pawn))
-			{
-				return HookResult.Continue;
-			}
-
-			Quake.ResetAmmo(pawn);
-
-			return HookResult.Continue;
-		}
-
-		private static void ResetAmmo(CCSPlayerPawn pawn)
-		{
-			pawn.ForEachWeapon((weapon) =>
-			{
-				if (weapon.IsValid)
-				{
-					weapon.Clip1 = 2;
-				}
-			});
 		}
 	}
 }

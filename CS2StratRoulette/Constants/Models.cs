@@ -7,22 +7,22 @@ namespace CS2StratRoulette.Constants
 
 		public static readonly string[] Props =
 		{
-			"models/props_fortifications/traffic_barrier001",
-			"models/props_c17/chair_stool01a",
-			"models/props_c17/furnituretable001a",
-			"models/props_c17/furniturewashingmachine001a",
-			"models/props_c17/metalpot001a",
-			"models/props_c17/metalpot002a",
-			"models/props_furniture/cafe_barstool1",
-			"models/props_interiors/cashregister01",
-			"models/props_interiors/chair_cafeteria",
-			"models/props_interiors/coffee_maker",
-			"models/props_interiors/lamp_floor",
-			"models/props_interiors/trashcan01",
-			"models/props_junk/cardboard_unfolded_04",
-			"models/props_junk/metalbucket01a",
-			"models/chicken/chicken",
-			"models/props/de_dust/pallet02",
+			"models/props_fortifications/traffic_barrier001.vmdl",
+			"models/props_c17/chair_stool01a.vmdl",
+			"models/props_c17/furnituretable001a.vmdl",
+			"models/props_c17/furniturewashingmachine001a.vmdl",
+			"models/props_c17/metalpot001a.vmdl",
+			"models/props_c17/metalpot002a.vmdl",
+			"models/props_furniture/cafe_barstool1.vmdl",
+			"models/props_interiors/cashregister01.vmdl",
+			"models/props_interiors/chair_cafeteria.vmdl",
+			"models/props_interiors/coffee_maker.vmdl",
+			"models/props_interiors/lamp_floor.vmdl",
+			"models/props_interiors/trashcan01.vmdl",
+			"models/props_junk/cardboard_unfolded_04.vmdl",
+			"models/props_junk/metalbucket01a.vmdl",
+			"models/chicken/chicken.vmdl",
+			"models/props/de_dust/pallet02.vmdl",
 		};
 	}
 }

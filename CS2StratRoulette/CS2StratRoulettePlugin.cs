@@ -266,7 +266,7 @@ namespace CS2StratRoulette
 		/// </summary>
 		private void AnnounceStrategy(Strategy strategy)
 		{
-			var isHidden = strategy.Flags.Has(StrategyFlags.Hidden) && this.random.Next(100) < 25;
+			var isHidden = strategy.Flags.Has(StrategyFlags.Hidden) && this.random.Next(100) < 10;
 			var name = isHidden ? "Strategy hidden." : strategy.Name;
 			var description = isHidden ? "Good luck! :)" : strategy.Description;
 
