@@ -6,7 +6,7 @@ using CS2StratRoulette.Enums;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class FakeCheats : Strategy
+	public sealed class FakeCheats : Strategy
 	{
 		private const float Interval = 1.0f;
 

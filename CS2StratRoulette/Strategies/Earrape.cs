@@ -12,7 +12,7 @@ using CS2StratRoulette.Constants;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public class Earrape : Strategy
+	public sealed class Earrape : Strategy
 	{
 		private static readonly string StartCommands =
 			$"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; {Commands.BuyAllowNone}; mp_buy_allow_grenades 0";
