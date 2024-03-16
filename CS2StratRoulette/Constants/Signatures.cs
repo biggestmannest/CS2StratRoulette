@@ -1,4 +1,3 @@
-using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Memory;
 
 namespace CS2StratRoulette.Constants
@@ -12,6 +11,6 @@ namespace CS2StratRoulette.Constants
 			@"\x55\x48\x89\xE5\x53\x48\x89\xFB\x48\x83\xEC\x08\x48\x8B\x47\x38";
 
 		public static readonly VirtualFunctionWithReturn<System.IntPtr, string> GetModel =
-			new(@"\x55\x48\x89\xE5\x53\x48\x89\xFB\x48\x83\xEC\x08\x48\x8B\x47\x38");
+			new(Signatures.GetModelSignatureLinux);
 	}
 }

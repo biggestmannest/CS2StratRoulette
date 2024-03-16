@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using CS2StratRoulette.Constants;
-using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette
@@ -28,8 +27,6 @@ namespace CS2StratRoulette
 
 		public required List<System.Type> Strategies = new();
 		public required Strategy? ActiveStrategy;
-
-		private readonly System.Random random = new();
 
 		private readonly StringBuilder builder = new();
 
@@ -48,15 +45,15 @@ namespace CS2StratRoulette
 				{
 					this.Strategies.Add(type);
 				}
-
-				this.RegisterListener<Listeners.OnServerPrecacheResources>((manifest) =>
-				{
-					foreach (var model in Models.Props)
-					{
-						manifest.AddResource(model);
-					}
-				});
 			}
+
+			this.RegisterListener<Listeners.OnServerPrecacheResources>((manifest) =>
+			{
+				foreach (var model in Models.Props)
+				{
+					manifest.AddResource(model);
+				}
+			});
 		}
 
 		/// <summary>
@@ -148,18 +145,6 @@ namespace CS2StratRoulette
 			}
 
 			commandInfo.ReplyToCommand("[OnStratCommand] strategy not found");
-		}
-
-		[ConsoleCommand("set_prop", "fdsafdsafdsafdsafdsa")]
-		[RequiresPermissions("@css/root")]
-		public void OnPropCommand(CCSPlayerController? controller, CommandInfo commandInfo)
-		{
-			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
-			{
-				return;
-			}
-
-			pawn.SetModel(Models.Props[System.Random.Shared.Next(Models.Props.Length)]);
 		}
 
 		public void CycleStrategy()
@@ -287,10 +272,6 @@ namespace CS2StratRoulette
 		/// </summary>
 		private void AnnounceStrategy(Strategy strategy)
 		{
-			var isHidden = strategy.Flags.Has(StrategyFlags.Hidden) && this.random.Next(100) < 10;
-			var name = isHidden ? "Strategy hidden." : strategy.Name;
-			var description = isHidden ? "Good luck! :)" : strategy.Description;
-
 			this.builder.Clear();
 
 			this.builder.Append(' ');
@@ -298,10 +279,10 @@ namespace CS2StratRoulette
 			this.builder.Append('-', 80);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
 			this.builder.Append(ChatColors.Green);
-			this.builder.Append(name);
+			this.builder.Append(strategy.Name);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
 			this.builder.Append(ChatColors.Silver);
-			this.builder.Append(description);
+			this.builder.Append(strategy.Description);
 			this.builder.Append(CS2StratRoulettePlugin.NewLine);
 			this.builder.Append(ChatColors.Blue);
 			this.builder.Append('-', 80);
