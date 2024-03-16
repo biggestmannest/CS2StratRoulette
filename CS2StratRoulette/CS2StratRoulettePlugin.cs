@@ -10,6 +10,8 @@ using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using CS2StratRoulette.Constants;
+using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette
 {
@@ -44,6 +46,14 @@ namespace CS2StratRoulette
 					this.Strategies.Add(type);
 				}
 			}
+
+			this.RegisterListener<Listeners.OnServerPrecacheResources>((manifest) =>
+			{
+				foreach (var model in Models.Props)
+				{
+					manifest.AddResource(model);
+				}
+			});
 		}
 
 		/// <summary>
