@@ -1,6 +1,8 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Timers;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -11,13 +13,24 @@ namespace CS2StratRoulette.Strategies
 			"Nostalgia";
 
 		public override string Description =>
-			"Plant and find out ;) (highly recommended that you type \"snd_toolvolume 0.05\" in console).";
+			":')";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
+		private Timer? timer;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
 				return false;
+			}
+
+			foreach (var player in Utilities.GetPlayers())
+			{
+				player.ExecuteClientCommand("play sounds/sfx/ence_roundstart");
+				this.timer = new Timer(17.0f,
+					() => { player.ExecuteClientCommand("play sounds/sfx/ence_actionstart"); });
 			}
 
 			plugin.RegisterEventHandler<EventBombPlanted>(this.OnBombPlanted);
@@ -31,6 +44,10 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
+
+			this.timer.Kill();
+
+			Server.NextFrame(() => { Server.ExecuteCommand("sv_cheats 0"); });
 
 			const string bombPlanted = "bomb_planted";
 
@@ -48,7 +65,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var players in Utilities.GetPlayers())
 			{
-				players.ExecuteClientCommand("play sounds/music/theverkkars_01/bombplanted");
+				players.ExecuteClientCommand("play sounds/sfx/encething");
 			}
 
 

@@ -1,23 +1,19 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Modules.Entities.Constants;
-using CS2StratRoulette.Constants;
+using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class JuanDeag : Strategy
+	public sealed class HidenSeek : Strategy
 	{
 		public override string Name =>
-			"Juan Deag";
+			"Hide & Seek";
 
 		public override string Description =>
-			"Everyone gets a deagle, and can only hit headshots.";
-
-		private const string Enable = "mp_damage_headshot_only 1";
-		private const string Disable = "mp_damage_headshot_only 0";
+			"Ts must kill the CTs with their knives. CTs must survive.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -26,8 +22,6 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(Commands.BuyAllowNone);
-			Server.ExecuteCommand(JuanDeag.Enable);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -36,10 +30,15 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
-				controller.GiveNamedItem(CsItem.Deagle);
+				if (controller.Team is CsTeam.CounterTerrorist)
+				{
+					controller.RemoveWeapons();
+				}
+				else if (controller.Team is CsTeam.Terrorist)
+				{
+					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+				}
 			}
-
 
 			return true;
 		}
@@ -50,10 +49,6 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
-
-			Server.ExecuteCommand(Commands.BuyAllowAll);
-
-			Server.ExecuteCommand(JuanDeag.Disable);
 
 			return true;
 		}

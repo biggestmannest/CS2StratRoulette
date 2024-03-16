@@ -1,0 +1,62 @@
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Timers;
+
+namespace CS2StratRoulette.Strategies
+{
+	[SuppressMessage("ReSharper", "UnusedType.Global")]
+	public sealed class Clumsy : Strategy
+	{
+		public override string Name =>
+			"Clumsy";
+
+		public override string Description =>
+			"First day on the job";
+
+		private static Random random = new();
+
+		private Timer? timer;
+
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Start(ref plugin))
+			{
+				return false;
+			}
+
+			this.timer = new Timer(6.0f, Clumsy.OnInterval, TimerFlags.REPEAT);
+
+			return true;
+		}
+
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
+
+			this.timer?.Kill();
+
+			return true;
+		}
+
+		private static void OnInterval()
+		{
+			var randomNum = Clumsy.random.Next(2);
+			if (randomNum == 1)
+			{
+				foreach (var controller in Utilities.GetPlayers())
+				{
+					if (!controller.IsValid)
+					{
+						continue;
+					}
+
+					controller.DropActiveWeapon();
+				}
+			}
+		}
+	}
+}

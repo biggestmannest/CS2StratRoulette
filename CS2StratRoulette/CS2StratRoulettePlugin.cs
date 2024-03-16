@@ -10,6 +10,7 @@ using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
@@ -47,6 +48,14 @@ namespace CS2StratRoulette
 				{
 					this.Strategies.Add(type);
 				}
+
+				this.RegisterListener<Listeners.OnServerPrecacheResources>((manifest) =>
+				{
+					foreach (var model in Models.Props)
+					{
+						manifest.AddResource(model);
+					}
+				});
 			}
 		}
 
@@ -139,6 +148,18 @@ namespace CS2StratRoulette
 			}
 
 			commandInfo.ReplyToCommand("[OnStratCommand] strategy not found");
+		}
+
+		[ConsoleCommand("set_prop", "fdsafdsafdsafdsafdsa")]
+		[RequiresPermissions("@css/root")]
+		public void OnPropCommand(CCSPlayerController? controller, CommandInfo commandInfo)
+		{
+			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
+			{
+				return;
+			}
+
+			pawn.SetModel(Models.Props[System.Random.Shared.Next(Models.Props.Length)]);
 		}
 
 		public void CycleStrategy()
