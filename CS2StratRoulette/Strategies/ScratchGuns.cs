@@ -1,17 +1,17 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
+using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class Panic : Strategy
+	public sealed class ScratchGuns : Strategy
 	{
 		public override string Name =>
-			"Panic";
+			"Don't scratch the goods!";
 
 		public override string Description =>
-			"Every time you are shot, you want to run away.";
+			"You can only use your primary while at 100 health.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -32,25 +32,29 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			const string playerSound = "player_hurt";
+			const string playerHurt = "player_hurt";
 
-			plugin.DeregisterEventHandler(playerSound, this.OnPlayerHurt, true);
+			plugin.DeregisterEventHandler(playerHurt, this.OnPlayerHurt, true);
 
 			return true;
 		}
 
 		private HookResult OnPlayerHurt(EventPlayerHurt @event, GameEventInfo _)
 		{
-			if (!this.Running)
+			var controller = @event.Userid;
+
+			if (!controller.TryGetPlayerPawn(out var pawn))
 			{
 				return HookResult.Continue;
 			}
 
-			if (@event.Userid.IsValid)
-			{
-				@event.Userid.ExecuteClientCommand("slot3");
-				@event.Userid.ExecuteClientCommandFromServer("say \"OUCH!!!!!!!!!!!!!!!!\"");
-			}
+			pawn.KeepWeaponsByType(
+				CSWeaponType.WEAPONTYPE_PISTOL,
+				CSWeaponType.WEAPONTYPE_KNIFE,
+				CSWeaponType.WEAPONTYPE_C4
+			);
+
+			controller.ExecuteClientCommand("slot3");
 
 			return HookResult.Continue;
 		}
