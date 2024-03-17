@@ -1,5 +1,6 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
@@ -12,6 +13,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"You can only use your primary while at 100 health.";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

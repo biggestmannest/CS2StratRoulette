@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CS2StratRoulette.Constants;
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
@@ -15,6 +16,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Everyone gets a deagle, and can only hit headshots.";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
 
 		private const string Enable = "mp_damage_headshot_only 1";
 		private const string Disable = "mp_damage_headshot_only 0";

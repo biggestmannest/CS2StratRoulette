@@ -15,8 +15,7 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Global voice chat has been turned on.";
-
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

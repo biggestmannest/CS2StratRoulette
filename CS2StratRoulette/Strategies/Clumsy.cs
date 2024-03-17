@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Timers;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -13,6 +14,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"First day on the job";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
 
 		private static Random random = new();
 

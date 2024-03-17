@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Utils;
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
@@ -14,11 +15,9 @@ namespace CS2StratRoulette.Strategies
 			"Hide & Seek";
 
 		public override string Description =>
-			"Ts must kill the CTs with their knives. CTs only have 1 person with a knife.";
+			"Ts must kill the CTs with their knives. CTs must survive.";
 
-		private readonly System.Random random = new();
-
-		private CCSPlayerController? ctKnife;
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -26,8 +25,6 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
-
-			var cts = new List<CCSPlayerController>(10);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -38,18 +35,12 @@ namespace CS2StratRoulette.Strategies
 
 				if (controller.Team is CsTeam.CounterTerrorist)
 				{
-					cts.Add(controller);
 					controller.RemoveWeapons();
 				}
 				else if (controller.Team is CsTeam.Terrorist)
 				{
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 				}
-			}
-
-			if (cts.Count > 0)
-			{
-				this.ctKnife = HidenSeek.GiveKnife(cts[this.random.Next(cts.Count)]);
 			}
 
 			{
@@ -65,23 +56,6 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			return true;
-		}
-
-		private static CCSPlayerController? GiveKnife(CCSPlayerController controller)
-		{
-			if (!controller.TryGetPlayerPawn(out var pawn))
-			{
-				return null;
-			}
-
-			Server.NextFrame(() =>
-			{
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE
-				);
-			});
-
-			return controller;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using CounterStrikeSharp.API;
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
@@ -13,6 +14,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Look carefully, everyone is at 50% visibility";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

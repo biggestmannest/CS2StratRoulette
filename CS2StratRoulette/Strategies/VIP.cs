@@ -141,7 +141,7 @@ namespace CS2StratRoulette.Strategies
 					CSWeaponType.WEAPONTYPE_C4
 				);
 			});
-
+			
 			Server.NextFrame(() =>
 			{
 				controller.GiveNamedItem(CsItem.CZ);
