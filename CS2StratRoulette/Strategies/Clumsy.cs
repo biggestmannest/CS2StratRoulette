@@ -17,7 +17,6 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
-
 		private static Random random = new();
 
 		private Timer? timer;
