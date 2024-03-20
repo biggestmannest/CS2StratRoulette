@@ -16,7 +16,7 @@ namespace CS2StratRoulette.Strategies
 			"Moon";
 
 		public override string Description =>
-			"It's the moon.";
+			"One small step for man (or woman), one giant leap for (wo)mankind.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
