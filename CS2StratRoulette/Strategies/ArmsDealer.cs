@@ -18,8 +18,6 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"Choose wisely.";
 
-		private static readonly System.Random Random = new();
-
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
