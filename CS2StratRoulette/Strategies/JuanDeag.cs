@@ -34,7 +34,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn) || controller.IsBot)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
