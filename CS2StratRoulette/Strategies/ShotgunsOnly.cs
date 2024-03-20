@@ -41,6 +41,8 @@ namespace CS2StratRoulette.Strategies
 					CSWeaponType.WEAPONTYPE_C4,
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
+
+				controller.ExecuteClientCommand("slot3");
 			}
 
 			return true;

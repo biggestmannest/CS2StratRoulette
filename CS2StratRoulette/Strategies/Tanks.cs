@@ -6,6 +6,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -17,6 +18,8 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Every team gets a tank.";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		private readonly System.Random random = new();
 
@@ -124,8 +127,8 @@ namespace CS2StratRoulette.Strategies
 			Server.NextFrame(() =>
 			{
 				pawn.SetModel(controller.Team is CsTeam.CounterTerrorist
-								  ? Models.JuggernautCt
-								  : Models.JuggernautT);
+					? Models.JuggernautCt
+					: Models.JuggernautT);
 			});
 		}
 	}
