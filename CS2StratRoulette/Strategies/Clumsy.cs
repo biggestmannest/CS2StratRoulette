@@ -47,8 +47,7 @@ namespace CS2StratRoulette.Strategies
 
 		private static void OnInterval()
 		{
-			var randomNum = Clumsy.random.Next(2);
-			if (randomNum == 1)
+			if ((Clumsy.random.Next() & 1) == 0)
 			{
 				foreach (var controller in Utilities.GetPlayers())
 				{
