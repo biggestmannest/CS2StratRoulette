@@ -1,32 +1,19 @@
+using CS2StratRoulette.Constants;
 using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CS2StratRoulette.Constants;
-using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class RandomWeapon : Strategy
 	{
-		private const int PistolMin = (int)CsItem.Deagle;
-		private const int PistolMax = (int)CsItem.Revolver;
-
-		private const int MidMin = (int)CsItem.Mac10;
-		private const int MidMax = (int)CsItem.Negev;
-
-		private const int RifleMin = (int)CsItem.AK47;
-		private const int RifleMax = (int)CsItem.G3SG1;
-
 		public override string Name =>
 			"Random weapon";
 
 		public override string Description =>
 			"I hope you like your new weapon :)";
-
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		private readonly System.Random random = new();
 
@@ -40,14 +27,9 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(Commands.BuyAllowNone);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
 
-			foreach (var player in Utilities.GetPlayers())
+			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!player.TryGetPlayerController(out var controller))
-				{
-					continue;
-				}
-
-				if (!controller.TryGetPlayerPawn(out var pawn) || pawn.WeaponServices is null)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
@@ -58,14 +40,9 @@ namespace CS2StratRoulette.Strategies
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
 
-				var item = this.random.Next(3) switch
-				{
-					0 => (CsItem)this.random.Next(RandomWeapon.PistolMin, RandomWeapon.PistolMax),
-					1 => (CsItem)this.random.Next(RandomWeapon.MidMin, RandomWeapon.MidMax),
-					_ => (CsItem)this.random.Next(RandomWeapon.RifleMin, RandomWeapon.RifleMax),
-				};
+				var item = Items.Weapons[this.random.Next(Items.Weapons.Length)];
 
-				player.GiveNamedItem(item);
+				controller.GiveNamedItem(item);
 			}
 
 			return true;

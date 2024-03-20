@@ -5,6 +5,9 @@ namespace CS2StratRoulette.Constants
 {
 	public static class Commands
 	{
+		public const string CheatsEnable = "sv_cheats 1";
+		public const string CheatsDisable = "sv_cheats 0";
+
 		public const string BuyAllowGrenadesDisable = "mp_buy_allow_grenades 0";
 		public const string BuyAllowGrenadesEnable = "mp_buy_allow_grenades 1";
 
