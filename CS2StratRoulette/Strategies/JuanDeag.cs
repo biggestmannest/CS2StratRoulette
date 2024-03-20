@@ -1,24 +1,26 @@
-using CS2StratRoulette.Constants;
-using CS2StratRoulette.Extensions;
-using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API;
+﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
+using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class RandomWeapon : Strategy
+	public sealed class JuanDeag : Strategy
 	{
 		public override string Name =>
-			"Random weapon";
+			"Juan Deag";
 
 		public override string Description =>
-			"I hope you like your new weapon :)";
+			"Everyone gets a deagle, and can only hit headshots.";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
-		private readonly System.Random random = new();
+		private const string Enable = "mp_damage_headshot_only 1";
+		private const string Disable = "mp_damage_headshot_only 0";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -28,7 +30,7 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			Server.ExecuteCommand(Commands.BuyAllowNone);
-			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
+			Server.ExecuteCommand(JuanDeag.Enable);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -37,16 +39,10 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
-
-				var item = Items.Weapons[this.random.Next(Items.Weapons.Length)];
-
-				controller.GiveNamedItem(item);
+				pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+				controller.GiveNamedItem(CsItem.Deagle);
 			}
+
 
 			return true;
 		}
@@ -59,7 +55,8 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			Server.ExecuteCommand(Commands.BuyAllowAll);
-			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
+
+			Server.ExecuteCommand(JuanDeag.Disable);
 
 			return true;
 		}

@@ -1,5 +1,6 @@
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -14,6 +15,8 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Skate like the wind.";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

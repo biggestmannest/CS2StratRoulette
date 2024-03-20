@@ -1,20 +1,19 @@
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using CounterStrikeSharp.API;
-using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class HeadshotOnly : Strategy
+	public sealed class Eyesight : Strategy
 	{
-		private const string EnableHeadshotOnly = "mp_damage_headshot_only 1";
-		private const string DisableHeadshotOnly = "mp_damage_headshot_only 0";
-
 		public override string Name =>
-			"Headshot Only";
+			"Eyesight";
 
 		public override string Description =>
-			"You can only kill players with a headshot.";
+			"Look carefully, everyone is at 50% visibility";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
@@ -25,7 +24,15 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(HeadshotOnly.EnableHeadshotOnly);
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				pawn.Render = Color.FromArgb(128, pawn.Render);
+			}
 
 			return true;
 		}
@@ -37,7 +44,15 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(HeadshotOnly.DisableHeadshotOnly);
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				pawn.Render = Color.FromArgb(255, pawn.Render);
+			}
 
 			return true;
 		}

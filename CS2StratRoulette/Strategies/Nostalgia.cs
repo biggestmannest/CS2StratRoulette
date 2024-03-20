@@ -1,6 +1,9 @@
-﻿using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API;
+﻿using System.Collections.Generic;
+using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Timers;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -11,13 +14,44 @@ namespace CS2StratRoulette.Strategies
 			"Nostalgia";
 
 		public override string Description =>
-			"Plant and find out ;) (highly recommended that you type \"snd_toolvolume 0.05\" in console).";
+			":')";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
+		private Timer? timer;
+
+		private readonly System.Random random = new();
+
+		private readonly Dictionary<int, string> song1 = new();
+
+		private readonly Dictionary<int, string> song2 = new();
+
+		private Dictionary<int, string> randomSong;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
 				return false;
+			}
+
+			//EZ4Ence
+			this.song1.Add(1, "sounds/sfx/ence_roundstart");
+			this.song1.Add(2, "sounds/sfx/ence_actionstart");
+			this.song1.Add(3, "sounds/sfx/encething");
+			//Flashbang Dance
+			this.song2.Add(1, "sounds/music/flashbang_roundstart");
+			this.song2.Add(2, "sounds/music/flashbang_actionstart");
+			this.song2.Add(3, "sounds/music/flashbang_bombplanted");
+
+			var randomNum = this.random.Next(2);
+			this.randomSong = randomNum == 0 ? this.song1 : this.song2;
+
+			foreach (var player in Utilities.GetPlayers())
+			{
+				player.ExecuteClientCommand($"play {this.randomSong[1]}");
+				this.timer = new Timer(17.0f,
+					() => { player.ExecuteClientCommand($"play {this.randomSong[2]}"); });
 			}
 
 			plugin.RegisterEventHandler<EventBombPlanted>(this.OnBombPlanted);
@@ -31,6 +65,8 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
+
+			this.timer?.Kill();
 
 			const string bombPlanted = "bomb_planted";
 
@@ -48,8 +84,9 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var players in Utilities.GetPlayers())
 			{
-				players.ExecuteClientCommand("play sounds/music/theverkkars_01/bombplanted");
+				players.ExecuteClientCommand($"play {this.randomSong[3]}");
 			}
+
 
 			return HookResult.Continue;
 		}

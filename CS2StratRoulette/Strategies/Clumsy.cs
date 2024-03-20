@@ -1,22 +1,25 @@
-using CounterStrikeSharp.API;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Timers;
 using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class HeadshotOnly : Strategy
+	public sealed class Clumsy : Strategy
 	{
-		private const string EnableHeadshotOnly = "mp_damage_headshot_only 1";
-		private const string DisableHeadshotOnly = "mp_damage_headshot_only 0";
-
 		public override string Name =>
-			"Headshot Only";
+			"Clumsy";
 
 		public override string Description =>
-			"You can only kill players with a headshot.";
+			"First day on the job";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
+		private static Random random = new();
+
+		private Timer? timer;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -25,7 +28,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(HeadshotOnly.EnableHeadshotOnly);
+			this.timer = new Timer(6.0f, Clumsy.OnInterval, TimerFlags.REPEAT);
 
 			return true;
 		}
@@ -37,9 +40,25 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(HeadshotOnly.DisableHeadshotOnly);
+			this.timer?.Kill();
 
 			return true;
+		}
+
+		private static void OnInterval()
+		{
+			if ((Clumsy.random.Next() & 1) == 0)
+			{
+				foreach (var controller in Utilities.GetPlayers())
+				{
+					if (!controller.IsValid)
+					{
+						continue;
+					}
+
+					controller.DropActiveWeapon();
+				}
+			}
 		}
 	}
 }

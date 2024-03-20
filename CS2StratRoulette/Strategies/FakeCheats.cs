@@ -1,6 +1,7 @@
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -34,6 +35,8 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Spams fake cheat advertisements in the chat.";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		private readonly System.Random random = new();
 

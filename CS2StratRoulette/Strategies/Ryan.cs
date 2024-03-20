@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Principal;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Timers;
 using CS2StratRoulette.Enums;
@@ -9,23 +8,23 @@ using CS2StratRoulette.Extensions;
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class Schizophrenia : Strategy
+	public sealed class Ryan : Strategy
 	{
 		public override string Name =>
-			"Schizophrenia";
+			"Callouts";
 
 		public override string Description =>
-			"???????????????????";
+			"Better listen to the voices!";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
+		private const string Sounds = "sounds/sfx/ryan/ryan";
+
 		private readonly Random random = new();
 
+		private const float Interval = 6.5f;
+
 		private Timer? timer;
-
-		private const float Interval = 5.0f;
-
-		private const string EffectOne = "sounds/sfx/nearmiss/bulletby_subsonic";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -34,7 +33,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			this.timer = new Timer(Schizophrenia.Interval, this.OnInterval, TimerFlags.REPEAT);
+			this.timer = new Timer(Ryan.Interval, this.OnInterval, TimerFlags.REPEAT);
 
 			return true;
 		}
@@ -47,6 +46,7 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			this.timer?.Kill();
+
 			return true;
 		}
 
@@ -57,12 +57,12 @@ namespace CS2StratRoulette.Strategies
 				return;
 			}
 
-			var number = this.random.Next(1, 8);
-			foreach (var player in Utilities.GetPlayers())
+			var randomNum = this.random.Next(1, 32).Str().PadLeft(2, '0');
+			foreach (var players in Utilities.GetPlayers())
 			{
-				if (player.IsValid)
+				if (players.IsValid)
 				{
-					player.ExecuteClientCommand($"play {Schizophrenia.EffectOne}_0{number.Str()}");
+					players.ExecuteClientCommand($"play {Ryan.Sounds}_{randomNum}");
 				}
 			}
 		}

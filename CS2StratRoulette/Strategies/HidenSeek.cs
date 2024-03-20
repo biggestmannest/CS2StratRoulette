@@ -1,22 +1,21 @@
+﻿using System.Collections.Generic;
+using CounterStrikeSharp.API.Core;
+using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
-using CounterStrikeSharp.API;
-using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Core;
-using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class RiflesOnly : Strategy
+	public sealed class HidenSeek : Strategy
 	{
-		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.Rifles.Str()}";
-
 		public override string Name =>
-			"Rifles Only";
+			"Hide & Seek";
 
 		public override string Description =>
-			"You're only allowed to buy rifles.";
+			"Ts must kill the CTs with their knives. CTs must survive.";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
@@ -27,25 +26,26 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(RiflesOnly.Enable);
-
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn) || controller.IsBot)
 				{
 					continue;
 				}
 
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
-								
-				controller.ExecuteClientCommand("slot3");
+				if (controller.Team is CsTeam.CounterTerrorist)
+				{
+					controller.RemoveWeapons();
+				}
+				else if (controller.Team is CsTeam.Terrorist)
+				{
+					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+				}
 			}
 
-			return true;
+			{
+				return true;
+			}
 		}
 
 		public override bool Stop(ref CS2StratRoulettePlugin plugin)
@@ -54,8 +54,6 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
-
-			Server.ExecuteCommand(Commands.BuyAllowAll);
 
 			return true;
 		}

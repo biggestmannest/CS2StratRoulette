@@ -20,13 +20,15 @@ namespace CS2StratRoulette.Strategies
 		private static readonly string StopCommands =
 			$"sv_cheats 1; sv_infinite_ammo 0; sv_cheats 0; {Commands.BuyAllowAll}; mp_buy_allow_grenades 1";
 
-		private const float Interval = 5.0f;
+		private const float Interval = 3.0f;
 
 		public override string Name =>
 			"Earrape";
 
 		public override string Description =>
 			"Everyone gets a Negev and decoy grenades, successfully ruining the enemies ears.";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		private readonly System.Random random = new();
 		private Timer? timer;
