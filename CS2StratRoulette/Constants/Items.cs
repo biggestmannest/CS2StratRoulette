@@ -7,6 +7,7 @@ namespace CS2StratRoulette.Constants
 		public static readonly CsItem[] Weapons =
 		{
 			CsItem.Zeus,
+			// pistols
 			CsItem.Deagle,
 			CsItem.Glock,
 			CsItem.USPS,
@@ -17,6 +18,7 @@ namespace CS2StratRoulette.Constants
 			CsItem.CZ,
 			CsItem.FiveSeven,
 			CsItem.Revolver,
+			// smgs
 			CsItem.Mac10,
 			CsItem.MP9,
 			CsItem.MP7,
@@ -26,18 +28,22 @@ namespace CS2StratRoulette.Constants
 			CsItem.UMP45,
 			CsItem.XM1014,
 			CsItem.Nova,
+			// shotguns
 			CsItem.MAG7,
 			CsItem.SawedOff,
+			// heavy
 			CsItem.M249,
 			CsItem.Negev,
+			// rifles
 			CsItem.AK47,
 			CsItem.M4A1S,
 			CsItem.M4A1,
 			CsItem.GalilAR,
 			CsItem.Famas,
 			CsItem.SG556,
-			CsItem.AWP,
 			CsItem.AUG,
+			// snipers
+			CsItem.AWP,
 			CsItem.SSG08,
 			CsItem.SCAR20,
 			CsItem.G3SG1,

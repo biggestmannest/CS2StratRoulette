@@ -1,3 +1,4 @@
+using CS2StratRoulette.Constants;
 using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
@@ -5,16 +6,12 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Tanks : Strategy
 	{
-		private const string EnableHeavyAssaultSuite = "mp_weapons_allow_heavyassaultsuit 1";
-		private const string DisableHeavyAssaultSuite = "mp_weapons_allow_heavyassaultsuit 0";
-
 		public override string Name =>
 			"Tanks";
 
@@ -32,8 +29,6 @@ namespace CS2StratRoulette.Strategies
 
 			Server.PrecacheModel(Models.JuggernautCt);
 			Server.PrecacheModel(Models.JuggernautT);
-
-			Server.ExecuteCommand(Tanks.EnableHeavyAssaultSuite);
 
 			var cts = new List<CCSPlayerController>(10);
 			var ts = new List<CCSPlayerController>(10);
@@ -77,8 +72,6 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
-
-			Server.ExecuteCommand(Tanks.DisableHeavyAssaultSuite);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -131,8 +124,8 @@ namespace CS2StratRoulette.Strategies
 			Server.NextFrame(() =>
 			{
 				pawn.SetModel(controller.Team is CsTeam.CounterTerrorist
-					              ? Models.JuggernautCt
-					              : Models.JuggernautT);
+								  ? Models.JuggernautCt
+								  : Models.JuggernautT);
 			});
 		}
 	}
