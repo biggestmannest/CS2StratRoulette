@@ -1,6 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -12,6 +13,8 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"You cannot see your radar.";
+
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		private const string Enable = "sv_disable_radar 1";
 		private const string Disable = "sv_disable_radar 0";

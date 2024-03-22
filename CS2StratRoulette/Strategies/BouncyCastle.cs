@@ -12,6 +12,8 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"You can bounce off of walls.";
+		
+		//hiding not needed, otherwise people wont notice anything happening
 
 		private const string Enable = "sv_bounce 6";
 		private const string Disable = "sv_bounce 0";

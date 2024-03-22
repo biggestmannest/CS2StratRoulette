@@ -1,6 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -13,6 +14,11 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"guhhhhhhhhhh my backkkk";
 
+		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+
+		private const string Enable = "sv_maxspeed 200";
+		private const string Disable = "sv_maxspeed 320";
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -20,7 +26,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand("sv_maxspeed 200");
+			Server.ExecuteCommand(ElderlyPeople.Enable);
 
 			return true;
 		}
@@ -32,7 +38,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand("sv_maxspeed 320");
+			Server.ExecuteCommand(ElderlyPeople.Disable);
 
 			return true;
 		}
