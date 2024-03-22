@@ -7,6 +7,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -102,26 +103,26 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			if ((this.ctVip is null || controller.SteamID != this.ctVip.SteamID) &&
-			    (this.tVip is null || controller.SteamID != this.tVip.SteamID))
+				(this.tVip is null || controller.SteamID != this.tVip.SteamID))
 			{
 				return HookResult.Continue;
 			}
 
-			var entity = Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").FirstOrDefault();
+			var proxy = Game.RulesProxy();
 
-			if (entity is null || entity.GameRules is null)
+			if (proxy is null || proxy.GameRules is null)
 			{
 				return HookResult.Continue;
 			}
 
 			var reason = controller.Team is CsTeam.CounterTerrorist
-				? RoundEndReason.TerroristsWin
-				: RoundEndReason.CTsWin;
+							 ? RoundEndReason.TerroristsWin
+							 : RoundEndReason.CTsWin;
 
 			Server.NextFrame(() =>
 			{
-				entity.GameRules.TerminateRound(1.0f, reason);
-				Utilities.SetStateChanged(entity, "CCSGameRulesProxy", "m_pGameRules");
+				proxy.GameRules.TerminateRound(1.0f, reason);
+				Utilities.SetStateChanged(proxy, "CCSGameRulesProxy", "m_pGameRules");
 			});
 
 			return HookResult.Continue;
@@ -141,7 +142,7 @@ namespace CS2StratRoulette.Strategies
 					CSWeaponType.WEAPONTYPE_C4
 				);
 			});
-			
+
 			Server.NextFrame(() =>
 			{
 				controller.GiveNamedItem(CsItem.CZ);
