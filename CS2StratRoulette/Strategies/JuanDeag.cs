@@ -19,7 +19,6 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
-
 		private const string Enable = "mp_damage_headshot_only 1";
 		private const string Disable = "mp_damage_headshot_only 0";
 
@@ -35,7 +34,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn) || controller.IsBot)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
