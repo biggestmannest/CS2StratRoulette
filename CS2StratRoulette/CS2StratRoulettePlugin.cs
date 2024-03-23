@@ -1,4 +1,6 @@
-﻿using CS2StratRoulette.Interfaces;
+﻿using CS2StratRoulette.Constants;
+using CS2StratRoulette.Helpers;
+using CS2StratRoulette.Interfaces;
 using CS2StratRoulette.Strategies;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core;
@@ -10,9 +12,6 @@ using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using CS2StratRoulette.Constants;
-using CS2StratRoulette.Extensions;
-using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette
 {
