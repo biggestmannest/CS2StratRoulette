@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API.Modules.Commands.Targeting;
 
 namespace CS2StratRoulette.Strategies
 {
