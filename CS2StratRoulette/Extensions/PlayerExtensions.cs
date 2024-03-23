@@ -6,7 +6,7 @@ namespace CS2StratRoulette.Extensions
 	public static class PlayerExtensions
 	{
 		public static bool TryGetPlayerController(this CCSPlayerController? ccsPlayerController,
-		                                          [NotNullWhen(true)] out CCSPlayerController? playerController)
+												  [NotNullWhen(true)] out CCSPlayerController? playerController)
 		{
 			playerController = null;
 
@@ -21,7 +21,7 @@ namespace CS2StratRoulette.Extensions
 		}
 
 		public static bool TryGetPlayerPawn(this CCSPlayerController controller,
-		                                    [NotNullWhen(true)] out CCSPlayerPawn? pawn)
+											[NotNullWhen(true)] out CCSPlayerPawn? pawn)
 		{
 			pawn = null;
 
