@@ -1,4 +1,6 @@
-﻿using CS2StratRoulette.Interfaces;
+﻿using CS2StratRoulette.Constants;
+using CS2StratRoulette.Helpers;
+using CS2StratRoulette.Interfaces;
 using CS2StratRoulette.Strategies;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core;
@@ -10,8 +12,6 @@ using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using CS2StratRoulette.Constants;
-using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette
 {
@@ -70,7 +70,13 @@ namespace CS2StratRoulette
 		[GameEventHandler]
 		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
 		{
-			System.Console.WriteLine(_.EventName);
+			var rules = Game.Rules();
+
+			if (rules is not null && rules.WarmupPeriod)
+			{
+				return HookResult.Continue;
+			}
+
 			if (this.ActiveStrategy is IStrategyPostStop strategy)
 			{
 				strategy.PostStop();
