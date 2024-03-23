@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Utils;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Extensions;
 
@@ -30,8 +30,6 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.PrecacheModel(Models.Fence);
-
 			Gladiator.PrepareArena(Points.Mirage);
 
 			return true;
@@ -49,27 +47,20 @@ namespace CS2StratRoulette.Strategies
 
 		private static void PrepareArena(Vector[] points)
 		{
-			for (var i = 0; i < points.Length; i++)
+			foreach (var point in points)
 			{
-				// Last point is only used for direction purposes
-				if (i == points.Length - 1)
-				{
-					continue;
-				}
-
-				var point = points[i];
-				var direction = points[i + 1];
-
-				var entity = Utilities.CreateEntityByName<CBaseProp>("prop_dynamic");
+				var entity = Utilities.CreateEntityByName<CDynamicProp>("prop_dynamic");
 
 				if (entity is null || !entity.IsValid)
 				{
 					continue;
 				}
 
-				entity.SetModel(Models.Fence);
-				entity.Teleport(point, point.Angle2(direction), VectorExtensions.Zero);
+				entity.Collision.CollisionGroup = (byte)CollisionGroup.COLLISION_GROUP_PLAYER;
+
 				entity.DispatchSpawn();
+				entity.SetModel(Models.Fence);
+				entity.Teleport(point, new(0f, 0f, 0f), VectorExtensions.Zero);
 			}
 		}
 	}
