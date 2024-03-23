@@ -12,6 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette
 {
@@ -70,7 +71,13 @@ namespace CS2StratRoulette
 		[GameEventHandler]
 		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
 		{
-			System.Console.WriteLine(_.EventName);
+			var rules = Game.Rules();
+
+			if (rules is not null && rules.WarmupPeriod)
+			{
+				return HookResult.Continue;
+			}
+
 			if (this.ActiveStrategy is IStrategyPostStop strategy)
 			{
 				strategy.PostStop();
