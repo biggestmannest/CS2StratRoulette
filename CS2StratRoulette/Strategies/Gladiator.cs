@@ -67,6 +67,7 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
+				entity.SetModel(Models.Fence);
 				entity.Teleport(point, point.Angle2(direction), VectorExtensions.Zero);
 				entity.DispatchSpawn();
 			}
