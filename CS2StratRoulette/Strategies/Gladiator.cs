@@ -60,9 +60,9 @@ namespace CS2StratRoulette.Strategies
 				var point = points[i];
 				var direction = points[i + 1];
 
-				var entity = Utilities.CreateEntityByName<CBaseProp>("chainlink_fence_001_128_capped");
+				var entity = Utilities.CreateEntityByName<CBaseProp>("prop_dynamic");
 
-				if (entity is null)
+				if (entity is null || !entity.IsValid)
 				{
 					continue;
 				}
