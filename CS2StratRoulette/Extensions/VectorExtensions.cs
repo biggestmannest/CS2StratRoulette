@@ -45,31 +45,13 @@ namespace CS2StratRoulette.Extensions
 			return u;
 		}
 
-		public static Vector Abs(this Vector @this)
-		{
-			@this.X = float.Abs(@this.X);
-			@this.Y = float.Abs(@this.Y);
-			@this.Z = float.Abs(@this.Z);
+		public static Vector Abs(this Vector @this) =>
+			new(float.Abs(@this.X), float.Abs(@this.Y), float.Abs(@this.Z));
 
-			return @this;
-		}
+		public static Vector Clamp(this Vector lhs, float min, float max) =>
+			new(float.Clamp(lhs.X, min, max), float.Clamp(lhs.Y, min, max), float.Clamp(lhs.Z, min, max));
 
-		public static Vector Clamp(this Vector @this, float min, float max)
-		{
-			@this.X = float.Clamp(@this.X, min, max);
-			@this.Y = float.Clamp(@this.Y, min, max);
-			@this.Z = float.Clamp(@this.Z, min, max);
-
-			return @this;
-		}
-
-		public static Vector Divide(this Vector @this, Vector rhs)
-		{
-			@this.X /= rhs.X;
-			@this.Y /= rhs.Y;
-			@this.Z /= rhs.Z;
-
-			return @this;
-		}
+		public static Vector Divide(this Vector lhs, Vector rhs) =>
+			new(lhs.X / rhs.X, lhs.Y / rhs.Y, lhs.Z / rhs.Z);
 	}
 }

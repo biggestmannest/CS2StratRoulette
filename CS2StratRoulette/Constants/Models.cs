@@ -10,7 +10,7 @@ namespace CS2StratRoulette.Constants
 		public const string Fence =
 			"models/props/de_nuke/hr_nuke/chainlink_fence_001/chainlink_fence_001_128_capped.vmdl";
 
-		public const float FenceWidth = 145f;
+		public const float FenceWidth = 140f;
 
 		public static readonly string[] Props =
 		{
