@@ -154,31 +154,6 @@ namespace CS2StratRoulette
 			commandInfo.ReplyToCommand("[OnStratCommand] strategy not found");
 		}
 
-		[ConsoleCommand("props", "")]
-		[CommandHelper(1, "[type]")]
-		[RequiresPermissions("@css/root")]
-		public void OnPropsCommand(CCSPlayerController? player, CommandInfo commandInfo)
-		{
-			var name = commandInfo.GetArg(1);
-
-			foreach (var entity in Utilities.GetAllEntities())
-			{
-				if (entity.DesignerName.Contains("fence", System.StringComparison.OrdinalIgnoreCase) ||
-					entity.DesignerName.Contains("gate", System.StringComparison.OrdinalIgnoreCase))
-				{
-					Server.ExecuteCommand($"say {entity.DesignerName}");
-				}
-			}
-
-			foreach (var entity in Utilities.FindAllEntitiesByDesignerName<CEntityInstance>(name))
-			{
-				var prop = new CEntityInstance(entity.Handle);
-
-				var model = Constants.Signatures.GetModel.Invoke(prop.Handle);
-				Server.ExecuteCommand($"say {model}");
-			}
-		}
-
 		public void CycleStrategy()
 		{
 			// We stop the strategy again just in case it didn't stop before.

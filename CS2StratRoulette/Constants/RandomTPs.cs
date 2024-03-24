@@ -23,7 +23,7 @@ namespace CS2StratRoulette.Constants
 			new(-372f, 613f, -17f),
 			new(-2304f, 696f, 25f),
 			new(-2570f, 287f, -104f),
-			new(-557f, -1035f, -104f),
+			new(-557f, -1035f, -160f),
 			new(-1138f, -1387f, -103f),
 			//ladder room, a lot of room for error so X and Y have to be specific.
 			new(-1032.11f, -96.35f, -104f),
