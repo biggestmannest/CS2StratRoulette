@@ -62,9 +62,14 @@ namespace CS2StratRoulette.Strategies
 
 				var fences = (int)float.Ceiling(float.Abs(diff.Length2D()) / Models.FenceWidth);
 
+				System.Console.WriteLine($"distance: {float.Abs(diff.Length2D())}");
+				System.Console.WriteLine($"Fences: {fences}");
+
 				for (var j = 1; j <= fences; j++)
 				{
-					Gladiator.CreateFence(point + (step * j), angle);
+					var a = point + (step * j);
+					System.Console.WriteLine($"Position{j}: {a}");
+					Gladiator.CreateFence(a, angle);
 				}
 			}
 		}

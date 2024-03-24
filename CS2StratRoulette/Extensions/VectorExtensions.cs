@@ -21,8 +21,8 @@ namespace CS2StratRoulette.Extensions
 
 			var angle =
 				float.Atan2(
-					north.Cross2D(VectorExtensions.North),
-					target.Dot2D(VectorExtensions.North)
+					north.Cross2D(target),
+					north.Dot2D(target)
 				) * rad2deg;
 
 			return new QAngle(0f, angle, 0f);
