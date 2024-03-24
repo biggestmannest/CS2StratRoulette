@@ -78,18 +78,23 @@ namespace CS2StratRoulette.Strategies
 				return null;
 			}
 
-			entity.Collision.SolidType = SolidType_t.SOLID_VPHYSICS;
-			entity.Collision.CollisionGroup = (byte)CollisionGroup.COLLISION_GROUP_NONE;
+			Server.NextFrame(() =>
+			{
+				entity.Collision.SolidType = SolidType_t.SOLID_VPHYSICS;
+				entity.Collision.CollisionGroup = (byte)CollisionGroup.COLLISION_GROUP_NONE;
+				entity.Collision.CollisionAttribute.CollisionGroup = (byte)CollisionGroup.COLLISION_GROUP_NONE;
 
-			entity.Teleport(position, angle, VectorExtensions.Zero);
-			entity.SetModel(Models.Fence);
-			entity.DispatchSpawn();
+				var collisionRulesChanged = new
+					VirtualFunctionVoid<nint>(entity.Handle, 172);
+
+				collisionRulesChanged.Invoke(entity.Handle);
+			});
 
 			Server.NextFrame(() =>
 			{
-				var collisionRulesChanged = new VirtualFunctionVoid<nint>(entity.Collision.Handle, 172);
-
-				collisionRulesChanged.Invoke(entity.Handle);
+				entity.DispatchSpawn();
+				entity.SetModel(Models.Fence);
+				entity.Teleport(position, angle, VectorExtensions.Zero);
 			});
 
 			return entity;
