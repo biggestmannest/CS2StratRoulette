@@ -1,5 +1,7 @@
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Extensions
 {
@@ -38,6 +40,24 @@ namespace CS2StratRoulette.Extensions
 			pawn = entity;
 
 			return true;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void EquipKnife(this CCSPlayerController controller)
+		{
+			controller.ExecuteClientCommand(Commands.EquipKnife);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void EquipSecondary(this CCSPlayerController controller)
+		{
+			controller.ExecuteClientCommand(Commands.EquipSecondary);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void EquipPrimary(this CCSPlayerController controller)
+		{
+			controller.ExecuteClientCommand(Commands.EquipPrimary);
 		}
 
 		/// <summary>

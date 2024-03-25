@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
+﻿using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Modules.Timers;
-using CS2StratRoulette.Enums;
+using CounterStrikeSharp.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -17,7 +17,7 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
-		private static Random random = new();
+		private static readonly System.Random Random = new();
 
 		private Timer? timer;
 
@@ -47,7 +47,7 @@ namespace CS2StratRoulette.Strategies
 
 		private static void OnInterval()
 		{
-			if ((Clumsy.random.Next() & 1) == 0)
+			if ((Clumsy.Random.Next() & 1) == 0)
 			{
 				foreach (var controller in Utilities.GetPlayers())
 				{
@@ -57,6 +57,7 @@ namespace CS2StratRoulette.Strategies
 					}
 
 					controller.DropActiveWeapon();
+					controller.EquipKnife();
 				}
 			}
 		}

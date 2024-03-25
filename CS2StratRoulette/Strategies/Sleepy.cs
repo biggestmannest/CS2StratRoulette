@@ -1,4 +1,5 @@
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
@@ -25,6 +26,14 @@ namespace CS2StratRoulette.Strategies
 
 			plugin.RegisterEventHandler<EventPlayerShoot>(this.OnPlayerShoot);
 
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (controller.IsValid)
+				{
+					controller.ExecuteClientCommand(Sleepy.Fade);
+				}
+			}
+
 			return true;
 		}
 
@@ -47,8 +56,8 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			@event.Userid.ExecuteClientCommandFromServer(Sleepy.Reset);
-			@event.Userid.ExecuteClientCommandFromServer(Sleepy.Fade);
+			@event.Userid.ExecuteClientCommand(Sleepy.Reset);
+			@event.Userid.ExecuteClientCommand(Sleepy.Fade);
 
 			return HookResult.Continue;
 		}

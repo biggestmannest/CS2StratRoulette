@@ -31,7 +31,6 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
-
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -57,6 +56,7 @@ namespace CS2StratRoulette.Strategies
 				pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
 
 				controller.GiveNamedItem(CsItem.PPBizon);
+				controller.EquipPrimary();
 
 				controller.DesiredFOV = Quake.QuakeFov;
 
@@ -93,6 +93,8 @@ namespace CS2StratRoulette.Strategies
 					CSWeaponType.WEAPONTYPE_C4,
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
+
+				controller.EquipKnife();
 
 				controller.DesiredFOV = Quake.DefaultFov;
 

@@ -28,7 +28,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn) || controller.IsBot)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
@@ -40,19 +40,8 @@ namespace CS2StratRoulette.Strategies
 				else if (controller.Team is CsTeam.Terrorist)
 				{
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+					controller.EquipKnife();
 				}
-			}
-
-			{
-				return true;
-			}
-		}
-
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
-		{
-			if (!base.Stop(ref plugin))
-			{
-				return false;
 			}
 
 			return true;

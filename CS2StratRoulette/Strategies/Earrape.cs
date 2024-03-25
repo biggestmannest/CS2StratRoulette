@@ -61,6 +61,8 @@ namespace CS2StratRoulette.Strategies
 				controller.GiveNamedItem(CsItem.Negev);
 				controller.GiveNamedItem(CsItem.Decoy);
 
+				controller.EquipPrimary();
+
 				if (controller.Team is CsTeam.Terrorist)
 				{
 					ts.Add(controller);

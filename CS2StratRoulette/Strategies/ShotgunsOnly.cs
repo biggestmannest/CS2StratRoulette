@@ -42,7 +42,7 @@ namespace CS2StratRoulette.Strategies
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
 
-				controller.ExecuteClientCommand("slot3");
+				controller.EquipKnife();
 			}
 
 			return true;

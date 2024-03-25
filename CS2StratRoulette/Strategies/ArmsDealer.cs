@@ -37,6 +37,8 @@ namespace CS2StratRoulette.Strategies
 				{
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
 
+					controller.EquipKnife();
+
 					if (controller.IsBot)
 					{
 						continue;

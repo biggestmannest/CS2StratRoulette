@@ -31,7 +31,7 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.Render = Color.FromArgb(128, pawn.Render);
+				pawn.Render = Color.FromArgb(byte.MaxValue / 2, pawn.Render);
 			}
 
 			return true;
@@ -51,7 +51,7 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.Render = Color.FromArgb(255, pawn.Render);
+				pawn.Render = Color.FromArgb(byte.MaxValue, pawn.Render);
 			}
 
 			return true;

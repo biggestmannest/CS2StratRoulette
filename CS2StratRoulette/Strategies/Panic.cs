@@ -1,7 +1,7 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
-using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -15,7 +15,6 @@ namespace CS2StratRoulette.Strategies
 			"Every time you are shot, you want to run away.";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
-
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -52,7 +51,7 @@ namespace CS2StratRoulette.Strategies
 
 			if (@event.Userid.IsValid)
 			{
-				@event.Userid.ExecuteClientCommand("slot3");
+				@event.Userid.EquipKnife();
 				@event.Userid.ExecuteClientCommandFromServer("say \"OUCH!!!!!!!!!!!!!!!!\"");
 			}
 

@@ -49,6 +49,7 @@ namespace CS2StratRoulette.Strategies
 				);
 
 				controller.GiveNamedItem(CsItem.SSG08);
+				controller.EquipPrimary();
 			}
 
 			Server.ExecuteCommand(FlyingScoutsman.EnableFs);
@@ -78,6 +79,7 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
+				controller.EquipKnife();
 			}
 
 			Server.ExecuteCommand(FlyingScoutsman.DisableFs);
