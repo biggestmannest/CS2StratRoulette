@@ -22,6 +22,8 @@ namespace CS2StratRoulette.Extensions
 			new(float.Clamp(lhs.X, min, max), float.Clamp(lhs.Y, min, max), float.Clamp(lhs.Z, min, max));
 
 		public static Vector Divide(this Vector lhs, Vector rhs) =>
-			new(lhs.X / rhs.X, lhs.Y / rhs.Y, lhs.Z / rhs.Z);
+			new((rhs.X == 0f) ? 0f : (lhs.X / rhs.X),
+				(rhs.Y == 0f) ? 0f : (lhs.Y / rhs.Y),
+				(rhs.Z == 0f) ? 0f : (lhs.Z / rhs.Z));
 	}
 }
