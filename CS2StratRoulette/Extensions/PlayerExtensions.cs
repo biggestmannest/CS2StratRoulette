@@ -27,7 +27,7 @@ namespace CS2StratRoulette.Extensions
 		{
 			pawn = null;
 
-			if (!controller.IsValid || !controller.PlayerPawn.TryGetValue(out var entity))
+			if (!controller.IsValid || !controller.PawnIsAlive || !controller.PlayerPawn.TryGetValue(out var entity))
 			{
 				return false;
 			}
@@ -58,6 +58,18 @@ namespace CS2StratRoulette.Extensions
 		public static void EquipPrimary(this CCSPlayerController controller)
 		{
 			controller.ExecuteClientCommand(Commands.EquipPrimary);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void EquipGrenade(this CCSPlayerController controller)
+		{
+			controller.ExecuteClientCommand(Commands.EquipGrenade);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void EquipC4(this CCSPlayerController controller)
+		{
+			controller.ExecuteClientCommand(Commands.EquipC4);
 		}
 
 		/// <summary>

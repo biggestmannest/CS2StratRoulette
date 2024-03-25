@@ -16,7 +16,7 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"Hope you like your new position :)";
 
-		private static readonly Dictionary<string, Vector[]> Maps = new()
+		private static readonly Dictionary<string, Vector[]> Maps = new(System.StringComparer.OrdinalIgnoreCase)
 		{
 			{ "de_mirage", RandomTPs.Mirage },
 			{ "de_overpass", RandomTPs.Overpass },
@@ -47,24 +47,31 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			RandomTeleport.Random.Shuffle(randomSpots);
+
+			var n = randomSpots.Length;
+
 			foreach (var player in Utilities.GetPlayers())
 			{
-				if (!player.TryGetPlayerPawn(out var pawn))
+				if (!player.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null)
 				{
 					continue;
 				}
 
-				var angle = pawn.AbsRotation;
+				if (n <= 0)
+				{
+					n = randomSpots.Length;
+				}
+
+				var position = randomSpots[--n];
+
 				Server.NextFrame(() =>
 				{
-					if (angle is not null)
-					{
-						pawn.Teleport(
-							randomSpots[RandomTeleport.Random.Next(randomSpots.Length)],
-							angle,
-							VectorExtensions.Zero
-						);
-					}
+					pawn.Teleport(
+						position,
+						pawn.AbsRotation,
+						VectorExtensions.Zero
+					);
 				});
 			}
 
