@@ -44,6 +44,11 @@ namespace CS2StratRoulette.Strategies
 
 		private HookResult OnPlayerHurt(EventPlayerHurt @event, GameEventInfo _)
 		{
+			if (!this.Running)
+			{
+				return HookResult.Continue;
+			}
+
 			var controller = @event.Userid;
 
 			if (!controller.TryGetPlayerPawn(out var pawn))
