@@ -1,4 +1,5 @@
 ﻿using CS2StratRoulette.Constants;
+using CS2StratRoulette.Extensions;
 using CS2StratRoulette.Helpers;
 using CS2StratRoulette.Interfaces;
 using CS2StratRoulette.Strategies;
@@ -152,6 +153,59 @@ namespace CS2StratRoulette
 			}
 
 			commandInfo.ReplyToCommand("[OnStratCommand] strategy not found");
+		}
+
+		[ConsoleCommand("props", "")]
+		[CommandHelper(1, "[type]")]
+		[RequiresPermissions("@css/root")]
+		public void OnPropsCommand(CCSPlayerController? player, CommandInfo commandInfo)
+		{
+			var name = commandInfo.GetArg(1);
+
+			foreach (var entity in Utilities.GetAllEntities())
+			{
+				if (entity.DesignerName.Contains("fence", System.StringComparison.OrdinalIgnoreCase) ||
+					entity.DesignerName.Contains("gate", System.StringComparison.OrdinalIgnoreCase))
+				{
+					Server.ExecuteCommand($"say {entity.DesignerName}");
+				}
+			}
+
+			foreach (var entity in Utilities.FindAllEntitiesByDesignerName<CEntityInstance>(name))
+			{
+				var prop = new CEntityInstance(entity.Handle);
+
+				var model = Constants.Signatures.GetModel.Invoke(prop.Handle);
+				Server.ExecuteCommand($"say {model}");
+			}
+		}
+
+		[ConsoleCommand("roll", "")]
+		[RequiresPermissions("@css/root")]
+		public void OnRollCommand(CCSPlayerController? player, CommandInfo commandInfo)
+		{
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				if (controller.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist))
+				{
+					continue;
+				}
+
+				if (pawn.AbsOrigin is null ||
+					pawn.AbsRotation is null)
+				{
+					continue;
+				}
+
+				pawn.AbsRotation.Z = float.Abs(pawn.AbsRotation.Z - 45f) < 0.1f ? 0f : 45f;
+
+				pawn.Teleport(pawn.AbsOrigin, pawn.AbsRotation, pawn.AbsVelocity);
+			}
 		}
 
 		public void CycleStrategy()

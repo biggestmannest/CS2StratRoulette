@@ -47,23 +47,25 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			this.timer?.Kill();
+
 			return true;
 		}
 
 		private void OnInterval()
 		{
-			if (this.random.Next(2) == 0)
+			foreach (var controller in Utilities.GetPlayers())
 			{
-				return;
-			}
-
-			var number = this.random.Next(1, 8);
-			foreach (var player in Utilities.GetPlayers())
-			{
-				if (player.IsValid)
+				if (!controller.IsValid)
 				{
-					player.ExecuteClientCommand($"play {Schizophrenia.EffectOne}_0{number.Str()}");
+					continue;
 				}
+
+				if (this.random.Next(2) == 0)
+				{
+					continue;
+				}
+
+				controller.ExecuteClientCommand($"play {Schizophrenia.EffectOne}_0{this.random.Next(1, 8).Str()}");
 			}
 		}
 	}

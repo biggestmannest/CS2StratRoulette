@@ -49,6 +49,8 @@ namespace CS2StratRoulette.Strategies
 					controller.GiveNamedItem(CsItem.HEGrenade);
 					controller.GiveNamedItem(CsItem.Molotov);
 
+					controller.EquipKnife();
+
 					continue;
 				}
 

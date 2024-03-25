@@ -46,6 +46,7 @@ namespace CS2StratRoulette.Strategies
 				var item = Items.Weapons[this.random.Next(Items.Weapons.Length)];
 
 				controller.GiveNamedItem(item);
+				controller.EquipPrimary();
 			}
 
 			return true;

@@ -1,13 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Entities.Constants;
-using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 using CS2StratRoulette.Helpers;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
+using CounterStrikeSharp.API.Modules.Utils;
+using CounterStrikeSharp.API;
+using System.Collections.Generic;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -146,6 +145,7 @@ namespace CS2StratRoulette.Strategies
 			Server.NextFrame(() =>
 			{
 				controller.GiveNamedItem(CsItem.CZ);
+				controller.EquipSecondary();
 
 				pawn.SetModel(controller.Team is CsTeam.CounterTerrorist ? Models.JuggernautCt : Models.JuggernautT);
 			});

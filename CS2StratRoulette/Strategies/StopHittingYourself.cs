@@ -1,5 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CounterStrikeSharp.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -8,6 +9,9 @@ namespace CS2StratRoulette.Strategies
 	{
 		private const string Half = "mp_weapon_self_inflict_amount 0.5";
 		private const string Reset = "mp_weapon_self_inflict_amount 0";
+
+		private const string KickDisable = "mp_autokick 0";
+		private const string KickEnable = "mp_autokick 1";
 
 		public override string Name =>
 			"Stop Hitting Yourself!";
@@ -24,7 +28,8 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(StopHittingYourself.Half);
+			Server.ExecuteCommand(StopHittingYourself.Half);
+			Server.ExecuteCommand(StopHittingYourself.KickDisable);
 
 			return true;
 		}
@@ -36,7 +41,8 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(StopHittingYourself.Reset);
+			Server.ExecuteCommand(StopHittingYourself.Reset);
+			Server.ExecuteCommand(StopHittingYourself.KickEnable);
 
 			return true;
 		}

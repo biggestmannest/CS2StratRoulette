@@ -11,6 +11,9 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class JuanDeag : Strategy
 	{
+		private const string Enable = "mp_damage_headshot_only 1";
+		private const string Disable = "mp_damage_headshot_only 0";
+
 		public override string Name =>
 			"Juan Deag";
 
@@ -18,9 +21,6 @@ namespace CS2StratRoulette.Strategies
 			"Everyone gets a deagle, and can only hit headshots.";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
-
-		private const string Enable = "mp_damage_headshot_only 1";
-		private const string Disable = "mp_damage_headshot_only 0";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -40,9 +40,11 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
-				controller.GiveNamedItem(CsItem.Deagle);
-			}
 
+				controller.GiveNamedItem(CsItem.Deagle);
+
+				controller.EquipSecondary();
+			}
 
 			return true;
 		}

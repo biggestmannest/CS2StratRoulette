@@ -49,6 +49,7 @@ namespace CS2StratRoulette.Strategies
 
 			for (var i = 0; i < points.Length; i += 2)
 			{
+				// Second point only gets used for direction
 				if (i == points.Length - 1)
 				{
 					continue;
@@ -61,17 +62,20 @@ namespace CS2StratRoulette.Strategies
 				var step = diff.Unit() * Models.FenceWidth;
 				var angle = diff.Angle();
 
-				var fences = (int)float.Ceiling(float.Abs(diff.Length2D()) / Models.FenceWidth);
+				var len = float.Abs(diff.Length2D());
+				var fences = (int)float.Ceiling(len / Models.FenceWidth);
 
 				System.Console.WriteLine($"Point:	{point}");
 				System.Console.WriteLine($"Direc:	{direction}");
 				System.Console.WriteLine($"Diff:	{diff}");
 				System.Console.WriteLine($"Step:	{step}");
-				System.Console.WriteLine($"AYaw:	{angle.Y.Str()}");
+				System.Console.WriteLine($"Leng:	{len.Str()}");
+				System.Console.WriteLine($"Fenc:	{fences.Str()}");
+				System.Console.WriteLine($"Angl:	{angle.X.Str()} {angle.Y.Str()} {angle.Z.Str()}");
 
-				for (var j = 1; j <= fences; j++)
+				for (var j = 0; j < fences; j++)
 				{
-					Gladiator.CreateFence(point + (step * j), new QAngle(angle.Pitch, angle.Yaw, angle.Roll));
+					Gladiator.CreateFence(point + (step * j), new QAngle(angle.X, angle.Y, angle.Z));
 				}
 			}
 		}

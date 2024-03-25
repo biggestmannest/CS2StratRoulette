@@ -14,6 +14,12 @@ namespace CS2StratRoulette.Constants
 		public const string ThirdPersonEnable = "thirdperson 1";
 		public const string ThirdPersonDisable = "thirdperson 0";
 
+		public const string EquipPrimary = "slot1";
+		public const string EquipSecondary = "slot2";
+		public const string EquipKnife = "slot3";
+		public const string EquipGrenade = "slot4";
+		public const string EquipC4 = "slot5";
+
 		public static readonly string BuyAllowNone = $"mp_buy_allow_guns {BuyAllow.None.Str()}";
 		public static readonly string BuyAllowAll = $"mp_buy_allow_guns {BuyAllow.All.Str()}";
 	}
