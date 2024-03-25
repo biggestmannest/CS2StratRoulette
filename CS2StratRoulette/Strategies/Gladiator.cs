@@ -56,21 +56,22 @@ namespace CS2StratRoulette.Strategies
 
 				var point = points[i];
 				var direction = points[i + 1];
+
 				var diff = point - direction;
-				var step = diff.Unit2D() * Models.FenceWidth;
-				var angle = point.Angle2(direction);
+				var step = diff.Unit() * Models.FenceWidth;
+				var angle = diff.Angle();
 
 				var fences = (int)float.Ceiling(float.Abs(diff.Length2D()) / Models.FenceWidth);
 
 				System.Console.WriteLine($"Point:	{point}");
+				System.Console.WriteLine($"Direc:	{direction}");
+				System.Console.WriteLine($"Diff:	{diff}");
 				System.Console.WriteLine($"Step:	{step}");
+				System.Console.WriteLine($"AYaw:	{angle.Y.Str()}");
 
 				for (var j = 1; j <= fences; j++)
 				{
-					var a = point + (step * j);
-					System.Console.WriteLine($"---{j.Str()}---");
-					System.Console.WriteLine($"Pos: {a}");
-					Gladiator.CreateFence(a, angle);
+					Gladiator.CreateFence(point + (step * j), new QAngle(angle.Pitch, angle.Yaw, angle.Roll));
 				}
 			}
 		}
@@ -90,8 +91,7 @@ namespace CS2StratRoulette.Strategies
 				entity.Collision.CollisionGroup = (byte)CollisionGroup.COLLISION_GROUP_NONE;
 				entity.Collision.CollisionAttribute.CollisionGroup = (byte)CollisionGroup.COLLISION_GROUP_NONE;
 
-				var collisionRulesChanged = new
-					VirtualFunctionVoid<nint>(entity.Handle, 172);
+				var collisionRulesChanged = new VirtualFunctionVoid<nint>(entity.Handle, 172);
 
 				collisionRulesChanged.Invoke(entity.Handle);
 			});
