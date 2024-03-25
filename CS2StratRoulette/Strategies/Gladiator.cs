@@ -49,6 +49,7 @@ namespace CS2StratRoulette.Strategies
 
 			for (var i = 0; i < points.Length; i += 2)
 			{
+				// Second point only gets used for direction
 				if (i == points.Length - 1)
 				{
 					continue;
@@ -70,11 +71,11 @@ namespace CS2StratRoulette.Strategies
 				System.Console.WriteLine($"Step:	{step}");
 				System.Console.WriteLine($"Leng:	{len.Str()}");
 				System.Console.WriteLine($"Fenc:	{fences.Str()}");
-				System.Console.WriteLine($"Angl:	{angle.Pitch.Str()} {angle.Yaw.Str()} {angle.Roll.Str()}");
+				System.Console.WriteLine($"Angl:	{angle.X.Str()} {angle.Y.Str()} {angle.Z.Str()}");
 
 				for (var j = 0; j < fences; j++)
 				{
-					Gladiator.CreateFence(point + (step * j), new QAngle(angle.Pitch, angle.Yaw, angle.Roll));
+					Gladiator.CreateFence(point + (step * j), new QAngle(angle.X, angle.Y, angle.Z));
 				}
 			}
 		}
