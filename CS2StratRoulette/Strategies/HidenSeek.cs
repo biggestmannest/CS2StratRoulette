@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Utils;
+using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
@@ -26,6 +27,9 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			Server.ExecuteCommand(Commands.BuyAllowNone);
+			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
+
 			foreach (var controller in Utilities.GetPlayers())
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
@@ -43,6 +47,19 @@ namespace CS2StratRoulette.Strategies
 					controller.EquipKnife();
 				}
 			}
+
+			return true;
+		}
+
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
+
+			Server.ExecuteCommand(Commands.BuyAllowAll);
+			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
 
 			return true;
 		}
