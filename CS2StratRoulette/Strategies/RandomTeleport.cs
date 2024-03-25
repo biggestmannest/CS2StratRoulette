@@ -21,6 +21,9 @@ namespace CS2StratRoulette.Strategies
 			{ "de_mirage", RandomTPs.Mirage },
 			{ "de_overpass", RandomTPs.Overpass },
 			{ "de_nuke", RandomTPs.Nuke },
+			{ "de_dust2", RandomTPs.Dust2 },
+			{ "cs_italy", RandomTPs.Italy },
+			{ "de_vertigo", RandomTPs.Vertigo },
 		};
 
 		private const string BuyAnywhereEnable = "mp_buy_anywhere 1";
