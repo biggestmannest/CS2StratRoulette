@@ -61,15 +61,18 @@ namespace CS2StratRoulette.Strategies
 				var step = diff.Unit() * Models.FenceWidth;
 				var angle = diff.Angle();
 
-				var fences = (int)float.Ceiling(float.Abs(diff.Length2D()) / Models.FenceWidth);
+				var len = float.Abs(diff.Length2D());
+				var fences = (int)float.Ceiling(len / Models.FenceWidth);
 
 				System.Console.WriteLine($"Point:	{point}");
 				System.Console.WriteLine($"Direc:	{direction}");
 				System.Console.WriteLine($"Diff:	{diff}");
 				System.Console.WriteLine($"Step:	{step}");
-				System.Console.WriteLine($"AYaw:	{angle.Y.Str()}");
+				System.Console.WriteLine($"Leng:	{len.Str()}");
+				System.Console.WriteLine($"Fenc:	{fences.Str()}");
+				System.Console.WriteLine($"Angl:	{angle.Pitch.Str()} {angle.Yaw.Str()} {angle.Roll.Str()}");
 
-				for (var j = 1; j <= fences; j++)
+				for (var j = 0; j < fences; j++)
 				{
 					Gladiator.CreateFence(point + (step * j), new QAngle(angle.Pitch, angle.Yaw, angle.Roll));
 				}
