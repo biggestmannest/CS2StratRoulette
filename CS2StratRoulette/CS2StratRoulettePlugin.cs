@@ -1,4 +1,5 @@
-﻿using CS2StratRoulette.Constants;
+﻿using System;
+using CS2StratRoulette.Constants;
 using CS2StratRoulette.Helpers;
 using CS2StratRoulette.Interfaces;
 using CS2StratRoulette.Strategies;
@@ -12,6 +13,7 @@ using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette
 {
@@ -176,6 +178,34 @@ namespace CS2StratRoulette
 
 				var model = Constants.Signatures.GetModel.Invoke(prop.Handle);
 				Server.ExecuteCommand($"say {model}");
+			}
+		}
+
+		[ConsoleCommand("roll", "")]
+		[RequiresPermissions("@css/root")]
+		public void OnRollCommand(CCSPlayerController? player, CommandInfo commandInfo)
+		{
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				if (controller.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist))
+				{
+					continue;
+				}
+
+				if (pawn.AbsOrigin is null ||
+					pawn.AbsRotation is null)
+				{
+					continue;
+				}
+
+				pawn.AbsRotation.Z = float.Abs(pawn.AbsRotation.Z - 45f) < 0.1f ? 0f : 45f;
+
+				pawn.Teleport(pawn.AbsOrigin, pawn.AbsRotation, pawn.AbsVelocity);
 			}
 		}
 
