@@ -14,7 +14,7 @@ namespace CS2StratRoulette.Strategies
 			"Roulette";
 
 		public override string Description =>
-			"If you guess the number between 1 and 10 correctly you get 200HP :) happy gambling!";
+			$" {ChatColors.Red}Pick a number between 1 and 10 in chat. You have 10 seconds. Winners will be announced after the 10 seconds have passed.\"";
 
 		private static readonly System.Random Random = new();
 
@@ -31,12 +31,11 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.PrintToChatAll(
-				$" {ChatColors.Red}Pick a number between 1 and 10 in chat. You have 10 seconds. Winners will be announced after the 10 seconds have passed.");
-
 			plugin.RegisterListener<Listeners.OnTick>(this.OnTick);
 
 			this.numPick = (Gambling.Random.Next(10) + 1);
+
+			System.Console.WriteLine($"Picked number: {this.numPick}");
 			this.endTime = Server.CurrentTime + 10f;
 
 			plugin.RegisterEventHandler<EventPlayerChat>(this.OnNumberPicked);
@@ -71,8 +70,8 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			var controller = Utilities.GetPlayerFromIndex(@event.Userid);
-
+			var controller = Utilities.GetPlayerFromUserid(@event.Userid);
+            
 			if (this.guessers[controller.Slot] != default)
 			{
 				return HookResult.Continue;
@@ -109,9 +108,9 @@ namespace CS2StratRoulette.Strategies
 				return;
 			}
 
-			this.endTime = 0f;
+			this.endTime = float.MaxValue;
 
-			var theNumber = this.numPick.Str();
+			var theNumber = int.Parse(this.numPick.Str(), CultureInfo.InvariantCulture);
 			var correct = $"You got it! The correct number was {theNumber}. Enjoy the 200HP.";
 			var wrong = $"You got it wrong. The correct number was {theNumber}. L";
 
@@ -121,6 +120,11 @@ namespace CS2StratRoulette.Strategies
 				var controller = Utilities.GetPlayerFromSlot(index);
 				var won = number == this.numPick;
 				var msg = won ? correct : wrong;
+
+				if (!controller.IsValid)
+				{
+					continue;
+				}
 
 				if (won)
 				{

@@ -1,5 +1,4 @@
-﻿using CounterStrikeSharp.API.Core;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CS2StratRoulette.Enums;
 
@@ -16,7 +15,7 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
-		private const string Enable = "sv_maxspeed 200";
+		private const string Enable = "sv_maxspeed 170";
 		private const string Disable = "sv_maxspeed 320";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
