@@ -5,16 +5,12 @@ using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Modules.Commands.Targeting;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class PropHunt : Strategy
 	{
-		private const byte Tries = 4;
-		private const byte DamageOnTry = (100 /*HP*/ / PropHunt.Tries);
-
 		public override string Name =>
 			"Prop Hunt";
 
@@ -29,6 +25,8 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
+
+			Server.PrecacheModel(Models.JuggernautCt);
 
 			Server.ExecuteCommand(Commands.BuyAllowNone);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
@@ -62,8 +60,6 @@ namespace CS2StratRoulette.Strategies
 				controller.RemoveWeapons();
 				pawn.Health = 1;
 
-				controller.ExecuteClientCommandFromServer(Commands.ThirdPersonEnable);
-
 				Server.NextFrame(() =>
 				{
 					pawn.SetModel(Models.Props[this.random.Next(Models.Props.Length)]);
@@ -71,7 +67,7 @@ namespace CS2StratRoulette.Strategies
 				});
 			}
 
-			Server.ExecuteCommand(Commands.CheatsDisable);
+			plugin.RegisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
 
 			return true;
 		}
@@ -86,8 +82,6 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(Commands.BuyAllowAll);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
 
-			Server.ExecuteCommand(Commands.CheatsEnable);
-
 			foreach (var controller in Utilities.GetPlayers())
 			{
 				if (!controller.IsValid)
@@ -96,13 +90,26 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				controller.RemoveWeapons();
-
-				controller.ExecuteClientCommandFromServer(Commands.ThirdPersonDisable);
 			}
 
-			Server.ExecuteCommand(Commands.CheatsDisable);
+			const string playerDeath = "player_death";
+			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
 
 			return true;
+		}
+
+		private HookResult OnPlayerDeath(EventPlayerDeath @event, GameEventInfo _)
+		{
+			var controller = @event.Userid;
+
+			if (!controller.TryGetPlayerPawn(out var pawn))
+			{
+				return HookResult.Continue;
+			}
+
+			pawn.SetModel(controller.Team is CsTeam.CounterTerrorist ? Models.NormalCt : Models.NormalT);
+
+			return HookResult.Continue;
 		}
 	}
 }

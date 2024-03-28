@@ -4,6 +4,8 @@ namespace CS2StratRoulette.Constants
 	{
 		public const string JuggernautCt = "characters/models/ctm_heavy/ctm_heavy.vmdl";
 		public const string JuggernautT = "characters/models/tm_phoenix_heavy/tm_phoenix_heavy.vmdl";
+		public const string NormalCt = "characters/models/ctm_sas/ctm_sas.vmdl";
+		public const string NormalT = "characters/models/tm_phoenix/tm_phoenix.vmdl";
 
 		public const string Chicken = "models/chicken/chicken.vmdl";
 

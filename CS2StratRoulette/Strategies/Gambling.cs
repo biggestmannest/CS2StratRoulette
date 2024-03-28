@@ -14,7 +14,7 @@ namespace CS2StratRoulette.Strategies
 			"Roulette";
 
 		public override string Description =>
-			$" {ChatColors.Red}Pick a number between 1 and 10 in chat. You have 10 seconds. Winners will be announced after the 10 seconds have passed.\"";
+			$" {ChatColors.Red}Pick a number between 1 and 10 in chat. You have 10 seconds. Winners will be announced after the 10 seconds have passed";
 
 		private static readonly System.Random Random = new();
 
