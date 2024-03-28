@@ -1,6 +1,5 @@
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
-using CS2StratRoulette.Helpers;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
