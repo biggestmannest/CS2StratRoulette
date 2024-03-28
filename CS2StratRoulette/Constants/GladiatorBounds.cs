@@ -19,7 +19,7 @@ namespace CS2StratRoulette.Constants
 				// CT -> Market
 				(new(-1544f, -735f, -166f), new(0f, 90f, 0f)),
 			},
-			(new(-1740f, -1400f, -153f), new(-1850f, -1620f, -153f)),
+			(new(-1760f, -1350f, -153f), new(-1850f, -1620f, -153f)),
 			(new(-1615f, -2120f, -250f), new(-1605f, -1260f, -250f))
 		);
 
