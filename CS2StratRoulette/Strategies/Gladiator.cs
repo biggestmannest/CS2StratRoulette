@@ -161,7 +161,7 @@ namespace CS2StratRoulette.Strategies
 		{
 			if (current is not null && current.PawnIsAlive)
 			{
-				return null;
+				return current;
 			}
 
 			var controller = players.Find(static (e) => (e.IsValid && e.PawnIsAlive));
