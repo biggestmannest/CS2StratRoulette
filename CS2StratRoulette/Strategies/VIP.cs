@@ -36,8 +36,8 @@ namespace CS2StratRoulette.Strategies
 			Server.PrecacheModel(Models.JuggernautCt);
 			Server.PrecacheModel(Models.JuggernautT);
 
-			var cts = new List<CCSPlayerController>(10);
-			var ts = new List<CCSPlayerController>(10);
+			var cts = new List<CCSPlayerController>(Server.MaxPlayers / 2);
+			var ts = new List<CCSPlayerController>(Server.MaxPlayers / 2);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{

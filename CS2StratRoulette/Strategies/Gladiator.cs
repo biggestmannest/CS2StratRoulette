@@ -1,11 +1,12 @@
-using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Modules.Utils;
-using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Constants;
+using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Memory;
-using CS2StratRoulette.Constants;
-using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Modules.Utils;
+using CounterStrikeSharp.API;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -18,6 +19,14 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"Fuckin' Gladiator ya fuck!";
 
+		private GladiatorMapBounds bounds;
+
+		private readonly List<CCSPlayerController> cts = new(Server.MaxPlayers / 2);
+		private readonly List<CCSPlayerController> ts = new(Server.MaxPlayers / 2);
+
+		private CCSPlayerController? ct;
+		private CCSPlayerController? t;
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -25,7 +34,40 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Gladiator.PrepareArena(Points.Mirage);
+			var map = Server.MapName;
+
+			if (!GladiatorBounds.Maps.TryGetValue(map, out var mapBounds))
+			{
+				return false;
+			}
+
+			this.bounds = mapBounds;
+
+			Server.ExecuteCommand(Commands.BuyAllowNone);
+			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
+
+			foreach (var (pos, angle) in this.bounds.Fences)
+			{
+				Gladiator.CreateFence(pos, angle);
+			}
+
+			var players = Utilities.GetPlayers();
+
+			foreach (var controller in players)
+			{
+				if (!controller.IsValid)
+				{
+					continue;
+				}
+
+				controller.EquipKnife();
+				controller.RemoveWeapons();
+			}
+
+			this.TeleportSpectators(players, this.bounds.Spectators.min, this.bounds.Spectators.max);
+			this.PickGladiators();
+
+			plugin.RegisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
 
 			return true;
 		}
@@ -37,56 +79,106 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			const string playerDeath = "player_death";
+			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
+
 			return true;
 		}
 
-		private static void PrepareArena(Vector[] points)
+		private HookResult OnPlayerDeath(EventPlayerDeath @event, GameEventInfo _)
 		{
-			if ((points.Length & 1) != 0)
+			if (!this.Running || !@event.Userid.IsValid)
 			{
-				throw new System.Exception("[PrepareArena] uneven array");
+				return HookResult.Continue;
 			}
 
-			for (var i = 0; i < points.Length; i += 2)
+			this.PickGladiators();
+
+			return HookResult.Continue;
+		}
+
+		private void PickGladiators()
+		{
+			if (!this.Running)
 			{
-				// Second point only gets used for direction
-				if (i == points.Length - 1)
+				return;
+			}
+
+			this.ct = Gladiator.PickGladiator(this.ct, this.cts, this.bounds.Gladiators.ct);
+			this.t = Gladiator.PickGladiator(this.t, this.ts, this.bounds.Gladiators.t);
+		}
+
+		private void TeleportSpectators(List<CCSPlayerController> players, Vector min, Vector max)
+		{
+			const float playerWidth = 32f;
+
+			var playerCount = players.Count;
+
+			var playersX = (int)float.Floor((max.X - min.X) / playerWidth);
+			var playersY = (int)float.Floor((max.Y - min.Y) / playerWidth);
+
+			for (var y = 0; y < playersY; y++)
+			{
+				for (var x = 0; x < playersX; x++)
 				{
-					continue;
-				}
+					if (playerCount < 0)
+					{
+						return;
+					}
 
-				var point = points[i];
-				var direction = points[i + 1];
+					var player = players[--playerCount];
 
-				var diff = point - direction;
-				var step = diff.Unit() * Models.FenceWidth;
-				var angle = diff.Angle();
+					if (!player.IsValid || player.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist))
+					{
+						continue;
+					}
 
-				var len = float.Abs(diff.Length2D());
-				var fences = (int)float.Ceiling(len / Models.FenceWidth);
+					if (player.Team is CsTeam.Terrorist)
+					{
+						this.ts.Add(player);
+					}
+					else
+					{
+						this.cts.Add(player);
+					}
 
-				System.Console.WriteLine($"Point:	{point}");
-				System.Console.WriteLine($"Direc:	{direction}");
-				System.Console.WriteLine($"Diff:	{diff}");
-				System.Console.WriteLine($"Step:	{step}");
-				System.Console.WriteLine($"Leng:	{len.Str()}");
-				System.Console.WriteLine($"Fenc:	{fences.Str()}");
-				System.Console.WriteLine($"Angl:	{angle.X.Str()} {angle.Y.Str()} {angle.Z.Str()}");
-
-				for (var j = 0; j < fences; j++)
-				{
-					Gladiator.CreateFence(point + (step * j), new QAngle(angle.X, angle.Y, angle.Z));
+					player.Teleport(
+						new(min.X + (playerWidth * x), min.Y + (playerWidth * y), 0f),
+						new(0f, 0f, 0f),
+						new(0f, 0f, 0f)
+					);
 				}
 			}
 		}
 
-		private static CDynamicProp? CreateFence(Vector position, QAngle angle)
+		private static CCSPlayerController? PickGladiator(CCSPlayerController? current,
+														  List<CCSPlayerController> players,
+														  Vector position)
+		{
+			if (current is not null && current.PawnIsAlive)
+			{
+				return null;
+			}
+
+			var next = players.Find(static (e) => (e.IsValid && e.PawnIsAlive));
+
+			if (next?.AbsRotation is null)
+			{
+				return null;
+			}
+
+			next.Teleport(position, next.AbsRotation, VectorExtensions.Zero);
+
+			return next;
+		}
+
+		private static void CreateFence(Vector position, QAngle angle)
 		{
 			var entity = Utilities.CreateEntityByName<CDynamicProp>("prop_dynamic");
 
 			if (entity is null || !entity.IsValid)
 			{
-				return null;
+				return;
 			}
 
 			Server.NextFrame(() =>
@@ -106,8 +198,6 @@ namespace CS2StratRoulette.Strategies
 				entity.SetModel(Models.Fence);
 				entity.Teleport(position, angle, VectorExtensions.Zero);
 			});
-
-			return entity;
 		}
 	}
 }
