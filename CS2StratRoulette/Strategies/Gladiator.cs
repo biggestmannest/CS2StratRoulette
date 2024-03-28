@@ -112,23 +112,24 @@ namespace CS2StratRoulette.Strategies
 		{
 			const float playerWidth = 32f;
 
-			var playerCount = players.Count;
+			var i = 0;
 
-			var playersX = (int)float.Floor((max.X - min.X) / playerWidth);
-			var playersY = (int)float.Floor((max.Y - min.Y) / playerWidth);
+			var playersX = (int)float.Abs(float.Floor((max.X - min.X) / playerWidth));
+			var playersY = (int)float.Abs(float.Floor((max.Y - min.Y) / playerWidth));
 
 			for (var y = 0; y < playersY; y++)
 			{
 				for (var x = 0; x < playersX; x++)
 				{
-					if (playerCount < 0)
+					if (i >= players.Count)
 					{
 						return;
 					}
 
-					var player = players[--playerCount];
+					var player = players[i++];
 
-					if (!player.IsValid || player.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist))
+					if (player.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist) ||
+						!player.TryGetPlayerPawn(out var pawn))
 					{
 						continue;
 					}
@@ -142,7 +143,7 @@ namespace CS2StratRoulette.Strategies
 						this.cts.Add(player);
 					}
 
-					player.Teleport(
+					pawn.Teleport(
 						new(min.X + (playerWidth * x), min.Y + (playerWidth * y), 0f),
 						new(0f, 0f, 0f),
 						new(0f, 0f, 0f)
@@ -162,12 +163,12 @@ namespace CS2StratRoulette.Strategies
 
 			var next = players.Find(static (e) => (e.IsValid && e.PawnIsAlive));
 
-			if (next?.AbsRotation is null)
+			if (next is null || !next.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null)
 			{
 				return null;
 			}
 
-			next.Teleport(position, next.AbsRotation, VectorExtensions.Zero);
+			pawn.Teleport(position, pawn.AbsRotation, VectorExtensions.Zero);
 
 			return next;
 		}
