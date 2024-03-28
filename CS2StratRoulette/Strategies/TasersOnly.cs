@@ -11,8 +11,6 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class TasersOnly : Strategy
 	{
-		private static readonly string NoBuy = $"mp_buy_allow_guns {BuyAllow.None}";
-
 		private const string InfiniteTasersEnable = "mp_taser_recharge_time 0";
 
 		private const string InfiniteTasersDisable = "mp_taser_recharge_time 30";
@@ -21,9 +19,11 @@ namespace CS2StratRoulette.Strategies
 
 		private const string PartyModeDisable = "sv_party_mode false";
 
-		public override string Name => "TASER TASER TASER";
+		public override string Name =>
+			"TASER TASER TASER";
 
-		public override string Description => "You can only use tasers, with instant recharge time.";
+		public override string Description =>
+			"You can only use tasers, with instant recharge time.";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
@@ -34,7 +34,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(TasersOnly.NoBuy);
+			Server.ExecuteCommand(Commands.BuyAllowNone);
 			Server.ExecuteCommand(TasersOnly.InfiniteTasersEnable);
 			Server.ExecuteCommand(TasersOnly.PartyModeEnable);
 
@@ -52,8 +52,7 @@ namespace CS2StratRoulette.Strategies
 				);
 
 				controller.GiveNamedItem(CsItem.Taser);
-
-				controller.ExecuteClientCommand("slot3");
+				controller.EquipKnife();
 			}
 
 			return true;
