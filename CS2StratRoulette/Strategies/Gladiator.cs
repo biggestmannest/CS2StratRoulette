@@ -79,6 +79,9 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			Server.ExecuteCommand(Commands.BuyAllowAll);
+			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
+
 			const string playerDeath = "player_death";
 			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
 
@@ -161,16 +164,19 @@ namespace CS2StratRoulette.Strategies
 				return null;
 			}
 
-			var next = players.Find(static (e) => (e.IsValid && e.PawnIsAlive));
+			var controller = players.Find(static (e) => (e.IsValid && e.PawnIsAlive));
 
-			if (next is null || !next.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null)
+			if (controller is null || !controller.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null)
 			{
 				return null;
 			}
 
 			pawn.Teleport(position, pawn.AbsRotation, VectorExtensions.Zero);
 
-			return next;
+			controller.GiveNamedItem(CsItem.KnifeT);
+			controller.EquipKnife();
+
+			return controller;
 		}
 
 		private static void CreateFence(Vector position, QAngle angle)
