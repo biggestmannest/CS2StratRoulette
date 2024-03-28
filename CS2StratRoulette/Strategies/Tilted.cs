@@ -56,8 +56,6 @@ namespace CS2StratRoulette.Strategies
 				pawn.Teleport(pawn.AbsOrigin, pawn.AbsRotation, pawn.AbsVelocity);
 			}
 
-			var a = Game.RulesProxy();
-
 			return true;
 		}
 	}
