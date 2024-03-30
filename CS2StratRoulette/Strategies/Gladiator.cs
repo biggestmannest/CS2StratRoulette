@@ -117,8 +117,11 @@ namespace CS2StratRoulette.Strategies
 
 			var i = 0;
 
-			var playersX = (int)float.Abs(float.Floor((max.X - min.X) / playerWidth));
-			var playersY = (int)float.Abs(float.Floor((max.Y - min.Y) / playerWidth));
+			var stepX = float.Floor((max.X - min.X) / playerWidth);
+			var stepY = float.Floor((max.Y - min.Y) / playerWidth);
+
+			var playersX = (int)float.Abs(stepX);
+			var playersY = (int)float.Abs(stepY);
 
 			for (var y = 0; y < playersY; y++)
 			{
@@ -147,7 +150,7 @@ namespace CS2StratRoulette.Strategies
 					}
 
 					pawn.Teleport(
-						new(min.X + (playerWidth * x), min.Y + (playerWidth * y), 0f),
+						new(min.X + (stepX * x), min.Y + (stepY * y), 0f),
 						new(0f, 0f, 0f),
 						new(0f, 0f, 0f)
 					);

@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Extensions;
 
@@ -10,6 +11,8 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Gambling : Strategy
 	{
+		private const float GuessingDuration = 10f;
+
 		public override string Name =>
 			"Roulette";
 
@@ -18,11 +21,13 @@ namespace CS2StratRoulette.Strategies
 
 		private static readonly System.Random Random = new();
 
-		private readonly int[] guessers = new int[Server.MaxPlayers];
+		/// <summary>
+		/// Array storing the player's guessed number indexed by their <see cref="CCSPlayerController.Slot"/>
+		/// </summary>
+		private readonly int[] guesses = new int[Server.MaxPlayers];
 
-		private float endTime;
-
-		private int numPick;
+		private int number;
+		private Timer? timer;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -31,14 +36,12 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			plugin.RegisterListener<Listeners.OnTick>(this.OnTick);
-
-			this.numPick = (Gambling.Random.Next(10) + 1);
-
-			System.Console.WriteLine($"Picked number: {this.numPick}");
-			this.endTime = Server.CurrentTime + 10f;
+			this.number = (Gambling.Random.Next(10) + 1);
 
 			plugin.RegisterEventHandler<EventPlayerChat>(this.OnNumberPicked);
+
+			this.timer = new Timer(Gambling.GuessingDuration, this.OnGuessingStop, 0);
+
 			return true;
 		}
 
@@ -49,11 +52,10 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			this.timer?.Kill();
+
 			const string playerChat = "player_chat";
 			plugin.DeregisterEventHandler(playerChat, this.OnNumberPicked, true);
-
-			const string onTick = "OnTick";
-			plugin.RemoveListener(onTick, this.OnTick);
 
 			return true;
 		}
@@ -65,20 +67,51 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			if (!int.TryParse(@event?.Text, CultureInfo.InvariantCulture, out var num))
+			if (!int.TryParse(@event.Text, CultureInfo.InvariantCulture, out var num))
 			{
 				return HookResult.Continue;
 			}
 
 			var controller = Utilities.GetPlayerFromUserid(@event.Userid);
-            
-			if (this.guessers[controller.Slot] != default)
+
+			if (this.guesses[controller.Slot] != default)
 			{
 				return HookResult.Continue;
 			}
 
-			this.guessers[controller.Slot] = num;
+			this.guesses[controller.Slot] = num;
+
 			return HookResult.Continue;
+		}
+
+		private void OnGuessingStop()
+		{
+			var n = this.number.Str();
+			var correct = $"You got it! The correct number was {n}. Enjoy the 200HP.";
+			var wrong = $"You got it wrong. The correct number was {n}. L";
+
+			for (var index = 0; index < this.guesses.Length; index++)
+			{
+				var controller = Utilities.GetPlayerFromSlot(index);
+
+				if (!controller.IsValid)
+				{
+					continue;
+				}
+
+				var guess = this.guesses[index];
+				var won = (guess == this.number);
+				var msg = wrong;
+
+				if (won)
+				{
+					msg = correct;
+
+					Gambling.GiveUpgrade(controller);
+				}
+
+				controller.PrintToCenter(msg);
+			}
 		}
 
 		private static void GiveUpgrade(CCSPlayerController controller)
@@ -99,40 +132,6 @@ namespace CS2StratRoulette.Strategies
 				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
 				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
 			});
-		}
-
-		private void OnTick()
-		{
-			if (Server.CurrentTime < this.endTime)
-			{
-				return;
-			}
-
-			this.endTime = float.MaxValue;
-
-			var theNumber = int.Parse(this.numPick.Str(), CultureInfo.InvariantCulture);
-			var correct = $"You got it! The correct number was {theNumber}. Enjoy the 200HP.";
-			var wrong = $"You got it wrong. The correct number was {theNumber}. L";
-
-			for (var index = 0; index < this.guessers.Length; index++)
-			{
-				var number = this.guessers[index];
-				var controller = Utilities.GetPlayerFromSlot(index);
-				var won = number == this.numPick;
-				var msg = won ? correct : wrong;
-
-				if (!controller.IsValid)
-				{
-					continue;
-				}
-
-				if (won)
-				{
-					Gambling.GiveUpgrade(controller);
-				}
-
-				controller.PrintToCenter(msg);
-			}
 		}
 	}
 }
