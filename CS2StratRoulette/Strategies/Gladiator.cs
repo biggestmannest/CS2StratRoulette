@@ -107,6 +107,8 @@ namespace CS2StratRoulette.Strategies
 				return;
 			}
 
+			System.Console.WriteLine("[Gladiator::PickGladiators]: picking gladiators");
+
 			this.ct = Gladiator.PickGladiator(this.ct, this.cts, this.bounds.Gladiators.ct);
 			this.t = Gladiator.PickGladiator(this.t, this.ts, this.bounds.Gladiators.t);
 		}
@@ -117,11 +119,12 @@ namespace CS2StratRoulette.Strategies
 
 			var i = 0;
 
-			var stepX = float.Floor((max.X - min.X) / playerWidth);
-			var stepY = float.Floor((max.Y - min.Y) / playerWidth);
+			var playersX = (int)float.Abs(float.Floor((max.X - min.X) / playerWidth));
+			var playersY = (int)float.Abs(float.Floor((max.Y - min.Y) / playerWidth));
 
-			var playersX = (int)float.Abs(stepX);
-			var playersY = (int)float.Abs(stepY);
+			// @todo make vector
+			var stepX = (min.X > max.X) ? -playerWidth : playerWidth;
+			var stepY = (min.Y > max.Y) ? -playerWidth : playerWidth;
 
 			for (var y = 0; y < playersY; y++)
 			{
@@ -150,7 +153,8 @@ namespace CS2StratRoulette.Strategies
 					}
 
 					pawn.Teleport(
-						new(min.X + (stepX * x), min.Y + (stepY * y), 0f),
+						// @todo Z
+						new(min.X + (stepX * x), min.Y + (stepY * y), min.Z),
 						new(0f, 0f, 0f),
 						new(0f, 0f, 0f)
 					);
@@ -158,26 +162,30 @@ namespace CS2StratRoulette.Strategies
 			}
 		}
 
-		private static CCSPlayerController? PickGladiator(CCSPlayerController? current,
+		private static CCSPlayerController? PickGladiator(CCSPlayerController? controller,
 														  List<CCSPlayerController> players,
 														  Vector position)
 		{
-			if (current is not null && current.PawnIsAlive)
+			if (controller is null || !controller.PawnIsAlive)
 			{
-				return current;
+				controller = players.Find(static (e) => (e.IsValid && e.PawnIsAlive));
 			}
 
-			var controller = players.Find(static (e) => (e.IsValid && e.PawnIsAlive));
-
-			if (controller is null || !controller.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null)
+			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
 			{
+				System.Console.WriteLine("[Gladiator::PickGladiator]: controller is null");
 				return null;
 			}
 
-			pawn.Teleport(position, pawn.AbsRotation, VectorExtensions.Zero);
+			System.Console.WriteLine($"[Gladiator::PickGladiator]: picked {controller.PlayerName}");
 
-			controller.GiveNamedItem(CsItem.KnifeT);
-			controller.EquipKnife();
+			Server.NextFrame(() =>
+			{
+				pawn.Teleport(position, pawn.AbsRotation ?? new(0f, 0f, 0f), VectorExtensions.Zero);
+
+				controller.GiveNamedItem(CsItem.KnifeT);
+				controller.EquipKnife();
+			});
 
 			return controller;
 		}
