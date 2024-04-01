@@ -27,7 +27,10 @@ namespace CS2StratRoulette.Extensions
 		{
 			pawn = null;
 
-			if (!controller.IsValid || !controller.PawnIsAlive || !controller.PlayerPawn.TryGetValue(out var entity))
+			if (!controller.IsValid ||
+				!controller.PawnIsAlive ||
+				controller.IsHLTV ||
+				!controller.PlayerPawn.TryGetValue(out var entity))
 			{
 				return false;
 			}
