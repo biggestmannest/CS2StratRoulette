@@ -90,11 +90,14 @@ namespace CS2StratRoulette.Strategies
 
 		private HookResult OnPlayerDeath(EventPlayerDeath @event, GameEventInfo _)
 		{
-			if (!this.Running || !@event.Userid.IsValid)
+			if (!this.Running ||
+				(@event.Userid.SteamID != this.ct?.SteamID &&
+				 @event.Userid.SteamID != this.t?.SteamID))
 			{
 				return HookResult.Continue;
 			}
 
+			System.Console.WriteLine($"[Gladiator::OnPlayerDeath]: {@event.Userid.PlayerName} died");
 			this.PickGladiators();
 
 			return HookResult.Continue;
