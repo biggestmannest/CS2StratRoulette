@@ -169,15 +169,14 @@ namespace CS2StratRoulette.Strategies
 														  List<CCSPlayerController> players,
 														  Vector position)
 		{
-			System.Console.WriteLine($"[Gladiator::PickGladiator]: controller.PawnIsAlive {controller?.PawnIsAlive}");
-			if (controller is null || !controller.PawnIsAlive)
+			if (controller is null || !controller.IsAlive())
 			{
-				controller = players.Find(static (e) => (e.IsValid && e.PawnIsAlive));
+				controller = players.Find(static (e) => e.IsAlive());
 			}
 
 			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
 			{
-				System.Console.WriteLine("[Gladiator::PickGladiator]: controller is null");
+				System.Console.WriteLine("[Gladiator::PickGladiator]: controller null or invalid");
 				return null;
 			}
 

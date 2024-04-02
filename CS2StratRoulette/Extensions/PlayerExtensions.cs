@@ -1,7 +1,7 @@
+using CS2StratRoulette.Constants;
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Extensions
 {
@@ -28,7 +28,6 @@ namespace CS2StratRoulette.Extensions
 			pawn = null;
 
 			if (!controller.IsValid ||
-				!controller.PawnIsAlive ||
 				controller.IsHLTV ||
 				!controller.PlayerPawn.TryGetValue(out var entity))
 			{
@@ -43,6 +42,22 @@ namespace CS2StratRoulette.Extensions
 			pawn = entity;
 
 			return true;
+		}
+
+		public static bool IsAlive(this CCSPlayerController @this, CCSPlayerPawn? pawn = null)
+		{
+			if (pawn is not null)
+			{
+				return pawn.IsAlive();
+			}
+
+			return @this.TryGetPlayerPawn(out pawn) && pawn.IsAlive();
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsAlive(this CCSPlayerPawn @this)
+		{
+			return (@this.LifeState == (byte)LifeState_t.LIFE_ALIVE);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
