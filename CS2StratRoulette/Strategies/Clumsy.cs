@@ -3,7 +3,6 @@ using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Metadata.Ecma335;
 
 namespace CS2StratRoulette.Strategies
 {
