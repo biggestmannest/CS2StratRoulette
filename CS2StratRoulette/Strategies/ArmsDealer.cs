@@ -35,9 +35,9 @@ namespace CS2StratRoulette.Strategies
 			{
 				if (controller.TryGetPlayerPawn(out var pawn))
 				{
-					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
-
 					controller.EquipKnife();
+
+					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
 
 					if (controller.IsBot)
 					{

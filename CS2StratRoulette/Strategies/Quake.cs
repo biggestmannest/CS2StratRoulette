@@ -88,13 +88,13 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
+				controller.EquipKnife();
+
 				pawn.KeepWeaponsByType(
 					CSWeaponType.WEAPONTYPE_KNIFE,
 					CSWeaponType.WEAPONTYPE_C4,
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
-
-				controller.EquipKnife();
 
 				controller.DesiredFOV = Quake.DefaultFov;
 

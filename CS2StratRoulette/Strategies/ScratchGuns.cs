@@ -56,13 +56,13 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
+			controller.EquipKnife();
+
 			pawn.KeepWeaponsByType(
 				CSWeaponType.WEAPONTYPE_PISTOL,
 				CSWeaponType.WEAPONTYPE_KNIFE,
 				CSWeaponType.WEAPONTYPE_C4
 			);
-
-			controller.EquipKnife();
 
 			return HookResult.Continue;
 		}

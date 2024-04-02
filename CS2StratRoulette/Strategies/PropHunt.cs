@@ -42,12 +42,12 @@ namespace CS2StratRoulette.Strategies
 
 				if (controller.Team is CsTeam.Terrorist)
 				{
+					controller.EquipKnife();
+
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 
 					controller.GiveNamedItem(CsItem.HEGrenade);
 					controller.GiveNamedItem(CsItem.Molotov);
-
-					controller.EquipKnife();
 
 					continue;
 				}

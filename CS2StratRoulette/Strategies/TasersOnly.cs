@@ -45,6 +45,8 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
+				controller.EquipKnife();
+
 				pawn.KeepWeaponsByType(
 					CSWeaponType.WEAPONTYPE_KNIFE,
 					CSWeaponType.WEAPONTYPE_C4,
@@ -52,7 +54,6 @@ namespace CS2StratRoulette.Strategies
 				);
 
 				controller.GiveNamedItem(CsItem.Taser);
-				controller.EquipKnife();
 			}
 
 			return true;

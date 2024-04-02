@@ -43,8 +43,8 @@ namespace CS2StratRoulette.Strategies
 				}
 				else if (controller.Team is CsTeam.Terrorist)
 				{
-					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 					controller.EquipKnife();
+					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 				}
 			}
 
