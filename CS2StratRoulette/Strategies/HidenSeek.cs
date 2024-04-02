@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using CounterStrikeSharp.API.Core;
-using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Modules.Utils;
-using CS2StratRoulette.Constants;
+﻿using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Utils;
+using CounterStrikeSharp.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -32,7 +31,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn))
+				if (controller.IsHLTV || !controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}

@@ -3,6 +3,7 @@ using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection.Metadata.Ecma335;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -47,17 +48,27 @@ namespace CS2StratRoulette.Strategies
 
 		private static void OnInterval()
 		{
-			if ((Clumsy.Random.Next() & 1) == 0)
+			foreach (var controller in Utilities.GetPlayers())
 			{
-				foreach (var controller in Utilities.GetPlayers())
+				if (Clumsy.Random.FiftyFifty() || !controller.IsValid)
 				{
-					if (!controller.IsValid)
-					{
-						continue;
-					}
+					continue;
+				}
 
+				if (!controller.TryGetPlayerPawn(out var pawn) || pawn.WeaponServices is null)
+				{
+					continue;
+				}
+
+				if (!pawn.WeaponServices.ActiveWeapon.TryGetValue(out var weapon) || !weapon.TryGetData(out var data))
+				{
+					continue;
+				}
+
+				// @todo
+				if (data.Slot != 3)
+				{
 					controller.DropActiveWeapon();
-					controller.EquipKnife();
 				}
 			}
 		}

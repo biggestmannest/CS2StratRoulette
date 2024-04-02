@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
+﻿using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
-using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -17,7 +16,7 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"You know the drill.";
 
-		private readonly Random random = new();
+		private static readonly System.Random Random = new();
 
 		private Timer? timer;
 
@@ -28,15 +27,13 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			var randomNum = this.random.Next(10);
-
-			this.timer = new Timer(5f, () =>
+			this.timer = new Timer(5f, static () =>
 			{
 				foreach (var players in Utilities.GetPlayers())
 				{
-					if (randomNum < 5)
+					if (GhostSlaps.Random.Next(10) < 4)
 					{
-						this.DoSlap(players);
+						GhostSlaps.DoSlap(players);
 					}
 				}
 			}, TimerFlags.REPEAT);
@@ -56,7 +53,7 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		private void DoSlap(CCSPlayerController controller)
+		private static void DoSlap(CCSPlayerController controller)
 		{
 			if (!controller.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null || pawn.AbsOrigin is null)
 			{
@@ -66,16 +63,17 @@ namespace CS2StratRoulette.Strategies
 			var position = pawn.AbsOrigin;
 			var angle = pawn.AbsRotation;
 
-			var velocityX = this.random.Next(151, 401);
-			var velocityY = this.random.Next(151, 401);
-			var velocityZ = this.random.Next(401, 600);
+			var velocity = new Vector(GhostSlaps.Random.Next(150, 401),
+									  GhostSlaps.Random.Next(150, 401),
+									  GhostSlaps.Random.Next(400, 601));
 
-			Vector finalVel = new(velocityX, velocityY, velocityZ);
+			velocity.X = (GhostSlaps.Random.FiftyFifty() ? -velocity.X : velocity.X);
+			velocity.Y = (GhostSlaps.Random.FiftyFifty() ? -velocity.Y : velocity.Y);
 
 			pawn.Teleport(
 				position,
 				angle,
-				finalVel
+				velocity
 			);
 		}
 	}
