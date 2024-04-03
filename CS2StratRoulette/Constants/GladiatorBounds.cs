@@ -23,10 +23,26 @@ namespace CS2StratRoulette.Constants
 			(new(-1615f, -2120f, -250f), new(-1605f, -1260f, -250f))
 		);
 
+		public static readonly GladiatorMapBounds Overpass = new(
+			"de_overpass",
+			new (Vector, QAngle)[]
+			{
+				// Connector door
+				(new(-1680f, -889f, 100f), new(0f, 90f, 0f)),
+				// Water -> T
+				(new(-1175f, -880f, 5f), new(0f, -180f, 0f)),
+				// B Short
+				(new(-1067f, -520f, 100f), new(0f, -180f, 0f)),
+			},
+			(new(-1260f, -1150f, 162f), new(-1540f, -1245f, 162f)),
+			(new(-1420f, -520f, 20f), new(-1420f, -1020f, 20f))
+		);
+
 		public static readonly Dictionary<string, GladiatorMapBounds> Maps =
 			new(System.StringComparer.OrdinalIgnoreCase)
 			{
 				{ GladiatorBounds.Mirage.Map, GladiatorBounds.Mirage },
+				{ GladiatorBounds.Overpass.Map, GladiatorBounds.Overpass },
 			};
 	}
 
