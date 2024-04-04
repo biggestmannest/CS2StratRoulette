@@ -114,6 +114,26 @@ namespace CS2StratRoulette.Strategies
 
 			this.ct = Gladiator.PickGladiator(this.ct, this.cts, this.bounds.Gladiators.ct);
 			this.t = Gladiator.PickGladiator(this.t, this.ts, this.bounds.Gladiators.t);
+
+			foreach (var players in Utilities.GetPlayers())
+			{
+				var message = "";
+				if (this.ct is null && this.t is null)
+				{
+					message = "It's a draw.";
+				} else if (this.ct is null)
+				{
+					message = "The Ts have won!";
+				} else if (this.t is null)
+				{
+					message = "The CTs have won!";
+				}
+				else
+				{
+					message = $"Next fight: {this.ct?.PlayerName} vs {this.t?.PlayerName}. Good luck!";
+				}
+				players.PrintToCenter(message);
+			}
 		}
 
 		private void TeleportSpectators(List<CCSPlayerController> players, Vector min, Vector max)
@@ -158,7 +178,7 @@ namespace CS2StratRoulette.Strategies
 					pawn.Teleport(
 						// @todo Z
 						new(min.X + (stepX * x), min.Y + (stepY * y), min.Z),
-						new(0f, 0f, 0f),
+						pawn.V_angle,
 						new(0f, 0f, 0f)
 					);
 				}
@@ -184,7 +204,7 @@ namespace CS2StratRoulette.Strategies
 
 			Server.NextFrame(() =>
 			{
-				pawn.Teleport(position, pawn.AbsRotation ?? new(0f, 0f, 0f), VectorExtensions.Zero);
+				pawn.Teleport(position, pawn.AbsRotation ?? pawn.V_angle, VectorExtensions.Zero);
 
 				controller.GiveNamedItem(CsItem.KnifeT);
 				controller.EquipKnife();
