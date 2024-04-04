@@ -30,9 +30,12 @@ namespace CS2StratRoulette.Constants
 				// Connector door
 				(new(-1680f, -889f, 100f), new(0f, 90f, 0f)),
 				// Water -> T
-				(new(-1175f, -880f, 5f), new(0f, -180f, 0f)),
+				(new(-1175f, -895f, 5f), new(0f, -180f, 0f)),
 				// B Short
 				(new(-1067f, -520f, 100f), new(0f, -180f, 0f)),
+				// For spectators
+				(new(-1184f, -1155f, 149f), new(0f, -180f, 0f)),
+				(new(-1184f, -1155f, 279f), new(0f, -180f, 0f)),
 			},
 			(new(-1260f, -1150f, 162f), new(-1540f, -1245f, 162f)),
 			(new(-1420f, -520f, 20f), new(-1420f, -1020f, 20f))
