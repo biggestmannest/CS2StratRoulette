@@ -75,24 +75,18 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			var vAngle = pawn.V_angle;
-
-			var x = float.Cos(vAngle.Y) * float.Cos(vAngle.X);
-			var y = float.Sin(vAngle.Y) * float.Cos(vAngle.X);
-			var z = float.Sin(vAngle.X);
-
-			var angle = new Vector(x, y, z);
-			var velocity = Knockback.Velocity.Multi(angle);
+			var velocity = pawn.AbsVelocity;
+			var forward = new Vector(0f, 0f, 0f);
 			var knockback = 1f + (wData.Weight / Knockback.MaxWeight);
 
-			System.Console.WriteLine(
-				$"[Knockback::OnWeaponFire] {vAngle} / {angle} / {velocity} / {knockback}");
+			NativeAPI.AngleVectors(vAngle.Handle, forward.Handle, System.IntPtr.Zero, System.IntPtr.Zero);
 
-			velocity += velocity * -1f * knockback;
+			System.Console.WriteLine($"[Knockback::OnWeaponFire] {velocity} / {forward} / {knockback.Str()}");
 
 			pawn.Teleport(
 				pawn.AbsOrigin ?? VectorExtensions.Zero,
 				vAngle,
-				velocity
+				velocity.Multi(Knockback.Velocity * knockback) - forward
 			);
 
 			return HookResult.Continue;
