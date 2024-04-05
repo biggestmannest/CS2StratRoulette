@@ -25,6 +25,12 @@ namespace CS2StratRoulette.Extensions
 		public static Vector Clamp(this Vector lhs, float min, float max) =>
 			new(float.Clamp(lhs.X, min, max), float.Clamp(lhs.Y, min, max), float.Clamp(lhs.Z, min, max));
 
+		public static Vector Multi(this Vector lhs, Vector rhs) =>
+			new(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z);
+
+		public static Vector Multi(this Vector lhs, Angle rhs) =>
+			new(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z);
+
 		public static Vector Divide(this Vector lhs, Vector rhs) =>
 			new((rhs.X == 0f) ? 0f : (lhs.X / rhs.X),
 				(rhs.Y == 0f) ? 0f : (lhs.Y / rhs.Y),
