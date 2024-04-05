@@ -19,6 +19,9 @@ namespace CS2StratRoulette.Strategies
 
 		private readonly System.Random random = new();
 
+		private const string DisableRadar = "sv_disable_radar 1";
+		private const string EnableRadar = "sv_disable_radar 0";
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -26,6 +29,8 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			Server.ExecuteCommand(PropHunt.DisableRadar);
+			
 			Server.PrecacheModel(Models.JuggernautCt);
 
 			Server.ExecuteCommand(Commands.BuyAllowNone);
@@ -81,14 +86,15 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Commands.BuyAllowAll);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
-
+			Server.ExecuteCommand(PropHunt.EnableRadar);
+			
 			foreach (var controller in Utilities.GetPlayers())
 			{
 				if (!controller.IsValid)
 				{
 					continue;
 				}
-
+                
 				controller.RemoveWeapons();
 			}
 

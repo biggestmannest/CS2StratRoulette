@@ -55,13 +55,13 @@ namespace CS2StratRoulette.Strategies
 
 		private static void DoSlap(CCSPlayerController controller)
 		{
-			if (!controller.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null || pawn.AbsOrigin is null)
+			if (!controller.TryGetPlayerPawn(out var pawn) || pawn.AbsOrigin is null)
 			{
 				return;
 			}
 
 			var position = pawn.AbsOrigin;
-			var angle = pawn.AbsRotation;
+			var angle = pawn.V_angle;
 
 			var velocity = new Vector(GhostSlaps.Random.Next(150, 401),
 									  GhostSlaps.Random.Next(150, 401),
