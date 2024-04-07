@@ -4,6 +4,7 @@ using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
+using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -22,7 +23,8 @@ namespace CS2StratRoulette.Strategies
 		private int count;
 
 		private Timer? timer;
-		
+		private Timer? timer2;
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -37,6 +39,7 @@ namespace CS2StratRoulette.Strategies
 			{
 				if (!players.IsValid)
 				{
+					System.Console.WriteLine("players are invalid!!!!!!!!!!!!!! franzj");
 					continue;
 				}
 
@@ -49,14 +52,40 @@ namespace CS2StratRoulette.Strategies
 					ts.Add(players);
 				}
 			}
-			
-			plugin.RegisterEventHandler<EventRoundEnd>(this.onRoundEnd);
 
 			this.timer = new Timer(5f, () =>
 			{
-				this.count += 1;
 				this.averageVelocityCts += this.AverageVelocity(cts);
 				this.averageVelocityTs += this.AverageVelocity(ts);
+				this.count++;
+			}, TimerFlags.REPEAT);
+			
+			//SINCE TERMINATEROUND DOESNT WORK!!!!!!!!!!!!!!!!!!!!!!!
+			this.timer2 = new Timer(20f, () =>
+			{
+				this.timer.Kill();
+				var totalAverageCt = this.averageVelocityCts / this.count;
+				var totalAverageT = this.averageVelocityTs / this.count;
+				var message = "";
+				
+				if (totalAverageCt < totalAverageT)
+				{
+					message =
+						$"CTs win. They had an average velocity of {totalAverageCt}, while Ts had an average velocity of {totalAverageT}.";
+					foreach (var player in cts)
+					{
+						player.CommitSuicide(true, false);
+					} 
+				} else if (totalAverageT < totalAverageCt)
+				{
+					message =
+						$"Ts win. They had an average velocity of {totalAverageT}, while CTs had an average velocity of {totalAverageCt}.";
+					foreach (var player in ts)
+					{
+						player.CommitSuicide(true, false);
+					}
+				}
+				Server.PrintToChatAll(message);
 			});
 
 			return true;
@@ -68,20 +97,8 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
-			
-			var message = "";
 
-			if (this.averageVelocityTs < this.averageVelocityCts)
-			{
-				message = "cts have won";
-			}
-			else
-			{
-				message = "ts have won";
-			}
-
-			Server.PrintToChatAll(message);
-
+			this.timer2?.Kill();
 			return true;
 		}
 
@@ -90,17 +107,18 @@ namespace CS2StratRoulette.Strategies
 			var totalVelocity = 0f;
 			foreach (var player in players)
 			{
-				totalVelocity += (player.Velocity.X + player.Velocity.Y + player.Velocity.Z) / 3;
+				
+				if (!player.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+				System.Console.WriteLine($"X velocity: {pawn.Velocity.X}");
+				System.Console.WriteLine($"Y velocity: {pawn.Velocity.Y}");
+				System.Console.WriteLine($"Z velocity: {pawn.Velocity.Z}");
+				totalVelocity += (pawn.Velocity.X + pawn.Velocity.Y + pawn.Velocity.Z) / 3f;
 			}
 
-			return players.Count > 0 ? totalVelocity / players.Count : 0;
-		}
-
-		private HookResult onRoundEnd(EventRoundEnd @event, GameEventInfo _)
-		{
-			@event.Winner = (int)CsTeam.CounterTerrorist;
-
-			return HookResult.Continue;
+			return totalVelocity;
 		}
 	}
 }
