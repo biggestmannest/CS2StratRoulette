@@ -84,7 +84,7 @@ namespace CS2StratRoulette.Strategies
 
 			velocity += (Knockback.Velocity * knockback).Multi(forward * -1f);
 
-			System.Console.WriteLine($"[Knockback::OnWeaponFire] {velocity} / {forward} / {knockback.Str()}");
+			System.Console.WriteLine($"[Knockback::OnWeaponFire] {velocity} / {knockback.Str()}");
 
 			pawn.Teleport(
 				pawn.AbsOrigin ?? VectorExtensions.Zero,
