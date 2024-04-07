@@ -60,17 +60,22 @@ namespace CS2StratRoulette.Strategies
 			var designerName = @event.Weapon;
 			CBasePlayerWeaponVData? wData = null;
 
+			System.Console.WriteLine($"[Knockback::OnWeaponFire] event_weapon {designerName}");
+
 			pawn.ForEachWeapon((w) =>
 			{
+				System.Console.WriteLine($"[Knockback::OnWeaponFire] pawn_weapon {w.DesignerName}");
 				if (string.Equals(w.DesignerName, designerName, System.StringComparison.OrdinalIgnoreCase) &&
 					w.TryGetData(out var data))
 				{
+					System.Console.WriteLine($"[Knockback::OnWeaponFire] found {w.DesignerName}");
 					wData = data;
 				}
 			});
 
 			if (wData is null)
 			{
+				System.Console.WriteLine($"[Knockback::OnWeaponFire] wData is null");
 				return HookResult.Continue;
 			}
 

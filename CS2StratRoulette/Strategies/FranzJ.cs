@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
+﻿using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
-using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -16,6 +17,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Get the highest velocity possible, the team with the least average velocity loses.";
+
+		private readonly List<CCSPlayerController> ts = new(Server.MaxPlayers / 2);
+		private readonly List<CCSPlayerController> cts = new(Server.MaxPlayers / 2);
 
 		private float averageVelocityTs;
 		private float averageVelocityCts;
@@ -32,8 +36,12 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			var cts = new List<CCSPlayerController>(Server.MaxPlayers / 2);
-			var ts = new List<CCSPlayerController>(Server.MaxPlayers / 2);
+			var rules = Game.Rules();
+
+			if (rules is null)
+			{
+				return false;
+			}
 
 			foreach (var players in Utilities.GetPlayers())
 			{
@@ -43,50 +51,24 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				if (players.Team is CsTeam.CounterTerrorist)
+				// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+				switch (players.Team)
 				{
-					cts.Add(players);
-				}
-				else if (players.Team is CsTeam.Terrorist)
-				{
-					ts.Add(players);
+					case CsTeam.CounterTerrorist:
+						this.cts.Add(players);
+						continue;
+					case CsTeam.Terrorist:
+						this.ts.Add(players);
+						continue;
 				}
 			}
 
-			this.timer = new Timer(5f, () =>
-			{
-				this.averageVelocityCts += this.AverageVelocity(cts);
-				this.averageVelocityTs += this.AverageVelocity(ts);
-				this.count++;
-			}, TimerFlags.REPEAT);
-			
+			this.timer = new Timer(5f, this.RecordVelocities, TimerFlags.REPEAT);
+
+			System.Console.WriteLine($"[FranzJ::Start] {rules.RoundTime.Str()}");
+
 			//SINCE TERMINATEROUND DOESNT WORK!!!!!!!!!!!!!!!!!!!!!!!
-			this.timer2 = new Timer(20f, () =>
-			{
-				this.timer.Kill();
-				var totalAverageCt = this.averageVelocityCts / this.count;
-				var totalAverageT = this.averageVelocityTs / this.count;
-				var message = "";
-				
-				if (totalAverageCt < totalAverageT)
-				{
-					message =
-						$"CTs win. They had an average velocity of {totalAverageCt}, while Ts had an average velocity of {totalAverageT}.";
-					foreach (var player in cts)
-					{
-						player.CommitSuicide(true, false);
-					} 
-				} else if (totalAverageT < totalAverageCt)
-				{
-					message =
-						$"Ts win. They had an average velocity of {totalAverageT}, while CTs had an average velocity of {totalAverageCt}.";
-					foreach (var player in ts)
-					{
-						player.CommitSuicide(true, false);
-					}
-				}
-				Server.PrintToChatAll(message);
-			});
+			this.timer2 = new Timer(rules.RoundTime - 10f, this.Outcome, 0);
 
 			return true;
 		}
@@ -98,24 +80,69 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			this.timer?.Kill();
 			this.timer2?.Kill();
+
 			return true;
 		}
 
-		private float AverageVelocity(List<CCSPlayerController> players)
+		private void RecordVelocities()
+		{
+			if (!this.Running)
+			{
+				return;
+			}
+
+			this.averageVelocityCts += FranzJ.AverageVelocity(this.cts);
+			this.averageVelocityTs += FranzJ.AverageVelocity(this.ts);
+
+			this.count++;
+		}
+
+		private void Outcome()
+		{
+			if (!this.Running)
+			{
+				return;
+			}
+
+			this.timer?.Kill();
+
+			var totalAverageCt = this.averageVelocityCts / this.count;
+			var totalAverageT = this.averageVelocityTs / this.count;
+
+			var winner = (totalAverageCt > totalAverageT) ? CsTeam.CounterTerrorist : CsTeam.Terrorist;
+			var team = (winner is CsTeam.CounterTerrorist) ? this.ts : this.cts;
+			var message = (winner is CsTeam.CounterTerrorist)
+							  ? $"CTs win. They had an average velocity of {totalAverageCt.Str()}, while Ts had an average velocity of {totalAverageT.Str()}."
+							  : $"Ts win. They had an average velocity of {totalAverageT.Str()}, while CTs had an average velocity of {totalAverageCt.Str()}.";
+
+			// ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+			foreach (var controller in team)
+			{
+				if (controller.IsValid && !controller.IsHLTV)
+				{
+					controller.CommitSuicide(false, true);
+				}
+			}
+
+			Server.PrintToChatAll(message);
+		}
+
+		private static float AverageVelocity(List<CCSPlayerController> players)
 		{
 			var totalVelocity = 0f;
-			foreach (var player in players)
+
+			foreach (var controller in players)
 			{
-				
-				if (!player.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
-				System.Console.WriteLine($"X velocity: {pawn.Velocity.X}");
-				System.Console.WriteLine($"Y velocity: {pawn.Velocity.Y}");
-				System.Console.WriteLine($"Z velocity: {pawn.Velocity.Z}");
-				totalVelocity += (pawn.Velocity.X + pawn.Velocity.Y + pawn.Velocity.Z) / 3f;
+
+				var velocity = pawn.AbsVelocity;
+
+				totalVelocity += (velocity.X + velocity.Y + velocity.Z) / 3f;
 			}
 
 			return totalVelocity;
