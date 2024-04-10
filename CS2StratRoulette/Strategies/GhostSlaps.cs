@@ -65,9 +65,9 @@ namespace CS2StratRoulette.Strategies
 			var position = pawn.AbsOrigin;
 			var angle = pawn.V_angle;
 
-			var velocity = new Vector(GhostSlaps.Random.Next(150, 401),
-									  GhostSlaps.Random.Next(150, 401),
-									  GhostSlaps.Random.Next(400, 601));
+			var velocity = new Vector(GhostSlaps.Random.Next(150, 350),
+									  GhostSlaps.Random.Next(150, 350),
+									  GhostSlaps.Random.Next(200, 500));
 
 			velocity.X = (GhostSlaps.Random.FiftyFifty() ? -velocity.X : velocity.X);
 			velocity.Y = (GhostSlaps.Random.FiftyFifty() ? -velocity.Y : velocity.Y);
@@ -75,7 +75,7 @@ namespace CS2StratRoulette.Strategies
 			pawn.Teleport(
 				position,
 				angle,
-				velocity
+				pawn.AbsVelocity + velocity
 			);
 		}
 	}
