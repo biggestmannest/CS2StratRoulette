@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using CounterStrikeSharp.API.Core;
-using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Modules.Utils;
+﻿using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Utils;
+using CounterStrikeSharp.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -26,9 +26,12 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			Server.ExecuteCommand(Commands.BuyAllowNone);
+			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
+
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn))
+				if (controller.IsHLTV || !controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
@@ -39,10 +42,23 @@ namespace CS2StratRoulette.Strategies
 				}
 				else if (controller.Team is CsTeam.Terrorist)
 				{
-					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 					controller.EquipKnife();
+					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 				}
 			}
+
+			return true;
+		}
+
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
+
+			Server.ExecuteCommand(Commands.BuyAllowAll);
+			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
 
 			return true;
 		}

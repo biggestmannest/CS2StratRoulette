@@ -35,9 +35,9 @@ namespace CS2StratRoulette.Strategies
 			{
 				if (controller.TryGetPlayerPawn(out var pawn))
 				{
-					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
-
 					controller.EquipKnife();
+
+					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
 
 					if (controller.IsBot)
 					{
@@ -132,7 +132,7 @@ namespace CS2StratRoulette.Strategies
 	public sealed class ChatMenuOption2 : ChatMenuOption
 	{
 		public readonly CsItem Gun = Items.Weapons[System.Random.Shared.Next(Items.Weapons.Length)];
-		public readonly bool HasArmor = (System.Random.Shared.Next() & 1) == 0;
+		public readonly bool HasArmor = (System.Random.Shared.FiftyFifty());
 
 		public ChatMenuOption2(System.Action<CCSPlayerController, ChatMenuOption> onSelect) :
 			base(string.Empty, false, onSelect)

@@ -1,22 +1,29 @@
+﻿using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Core;
-using CS2StratRoulette.Constants;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class SnipersOnly : Strategy
+	public sealed class TasersOnly : Strategy
 	{
-		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.Snipers.Str()}";
+		private const string InfiniteTasersEnable = "mp_taser_recharge_time 0";
+
+		private const string InfiniteTasersDisable = "mp_taser_recharge_time 30";
+
+		private const string PartyModeEnable = "sv_party_mode true";
+
+		private const string PartyModeDisable = "sv_party_mode false";
 
 		public override string Name =>
-			"Snipers Only";
+			"TASER TASER TASER";
 
 		public override string Description =>
-			"You're only allowed to buy snipers.";
+			"You can only use tasers, with instant recharge time.";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
@@ -27,7 +34,9 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(SnipersOnly.Enable);
+			Server.ExecuteCommand(Commands.BuyAllowNone);
+			Server.ExecuteCommand(TasersOnly.InfiniteTasersEnable);
+			Server.ExecuteCommand(TasersOnly.PartyModeEnable);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -43,6 +52,8 @@ namespace CS2StratRoulette.Strategies
 					CSWeaponType.WEAPONTYPE_C4,
 					CSWeaponType.WEAPONTYPE_EQUIPMENT
 				);
+
+				controller.GiveNamedItem(CsItem.Taser);
 			}
 
 			return true;
@@ -56,6 +67,8 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			Server.ExecuteCommand(Commands.BuyAllowAll);
+			Server.ExecuteCommand(TasersOnly.InfiniteTasersDisable);
+			Server.ExecuteCommand(TasersOnly.PartyModeDisable);
 
 			return true;
 		}

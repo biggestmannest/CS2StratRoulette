@@ -44,6 +44,11 @@ namespace CS2StratRoulette.Strategies
 
 		private HookResult OnPlayerHurt(EventPlayerHurt @event, GameEventInfo _)
 		{
+			if (!this.Running)
+			{
+				return HookResult.Continue;
+			}
+
 			var controller = @event.Userid;
 
 			if (!controller.TryGetPlayerPawn(out var pawn))
@@ -51,13 +56,13 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
+			controller.EquipKnife();
+
 			pawn.KeepWeaponsByType(
 				CSWeaponType.WEAPONTYPE_PISTOL,
 				CSWeaponType.WEAPONTYPE_KNIFE,
 				CSWeaponType.WEAPONTYPE_C4
 			);
-
-			controller.EquipKnife();
 
 			return HookResult.Continue;
 		}

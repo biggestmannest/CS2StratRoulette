@@ -78,8 +78,8 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
 				controller.EquipKnife();
+				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
 			}
 
 			Server.ExecuteCommand(FlyingScoutsman.DisableFs);

@@ -5,16 +5,12 @@ using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Modules.Commands.Targeting;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class PropHunt : Strategy
 	{
-		private const byte Tries = 4;
-		private const byte DamageOnTry = (100 /*HP*/ / PropHunt.Tries);
-
 		public override string Name =>
 			"Prop Hunt";
 
@@ -23,12 +19,19 @@ namespace CS2StratRoulette.Strategies
 
 		private readonly System.Random random = new();
 
+		private const string DisableRadar = "sv_disable_radar 1";
+		private const string EnableRadar = "sv_disable_radar 0";
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
+
+			Server.ExecuteCommand(PropHunt.DisableRadar);
+			
+			Server.PrecacheModel(Models.JuggernautCt);
 
 			Server.ExecuteCommand(Commands.BuyAllowNone);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
@@ -44,12 +47,12 @@ namespace CS2StratRoulette.Strategies
 
 				if (controller.Team is CsTeam.Terrorist)
 				{
+					controller.EquipKnife();
+
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 
 					controller.GiveNamedItem(CsItem.HEGrenade);
 					controller.GiveNamedItem(CsItem.Molotov);
-
-					controller.EquipKnife();
 
 					continue;
 				}
@@ -62,8 +65,6 @@ namespace CS2StratRoulette.Strategies
 				controller.RemoveWeapons();
 				pawn.Health = 1;
 
-				controller.ExecuteClientCommandFromServer(Commands.ThirdPersonEnable);
-
 				Server.NextFrame(() =>
 				{
 					pawn.SetModel(Models.Props[this.random.Next(Models.Props.Length)]);
@@ -71,7 +72,7 @@ namespace CS2StratRoulette.Strategies
 				});
 			}
 
-			Server.ExecuteCommand(Commands.CheatsDisable);
+			plugin.RegisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
 
 			return true;
 		}
@@ -85,24 +86,36 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Commands.BuyAllowAll);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
-
-			Server.ExecuteCommand(Commands.CheatsEnable);
-
+			Server.ExecuteCommand(PropHunt.EnableRadar);
+			
 			foreach (var controller in Utilities.GetPlayers())
 			{
 				if (!controller.IsValid)
 				{
 					continue;
 				}
-
+                
 				controller.RemoveWeapons();
-
-				controller.ExecuteClientCommandFromServer(Commands.ThirdPersonDisable);
 			}
 
-			Server.ExecuteCommand(Commands.CheatsDisable);
+			const string playerDeath = "player_death";
+			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
 
 			return true;
+		}
+
+		private HookResult OnPlayerDeath(EventPlayerDeath @event, GameEventInfo _)
+		{
+			var controller = @event.Userid;
+
+			if (!controller.TryGetPlayerPawn(out var pawn))
+			{
+				return HookResult.Continue;
+			}
+
+			pawn.SetModel(controller.Team is CsTeam.CounterTerrorist ? Models.NormalCt : Models.NormalT);
+
+			return HookResult.Continue;
 		}
 	}
 }

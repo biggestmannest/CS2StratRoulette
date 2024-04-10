@@ -1,7 +1,7 @@
+using CS2StratRoulette.Constants;
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Extensions
 {
@@ -27,7 +27,9 @@ namespace CS2StratRoulette.Extensions
 		{
 			pawn = null;
 
-			if (!controller.IsValid || !controller.PlayerPawn.TryGetValue(out var entity))
+			if (!controller.IsValid ||
+				controller.IsHLTV ||
+				!controller.PlayerPawn.TryGetValue(out var entity))
 			{
 				return false;
 			}
@@ -40,6 +42,22 @@ namespace CS2StratRoulette.Extensions
 			pawn = entity;
 
 			return true;
+		}
+
+		public static bool IsAlive(this CCSPlayerController @this, CCSPlayerPawn? pawn = null)
+		{
+			if (pawn is not null)
+			{
+				return pawn.IsAlive();
+			}
+
+			return @this.TryGetPlayerPawn(out pawn) && pawn.IsAlive();
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsAlive(this CCSPlayerPawn @this)
+		{
+			return (@this.LifeState == (byte)LifeState_t.LIFE_ALIVE);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -58,6 +76,18 @@ namespace CS2StratRoulette.Extensions
 		public static void EquipPrimary(this CCSPlayerController controller)
 		{
 			controller.ExecuteClientCommand(Commands.EquipPrimary);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void EquipGrenade(this CCSPlayerController controller)
+		{
+			controller.ExecuteClientCommand(Commands.EquipGrenade);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void EquipC4(this CCSPlayerController controller)
+		{
+			controller.ExecuteClientCommand(Commands.EquipC4);
 		}
 
 		/// <summary>

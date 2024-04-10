@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Principal;
+﻿using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Timers;
 using CS2StratRoulette.Enums;
@@ -19,7 +17,7 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
-		private readonly Random random = new();
+		private readonly System.Random random = new();
 
 		private Timer? timer;
 
