@@ -1,5 +1,4 @@
-﻿using CounterStrikeSharp.API.Core;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 
 namespace CS2StratRoulette.Strategies
