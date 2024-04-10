@@ -10,48 +10,49 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Knockback : Strategy
 	{
-		private static readonly Vector Velocity = new(200f, 200f, 200f);
+		private static readonly Vector Velocity = new(400f, 400f, 300f);
 
 		private static readonly FrozenDictionary<string, float> Weights =
 			new Dictionary<string, float>(System.StringComparer.OrdinalIgnoreCase)
 			{
-				{ "weapon_deagle", .5f },
-				{ "weapon_revolver", .4f },
 				{ "weapon_glock", .2f },
+				{ "weapon_hkp2000", .2f },
 				{ "weapon_usp_silencer", .1f },
-				{ "weapon_cz75a", .2f },
-				{ "weapon_fiveseven", .25f },
+				{ "weapon_elite", .2f },
 				{ "weapon_p250", .2f },
 				{ "weapon_tec9", .25f },
-				{ "weapon_elite", .2f },
-				{ "weapon_hkp2000", .2f },
+				{ "weapon_fiveseven", .25f },
+				{ "weapon_cz75a", .2f },
+				{ "weapon_deagle", .5f },
+				{ "weapon_revolver", .4f },
 
-				{ "weapon_mp9", .4f },
-				{ "weapon_mac10", .4f },
-				{ "weapon_bizon", .35f },
-				{ "weapon_mp7", .4f },
-				{ "weapon_ump45", .4f },
-				{ "weapon_p90", .4f },
-				{ "weapon_mp5sd", .3f },
+				{ "weapon_mp9", .3f },
+				{ "weapon_mac10", .3f },
+				{ "weapon_bizon", .3f },
+				{ "weapon_mp7", .3f },
+				{ "weapon_ump45", .3f },
+				{ "weapon_p90", .3f },
+				{ "weapon_mp5sd", .25f },
 
 				{ "weapon_famas", .5f },
 				{ "weapon_galilar", .5f },
-				{ "weapon_m4a4", .6f },
-				{ "weapon_m4a1_silencer", .45f },
+				{ "weapon_m4a1", .6f },
+				{ "weapon_m4a1_silencer", .35f },
 				{ "weapon_ak47", .6f },
 				{ "weapon_aug", .65f },
-				{ "weapon_sg553", .65f },
-				{ "weapon_ssg08", .55f },
-				{ "weapon_awp", .8f },
+				{ "weapon_sg556", .65f },
+				{ "weapon_ssg08", .4f },
+
+				{ "weapon_awp", 1f },
 				{ "weapon_scar20", .7f },
 				{ "weapon_g3sg1", .7f },
 
-				{ "weapon_nova", .65f },
-				{ "weapon_xm1014", .65f },
-				{ "weapon_mag7", .65f },
-				{ "weapon_sawedoff", .65f },
-				{ "weapon_m249", .65f },
+				{ "weapon_nova", 1f },
+				{ "weapon_xm1014", 1f },
+				{ "weapon_mag7", 1f },
+				{ "weapon_sawedoff", .9f },
 
+				{ "weapon_m249", .5f },
 				{ "weapon_negev", .5f },
 			}.ToFrozenDictionary();
 
@@ -101,8 +102,6 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			var weapon = @event.Weapon;
-
-			System.Console.WriteLine($"[Knockback::OnWeaponFire] event_weapon {weapon}");
 
 			if (weapon is null || !Knockback.Weights.TryGetValue(weapon, out var weight))
 			{

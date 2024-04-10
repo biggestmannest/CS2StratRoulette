@@ -9,6 +9,8 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Clumsy : Strategy
 	{
+		private const float Interval = 5f;
+
 		public override string Name =>
 			"Clumsy";
 
@@ -28,7 +30,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			this.timer = new Timer(6.0f, Clumsy.OnInterval, TimerFlags.REPEAT);
+			this.timer = new Timer(Clumsy.Interval, this.OnInterval, TimerFlags.REPEAT);
 
 			return true;
 		}
@@ -45,11 +47,16 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		private static void OnInterval()
+		private void OnInterval()
 		{
+			if (!this.Running)
+			{
+				return;
+			}
+
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (Clumsy.Random.FiftyFifty() || !controller.IsValid)
+				if (Clumsy.Random.Next(10) < 6)
 				{
 					continue;
 				}
