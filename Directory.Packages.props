@@ -5,11 +5,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageVersion Include="CounterStrikeSharp.API" Version="1.0.191"/>
+		<PackageVersion Include="CounterStrikeSharp.API" Version="1.0.205"/>
 
 		<PackageVersion Include="ErrorProne.NET.CoreAnalyzers" Version="0.6.1-beta.1"/>
-		<PackageVersion Include="Meziantou.Analyzer" Version="2.0.145"/>
-		<PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4"/>
+		<PackageVersion Include="Meziantou.Analyzer" Version="2.0.147"/>
+		<PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0"/>
 		<PackageVersion Include="Roslynator.Analyzers" Version="4.11.0"/>
 
 		<PackageVersion Include="JetBrains.Annotations" Version="2023.3.0"/>
