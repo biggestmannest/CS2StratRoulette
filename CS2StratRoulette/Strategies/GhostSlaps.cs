@@ -10,6 +10,8 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class GhostSlaps : Strategy
 	{
+		private const float Interval = 2f;
+
 		public override string Name =>
 			"Ghost Slaps";
 
@@ -27,7 +29,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			this.timer = new Timer(5f, static () =>
+			this.timer = new Timer(GhostSlaps.Interval, static () =>
 			{
 				foreach (var players in Utilities.GetPlayers())
 				{
