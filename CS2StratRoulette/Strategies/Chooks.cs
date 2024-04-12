@@ -14,7 +14,7 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"*whatever sound chickens make*";
 
-		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref Base plugin)
 		{
 			if (!base.Start(ref plugin))
 			{

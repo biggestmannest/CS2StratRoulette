@@ -19,15 +19,15 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
-		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref Base plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
 
-			Server.ExecuteCommand(Commands.BuyAllowNone);
-			Server.ExecuteCommand(Commands.BuyAllowGrenadesDisable);
+			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
+			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesDisable);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -51,15 +51,15 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref Base plugin)
 		{
 			if (!base.Stop(ref plugin))
 			{
 				return false;
 			}
 
-			Server.ExecuteCommand(Commands.BuyAllowAll);
-			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
+			Server.ExecuteCommand(ConsoleCommands.BuyAllowAll);
+			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesEnable);
 
 			return true;
 		}

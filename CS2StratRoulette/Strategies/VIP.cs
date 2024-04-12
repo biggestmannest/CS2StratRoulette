@@ -26,7 +26,7 @@ namespace CS2StratRoulette.Strategies
 		private CCSPlayerController? ctVip;
 		private CCSPlayerController? tVip;
 
-		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref Base plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
@@ -72,7 +72,7 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref Base plugin)
 		{
 			if (!base.Stop(ref plugin))
 			{
@@ -107,22 +107,15 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			var proxy = Game.RulesProxy();
+			var team = controller.Team;
 
-			if (proxy is null || proxy.GameRules is null)
+			foreach (var c in Utilities.GetPlayers())
 			{
-				return HookResult.Continue;
+				if (c.Team == team && c.IsValid)
+				{
+					c.CommitSuicide(false, true);
+				}
 			}
-
-			var reason = controller.Team is CsTeam.CounterTerrorist
-							 ? RoundEndReason.TerroristsWin
-							 : RoundEndReason.CTsWin;
-
-			Server.NextFrame(() =>
-			{
-				proxy.GameRules.TerminateRound(1.0f, reason);
-				Utilities.SetStateChanged(proxy, "CCSGameRulesProxy", "m_pGameRules");
-			});
 
 			return HookResult.Continue;
 		}

@@ -23,7 +23,7 @@ namespace CS2StratRoulette.Strategies
 
 		private readonly System.Random random = new();
 
-		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref Base plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
@@ -69,7 +69,7 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref Base plugin)
 		{
 			if (!base.Stop(ref plugin))
 			{
@@ -127,8 +127,8 @@ namespace CS2StratRoulette.Strategies
 			Server.NextFrame(() =>
 			{
 				pawn.SetModel(controller.Team is CsTeam.CounterTerrorist
-					? Models.JuggernautCt
-					: Models.JuggernautT);
+								  ? Models.JuggernautCt
+								  : Models.JuggernautT);
 			});
 		}
 	}

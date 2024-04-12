@@ -3,7 +3,7 @@ using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Constants
 {
-	public static class Commands
+	public static class ConsoleCommands
 	{
 		public const string CheatsEnable = "sv_cheats 1";
 		public const string CheatsDisable = "sv_cheats 0";

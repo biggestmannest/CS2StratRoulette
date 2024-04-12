@@ -24,8 +24,8 @@ namespace CS2StratRoulette.Strategies
 			{ "de_vertigo", SmokeSpots.Vertigo },
 			{ "cs_italy", SmokeSpots.Italy }
 		};
-		
-		public override bool Start(ref CS2StratRoulettePlugin plugin)
+
+		public override bool Start(ref Base plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
@@ -41,7 +41,7 @@ namespace CS2StratRoulette.Strategies
 
 			Vector velocity = new(0f, 0f, 0f);
 			QAngle angle = new(0f, 0f, 0f);
-            
+
 			foreach (var position in spots)
 			{
 				Signatures.CreateSmoke.Invoke(
@@ -54,11 +54,11 @@ namespace CS2StratRoulette.Strategies
 					2
 				);
 			}
-			
+
 			return true;
 		}
 
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref Base plugin)
 		{
 			if (!base.Stop(ref plugin))
 			{

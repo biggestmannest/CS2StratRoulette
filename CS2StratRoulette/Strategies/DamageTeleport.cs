@@ -26,22 +26,22 @@ namespace CS2StratRoulette.Strategies
 			{ "cs_italy", RandomTPs.Italy },
 			{ "de_vertigo", RandomTPs.Vertigo },
 		};
-		
+
 		private static readonly System.Random Random = new();
-		
-		public override bool Start(ref CS2StratRoulettePlugin plugin)
+
+		public override bool Start(ref Base plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
 				return false;
 			}
 
-            plugin.RegisterEventHandler<EventPlayerHurt>(this.OnHurt);
-            
+			plugin.RegisterEventHandler<EventPlayerHurt>(this.OnHurt);
+
 			return true;
 		}
 
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref Base plugin)
 		{
 			if (!base.Stop(ref plugin))
 			{
@@ -49,9 +49,9 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			const string playerHurt = "player_hurt";
-			
+
 			plugin.DeregisterEventHandler(playerHurt, this.OnHurt, false);
-			
+
 			return true;
 		}
 
@@ -63,34 +63,34 @@ namespace CS2StratRoulette.Strategies
 			{
 				return HookResult.Continue;
 			}
-			
+
 			DamageTeleport.Random.Shuffle(spots);
 
 			var player = @event.Userid;
-            
+
 			var n = spots.Length;
-			
-				if (!player.TryGetPlayerPawn(out var pawn))
-				{
-					return HookResult.Continue;
-				}
 
-				if (n <= 0)
-				{
-					n = spots.Length;
-				}
+			if (!player.TryGetPlayerPawn(out var pawn))
+			{
+				return HookResult.Continue;
+			}
 
-				var position = spots[--n];
-				var angle = pawn.V_angle;
-				
-				Server.NextFrame(() =>
-				{
-					pawn.Teleport(
-						position,
-						angle,
-						VectorExtensions.Zero
-					);
-				});
+			if (n <= 0)
+			{
+				n = spots.Length;
+			}
+
+			var position = spots[--n];
+			var angle = pawn.V_angle;
+
+			Server.NextFrame(() =>
+			{
+				pawn.Teleport(
+					position,
+					angle,
+					VectorExtensions.Zero
+				);
+			});
 
 			return HookResult.Continue;
 		}

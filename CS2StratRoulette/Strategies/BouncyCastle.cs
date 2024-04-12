@@ -11,13 +11,13 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"You can bounce off of walls.";
-		
+
 		//hiding not needed, otherwise people wont notice anything happening
 
 		private const string Enable = "sv_bounce 6";
 		private const string Disable = "sv_bounce 0";
 
-		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref Base plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
@@ -29,7 +29,7 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref Base plugin)
 		{
 			if (!base.Stop(ref plugin))
 			{

@@ -63,31 +63,31 @@ namespace CS2StratRoulette.Extensions
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void EquipKnife(this CCSPlayerController controller)
 		{
-			controller.ExecuteClientCommand(Commands.EquipKnife);
+			controller.ExecuteClientCommand(ConsoleCommands.EquipKnife);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void EquipSecondary(this CCSPlayerController controller)
 		{
-			controller.ExecuteClientCommand(Commands.EquipSecondary);
+			controller.ExecuteClientCommand(ConsoleCommands.EquipSecondary);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void EquipPrimary(this CCSPlayerController controller)
 		{
-			controller.ExecuteClientCommand(Commands.EquipPrimary);
+			controller.ExecuteClientCommand(ConsoleCommands.EquipPrimary);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void EquipGrenade(this CCSPlayerController controller)
 		{
-			controller.ExecuteClientCommand(Commands.EquipGrenade);
+			controller.ExecuteClientCommand(ConsoleCommands.EquipGrenade);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void EquipC4(this CCSPlayerController controller)
 		{
-			controller.ExecuteClientCommand(Commands.EquipC4);
+			controller.ExecuteClientCommand(ConsoleCommands.EquipC4);
 		}
 
 		public static void RemoveC4(this CCSPlayerPawn pawn)

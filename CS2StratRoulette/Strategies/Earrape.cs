@@ -15,10 +15,10 @@ namespace CS2StratRoulette.Strategies
 	public sealed class Earrape : Strategy
 	{
 		private static readonly string StartCommands =
-			$"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; {Commands.BuyAllowNone}; mp_buy_allow_grenades 0";
+			$"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; {ConsoleCommands.BuyAllowNone}; mp_buy_allow_grenades 0";
 
 		private static readonly string StopCommands =
-			$"sv_cheats 1; sv_infinite_ammo 0; sv_cheats 0; {Commands.BuyAllowAll}; mp_buy_allow_grenades 1";
+			$"sv_cheats 1; sv_infinite_ammo 0; sv_cheats 0; {ConsoleCommands.BuyAllowAll}; mp_buy_allow_grenades 1";
 
 		private const float Interval = 3.0f;
 
@@ -33,7 +33,7 @@ namespace CS2StratRoulette.Strategies
 		private readonly System.Random random = new();
 		private Timer? timer;
 
-		public override bool Start(ref CS2StratRoulettePlugin plugin)
+		public override bool Start(ref Base plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
@@ -81,7 +81,7 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		public override bool Stop(ref Base plugin)
 		{
 			if (!base.Stop(ref plugin))
 			{
