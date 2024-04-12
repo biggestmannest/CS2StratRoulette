@@ -95,7 +95,7 @@ namespace CS2StratRoulette.Extensions
 			pawn.ForEachWeapon((weapon) =>
 			{
 				System.Console.WriteLine($"[PlayerExtensions::RemoveC4] {weapon.DesignerName}");
-				if (weapon.DesignerName != "weapon_c4")
+				if (!string.Equals(weapon.DesignerName, "weapon_c4", System.StringComparison.OrdinalIgnoreCase))
 				{
 					return;
 				}
