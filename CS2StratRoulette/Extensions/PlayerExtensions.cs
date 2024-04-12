@@ -94,12 +94,15 @@ namespace CS2StratRoulette.Extensions
 		{
 			pawn.ForEachWeapon((weapon) =>
 			{
+#if DEBUG
 				System.Console.WriteLine($"[PlayerExtensions::RemoveC4] {weapon.DesignerName}");
+#endif
 				if (!string.Equals(weapon.DesignerName, "weapon_c4", System.StringComparison.OrdinalIgnoreCase))
 				{
 					return;
 				}
 
+#if DEBUG
 				if (weapon.VData is null)
 				{
 					return;
@@ -108,6 +111,9 @@ namespace CS2StratRoulette.Extensions
 				var data = new CCSWeaponBaseVData(weapon.VData.Handle);
 
 				System.Console.WriteLine($"[PlayerExtensions::RemoveC4] {data.WeaponType}");
+#endif
+
+				pawn.RemovePlayerItem(weapon);
 			});
 		}
 
