@@ -1,5 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -13,7 +14,7 @@ namespace CS2StratRoulette.Strategies
 			"You have no money this round.";
 
 		/// <summary>
-		/// Array storing the player's guessed number indexed by their <see cref="CCSPlayerController.Slot"/>
+		/// Array storing the player's money indexed by their <see cref="CCSPlayerController.Slot"/>
 		/// </summary>
 		private readonly int[] accounts = new int[Server.MaxPlayers];
 
