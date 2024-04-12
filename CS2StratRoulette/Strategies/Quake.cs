@@ -1,11 +1,12 @@
 using CS2StratRoulette.Constants;
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Cvars;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
+using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -54,6 +55,11 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
+
+				if (controller.Team is CsTeam.Terrorist)
+				{
+					pawn.RemoveC4();
+				}
 
 				controller.GiveNamedItem(CsItem.PPBizon);
 				controller.EquipPrimary();

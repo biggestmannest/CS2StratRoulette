@@ -31,7 +31,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (controller.IsHLTV || !controller.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
@@ -44,6 +44,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					controller.EquipKnife();
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+					pawn.RemoveC4();
 				}
 			}
 

@@ -30,7 +30,7 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			Server.ExecuteCommand(PropHunt.DisableRadar);
-			
+
 			Server.PrecacheModel(Models.JuggernautCt);
 
 			Server.ExecuteCommand(Commands.BuyAllowNone);
@@ -50,6 +50,7 @@ namespace CS2StratRoulette.Strategies
 					controller.EquipKnife();
 
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+					pawn.RemoveC4();
 
 					controller.GiveNamedItem(CsItem.HEGrenade);
 					controller.GiveNamedItem(CsItem.Molotov);
@@ -63,6 +64,7 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				controller.RemoveWeapons();
+
 				pawn.Health = 1;
 
 				Server.NextFrame(() =>
@@ -87,14 +89,14 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(Commands.BuyAllowAll);
 			Server.ExecuteCommand(Commands.BuyAllowGrenadesEnable);
 			Server.ExecuteCommand(PropHunt.EnableRadar);
-			
+
 			foreach (var controller in Utilities.GetPlayers())
 			{
 				if (!controller.IsValid)
 				{
 					continue;
 				}
-                
+
 				controller.RemoveWeapons();
 			}
 

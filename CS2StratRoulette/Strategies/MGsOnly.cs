@@ -12,9 +12,11 @@ namespace CS2StratRoulette.Strategies
 	{
 		private static readonly string Enable = $"mp_buy_allow_guns {BuyAllow.Heavy.Str()}";
 
-		public override string Name => "MGs Only";
+		public override string Name =>
+			"MGs Only";
 
-		public override string Description => "You're only allowed to buy machine guns.";
+		public override string Description =>
+			"You're only allowed to buy machine guns.";
 
 		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
@@ -34,13 +36,16 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				controller.EquipKnife();
+				Server.NextFrame(() =>
+				{
+					controller.EquipKnife();
 
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
+					pawn.KeepWeaponsByType(
+						CSWeaponType.WEAPONTYPE_KNIFE,
+						CSWeaponType.WEAPONTYPE_C4,
+						CSWeaponType.WEAPONTYPE_EQUIPMENT
+					);
+				});
 			}
 
 			return true;

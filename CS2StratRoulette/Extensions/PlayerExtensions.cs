@@ -90,6 +90,27 @@ namespace CS2StratRoulette.Extensions
 			controller.ExecuteClientCommand(Commands.EquipC4);
 		}
 
+		public static void RemoveC4(this CCSPlayerPawn pawn)
+		{
+			pawn.ForEachWeapon((weapon) =>
+			{
+				System.Console.WriteLine($"[PlayerExtensions::RemoveC4] {weapon.DesignerName}");
+				if (weapon.DesignerName != "weapon_c4")
+				{
+					return;
+				}
+
+				if (weapon.VData is null)
+				{
+					return;
+				}
+
+				var data = new CCSWeaponBaseVData(weapon.VData.Handle);
+
+				System.Console.WriteLine($"[PlayerExtensions::RemoveC4] {data.WeaponType}");
+			});
+		}
+
 		/// <summary>
 		/// Remove all weapons from player pawn not included in types.
 		/// </summary>

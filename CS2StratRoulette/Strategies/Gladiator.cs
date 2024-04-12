@@ -55,13 +55,18 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in players)
 			{
-				if (!controller.IsValid)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
 
 				controller.EquipKnife();
 				controller.RemoveWeapons();
+
+				if (controller.Team is CsTeam.Terrorist)
+				{
+					pawn.RemoveC4();
+				}
 			}
 
 			this.TeleportSpectators(players, this.bounds.Spectators.min, this.bounds.Spectators.max);
@@ -121,10 +126,12 @@ namespace CS2StratRoulette.Strategies
 				if (this.ct is null && this.t is null)
 				{
 					message = "It's a draw.";
-				} else if (this.ct is null)
+				}
+				else if (this.ct is null)
 				{
 					message = "The Ts have won!";
-				} else if (this.t is null)
+				}
+				else if (this.t is null)
 				{
 					message = "The CTs have won!";
 				}
@@ -132,6 +139,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					message = $"Next fight: {this.ct?.PlayerName} vs {this.t?.PlayerName}. Good luck!";
 				}
+
 				players.PrintToCenter(message);
 			}
 		}
@@ -179,7 +187,7 @@ namespace CS2StratRoulette.Strategies
 						// @todo Z
 						new(min.X + (stepX * x), min.Y + (stepY * y), min.Z),
 						pawn.V_angle,
-						new(0f, 0f, 0f)
+						VectorExtensions.Zero
 					);
 				}
 			}
