@@ -19,6 +19,9 @@ namespace CS2StratRoulette.Extensions
 		public static Vector Unit(this Vector @this) =>
 			@this.Divide(@this.Abs());
 
+		public static float Dot(this Vector @this, Vector rhs) =>
+			((@this.X * rhs.X) + (@this.Y * rhs.Y) + (@this.Z * rhs.Z));
+
 		public static Vector Abs(this Vector @this) =>
 			new(float.Abs(@this.X), float.Abs(@this.Y), float.Abs(@this.Z));
 
