@@ -141,7 +141,7 @@ namespace CS2StratRoulette.Managers
 				StrategyManager.activeStrategy = null;
 
 				System.Console.WriteLine(
-					"[CS2StratRoulette::StrategyManager]: failed invoking {0} strategy",
+					"[CS2StratRoulette::StrategyManager]: Failed invoking {0} strategy",
 					type.Name
 				);
 
@@ -150,7 +150,7 @@ namespace CS2StratRoulette.Managers
 
 			StrategyManager.activeStrategy = strategy;
 
-			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: picked {0}", StrategyManager.Name);
+			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: Picked {0}", StrategyManager.Name);
 
 			return true;
 		}
@@ -190,7 +190,7 @@ namespace CS2StratRoulette.Managers
 				System.Console.Write(e);
 			}
 
-			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: failed invoking Strategy");
+			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: Failed invoking Strategy");
 
 			return false;
 		}
