@@ -36,9 +36,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			const string playerDeath = "player_death";
-
-			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
+			plugin.DeregisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
 
 			return true;
 		}

@@ -48,9 +48,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			const string weaponReload = "weapon_reload";
-
-			plugin.DeregisterEventHandler(weaponReload, this.OnReload, false);
+			plugin.DeregisterEventHandler<EventWeaponReload>(this.OnReload);
 
 			return true;
 		}

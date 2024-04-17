@@ -54,8 +54,7 @@ namespace CS2StratRoulette.Strategies
 
 			this.timer?.Kill();
 
-			const string playerChat = "player_chat";
-			plugin.DeregisterEventHandler(playerChat, this.OnNumberPicked, true);
+			plugin.DeregisterEventHandler<EventPlayerChat>(this.OnNumberPicked);
 
 			return true;
 		}

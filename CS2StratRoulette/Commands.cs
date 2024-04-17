@@ -13,41 +13,42 @@ using CS2StratRoulette.Extensions;
 namespace CS2StratRoulette
 {
 	[SuppressMessage("Design", "MA0048")]
+	[SuppressMessage("Design", "CA1822")]
 	// ReSharper disable once InconsistentNaming
 	public sealed partial class CS2StratRoulettePlugin
 	{
 		[ConsoleCommand("set_strat", "Sets the active strategy")]
 		[CommandHelper(1, "[strat]")]
 		[RequiresPermissions("@css/root")]
-		public static void OnStratCommand(CCSPlayerController? _, CommandInfo commandInfo)
+		public void OnStratCommand(CCSPlayerController? _, CommandInfo commandInfo)
 		{
 			var name = commandInfo.GetArg(1);
 
 			if (!StrategyManager.SetActiveStrategy(name))
 			{
-				commandInfo.ReplyToCommand($"[OnStratCommand] Could not find or instantiate strategy");
+				commandInfo.ReplyToCommand("[set_strat] Could not find or instantiate strategy");
 
 				return;
 			}
 
-			if (!StrategyManager.StartActiveStrategy())
-			{
-				commandInfo.ReplyToCommand("[OnStratCommand] failed starting strategy");
+			var result = StrategyManager.Start();
 
-				return;
+			if (result)
+			{
+				StrategyManager.Announce();
 			}
 
 			commandInfo.ReplyToCommand(
-				(StrategyManager.ActiveStrategy is not null)
-					? $"[OnStratCommand] set active strategy to {StrategyManager.ActiveStrategy.Name}"
-					: "[OnStratCommand] strategy not found"
+				(result)
+					? $"[set_strat] set active strategy to {StrategyManager.Name}"
+					: "[set_strat] strategy not found"
 			);
 		}
 
 		[ConsoleCommand("css_map", "Change map")]
 		[CommandHelper(1, "[map]")]
 		[RequiresPermissions("@css/changemap")]
-		public static void OnMapCommand(CCSPlayerController? _, CommandInfo info)
+		public void OnMapCommand(CCSPlayerController? _, CommandInfo info)
 		{
 			var name = info.GetArg(1);
 
@@ -58,7 +59,7 @@ namespace CS2StratRoulette
 		[ConsoleCommand("props", "")]
 		[CommandHelper(1, "[type]")]
 		[RequiresPermissions("@css/root")]
-		public static void OnPropsCommand(CCSPlayerController? player, CommandInfo commandInfo)
+		public void OnPropsCommand(CCSPlayerController? player, CommandInfo commandInfo)
 		{
 			var name = commandInfo.GetArg(1);
 
@@ -82,7 +83,7 @@ namespace CS2StratRoulette
 
 		[ConsoleCommand("roll", "")]
 		[RequiresPermissions("@css/root")]
-		public static void OnRollCommand(CCSPlayerController? player, CommandInfo commandInfo)
+		public void OnRollCommand(CCSPlayerController? player, CommandInfo commandInfo)
 		{
 			foreach (var controller in Utilities.GetPlayers())
 			{

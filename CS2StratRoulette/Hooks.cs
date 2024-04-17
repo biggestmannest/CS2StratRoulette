@@ -8,11 +8,12 @@ using CS2StratRoulette.Managers;
 namespace CS2StratRoulette
 {
 	[SuppressMessage("Design", "MA0048")]
+	[SuppressMessage("Design", "CA1822")]
 	// ReSharper disable once InconsistentNaming
 	public sealed partial class CS2StratRoulettePlugin
 	{
 		[GameEventHandler]
-		public static HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
+		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
 		{
 			var rules = Game.Rules();
 
@@ -21,36 +22,23 @@ namespace CS2StratRoulette
 				return HookResult.Continue;
 			}
 
-			if (StrategyManager.ActiveStrategy is IStrategyPostStop strategy)
-			{
-				strategy.PostStop();
-			}
+			StrategyManager.PostStop();
+			StrategyManager.SetRandomStrategy();
 
-			StrategyManager.CycleStrategy();
+			var started = StrategyManager.Start();
 
-			if (StrategyManager.StartActiveStrategy() && StrategyManager.ActiveStrategy is not null)
+			if (started)
 			{
-				StrategyManager.AnnounceStrategy(StrategyManager.ActiveStrategy);
+				StrategyManager.Announce();
 			}
 
 			return HookResult.Continue;
 		}
 
 		[GameEventHandler]
-		public static HookResult OnRoundEnd(EventRoundEnd _, GameEventInfo __)
+		public HookResult OnRoundEnd(EventRoundEnd _, GameEventInfo __)
 		{
-			StrategyManager.StopActiveStrategy();
-
-			return HookResult.Continue;
-		}
-
-		[GameEventHandler(HookMode.Pre)]
-		public static HookResult OnRoundEndPre(EventRoundEnd _, GameEventInfo __)
-		{
-			if (StrategyManager.ActiveStrategy is IStrategyPreStop strategy)
-			{
-				strategy.PreStop();
-			}
+			StrategyManager.Stop();
 
 			return HookResult.Continue;
 		}

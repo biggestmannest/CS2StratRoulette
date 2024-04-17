@@ -100,8 +100,7 @@ namespace CS2StratRoulette.Strategies
 				controller.RemoveWeapons();
 			}
 
-			const string playerDeath = "player_death";
-			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
+			plugin.DeregisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
 
 			return true;
 		}

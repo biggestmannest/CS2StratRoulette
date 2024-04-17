@@ -19,21 +19,24 @@ namespace CS2StratRoulette
 			"0.0.1";
 
 		public override string ModuleAuthor =>
-			"me, only me. i am the greatest! :)";
+			"Snake, bigman & wsrvn (i guess)";
 
 		public override void Load(bool hotReload)
 		{
 			CS2StratRoulettePlugin.Instance = this;
 
-			base.Load(hotReload);
-
-			this.RegisterListener<Listeners.OnServerPrecacheResources>((manifest) =>
+			if (!hotReload)
 			{
-				foreach (var model in Models.Props)
+				this.RegisterListener<Listeners.OnServerPrecacheResources>((manifest) =>
 				{
-					manifest.AddResource(model);
-				}
-			});
+					foreach (var model in Models.Props)
+					{
+						manifest.AddResource(model);
+					}
+				});
+			}
+
+			StrategyManager.Load();
 
 			System.Console.WriteLine("[CS2StratRoulettePlugin] Initialized");
 		}

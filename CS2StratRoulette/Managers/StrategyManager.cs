@@ -13,10 +13,15 @@ namespace CS2StratRoulette.Managers
 		private static readonly List<System.Type> strategies = new(50);
 		private static readonly StringBuilder builder = new();
 
-		public static Strategy? ActiveStrategy;
+		private static Strategy? activeStrategy;
+
+		public static string Name =>
+			(StrategyManager.activeStrategy is null)
+				? string.Empty
+				: StrategyManager.activeStrategy.GetType().Name;
 
 		public static bool Running =>
-			(StrategyManager.ActiveStrategy is not null && StrategyManager.ActiveStrategy.Running);
+			(StrategyManager.activeStrategy is not null && StrategyManager.activeStrategy.Running);
 
 		public static void Load()
 		{
@@ -29,20 +34,24 @@ namespace CS2StratRoulette.Managers
 					StrategyManager.strategies.Add(type);
 				}
 			}
+
+			System.Console.WriteLine(
+				$"[CS2StratRoulette::StrategyManager]: Loaded {StrategyManager.strategies.Count} strategies"
+			);
 		}
 
 		public static void Unload()
 		{
-			StrategyManager.StopActiveStrategy();
+			StrategyManager.Kill();
 
 			StrategyManager.strategies.Clear();
 		}
 
-		public static void CycleStrategy()
+		public static void SetRandomStrategy()
 		{
 			if (StrategyManager.strategies.Count == 0)
 			{
-				System.Console.WriteLine("[CycleStrategy]: there no strategies");
+				System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: No strategies");
 
 				return;
 			}
@@ -52,60 +61,60 @@ namespace CS2StratRoulette.Managers
 			StrategyManager.SetActiveStrategy(StrategyManager.strategies[idx]);
 		}
 
-		public static bool StartActiveStrategy()
+		public static bool Start()
 		{
-			if (StrategyManager.ActiveStrategy is null)
+			if (StrategyManager.activeStrategy is null || StrategyManager.Running)
 			{
-				System.Console.WriteLine("[StartActiveStrategy]: ActiveStrategy is null");
-
 				return false;
 			}
 
 			var plugin = CS2StratRoulettePlugin.Instance;
-			var result = StrategyManager.ActiveStrategy.Start(ref plugin);
+			var name = StrategyManager.Name;
 
-			if (!result)
+			var result = StrategyManager.activeStrategy.Start(ref plugin);
+
+			System.Console.WriteLine(
+				result
+					? $"[CS2StratRoulette::StrategyManager]: Started {name}"
+					: $"[CS2StratRoulette::StrategyManager]: Failed starting {name}"
+			);
+
+			return true;
+		}
+
+		public static bool Stop()
+		{
+			if (StrategyManager.activeStrategy is null || !StrategyManager.Running)
 			{
-				System.Console.WriteLine(
-					"[StartActiveStrategy]: failed starting {0}",
-					StrategyManager.ActiveStrategy.GetType().Name
-				);
+				return false;
 			}
 
-			StrategyManager.AnnounceStrategy(StrategyManager.ActiveStrategy);
+			var plugin = CS2StratRoulettePlugin.Instance;
+			var name = StrategyManager.Name;
+
+			var result = StrategyManager.activeStrategy.Stop(ref plugin);
+
+			System.Console.WriteLine(
+				result
+					? $"[CS2StratRoulette::StrategyManager]: Stopped {name}"
+					: $"[CS2StratRoulette::StrategyManager]: Failed stopping {name}"
+			);
 
 			return result;
 		}
 
-		public static bool StopActiveStrategy()
+		public static void PostStop()
 		{
-			if (StrategyManager.ActiveStrategy is null)
+			if (StrategyManager.activeStrategy is IStrategyPostStop strategy)
 			{
-				return true;
+				strategy.PostStop();
 			}
+		}
 
-			if (StrategyManager.ActiveStrategy is IStrategyPreStop preStrat)
-			{
-				preStrat.PreStop();
-			}
-
-			var plugin = CS2StratRoulettePlugin.Instance;
-			var result = StrategyManager.ActiveStrategy.Stop(ref plugin);
-
-			if (StrategyManager.ActiveStrategy is IStrategyPostStop postStrat)
-			{
-				postStrat.PostStop();
-			}
-
-			if (!result && !StrategyManager.ActiveStrategy.Running)
-			{
-				System.Console.WriteLine(
-					"[StopActiveStrategy]: failed stopping {0}",
-					StrategyManager.ActiveStrategy.GetType().Name
-				);
-			}
-
-			return result;
+		public static void Kill()
+		{
+			StrategyManager.Stop();
+			StrategyManager.PostStop();
 		}
 
 		public static bool SetActiveStrategy(string name)
@@ -123,22 +132,25 @@ namespace CS2StratRoulette.Managers
 
 		public static bool SetActiveStrategy(System.Type type)
 		{
-			StrategyManager.StopActiveStrategy();
+			StrategyManager.Kill();
 
 			// Try to invoke a random chosen strategy
 			if (!StrategyManager.TryInvokeStrategy(type, out var strategy))
 			{
 				// If it fails don't use a strategy for this round and pretend as if nothing happened :)
-				StrategyManager.ActiveStrategy = null;
+				StrategyManager.activeStrategy = null;
 
-				System.Console.WriteLine("[CycleStrategy]: failed invoking {0} strategy", type.Name);
+				System.Console.WriteLine(
+					"[CS2StratRoulette::StrategyManager]: failed invoking {0} strategy",
+					type.Name
+				);
 
 				return false;
 			}
 
-			StrategyManager.ActiveStrategy = strategy;
+			StrategyManager.activeStrategy = strategy;
 
-			System.Console.WriteLine("[CycleStrategy]: picked {0}", strategy.Name);
+			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: picked {0}", StrategyManager.Name);
 
 			return true;
 		}
@@ -178,16 +190,21 @@ namespace CS2StratRoulette.Managers
 				System.Console.Write(e);
 			}
 
-			System.Console.WriteLine("[TryInvokeStrategy]: failed invoking Strategy");
+			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: failed invoking Strategy");
 
 			return false;
 		}
 
 		/// <summary>
-		/// Announces a strategy in global chat
+		/// Announces the current strategy in global chat
 		/// </summary>
-		public static void AnnounceStrategy(Strategy strategy)
+		public static void Announce()
 		{
+			if (StrategyManager.activeStrategy is null)
+			{
+				return;
+			}
+
 			const char newLine = '\u2029';
 
 			StrategyManager.builder.Clear();
@@ -197,10 +214,10 @@ namespace CS2StratRoulette.Managers
 			StrategyManager.builder.Append('-', 80);
 			StrategyManager.builder.Append(newLine);
 			StrategyManager.builder.Append(ChatColors.Green);
-			StrategyManager.builder.Append(strategy.Name);
+			StrategyManager.builder.Append(StrategyManager.activeStrategy.Name);
 			StrategyManager.builder.Append(newLine);
 			StrategyManager.builder.Append(ChatColors.Silver);
-			StrategyManager.builder.Append(strategy.Description);
+			StrategyManager.builder.Append(StrategyManager.activeStrategy.Description);
 			StrategyManager.builder.Append(newLine);
 			StrategyManager.builder.Append(ChatColors.Blue);
 			StrategyManager.builder.Append('-', 80);

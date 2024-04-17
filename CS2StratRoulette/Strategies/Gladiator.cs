@@ -87,8 +87,7 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowAll);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesEnable);
 
-			const string playerDeath = "player_death";
-			plugin.DeregisterEventHandler(playerDeath, this.OnPlayerDeath, true);
+			plugin.DeregisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
 
 			return true;
 		}

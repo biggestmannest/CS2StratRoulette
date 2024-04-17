@@ -35,9 +35,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			const string playerHurt = "player_hurt";
-
-			plugin.DeregisterEventHandler(playerHurt, this.OnPlayerHurt, true);
+			plugin.DeregisterEventHandler<EventPlayerHurt>(this.OnPlayerHurt);
 
 			return true;
 		}

@@ -81,8 +81,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			const string weaponFire = "weapon_fire";
-			plugin.DeregisterEventHandler(weaponFire, this.OnWeaponFire, true);
+			plugin.DeregisterEventHandler<EventWeaponFire>(this.OnWeaponFire);
 
 			return true;
 		}

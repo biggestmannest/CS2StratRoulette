@@ -31,9 +31,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			const string playerSound = "player_sound";
-
-			plugin.DeregisterEventHandler(playerSound, this.OnPlayerSound, true);
+			plugin.DeregisterEventHandler<EventPlayerSound>(this.OnPlayerSound);
 
 			return true;
 		}
