@@ -5,7 +5,7 @@ namespace CS2StratRoulette.Strategies
 	public abstract class Strategy
 	{
 		/// <summary>
-		/// Human readable strategy name
+		/// Human-readable strategy name
 		/// </summary>
 		public abstract string Name { get; }
 
