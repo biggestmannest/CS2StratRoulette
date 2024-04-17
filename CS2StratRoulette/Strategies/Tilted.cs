@@ -19,7 +19,7 @@ namespace CS2StratRoulette.Strategies
 
 		private readonly System.Random random = new();
 
-		public override bool Start(ref Base plugin)
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
 			{

@@ -27,9 +27,9 @@ namespace CS2StratRoulette.Strategies
 		/// <summary>
 		/// Register required event listeners in order to enforce the strategy
 		/// </summary>
-		/// <param name="plugin">Reference to <see cref="Base"/></param>
+		/// <param name="plugin">Reference to <see cref="CS2StratRoulettePlugin"/></param>
 		/// <returns><see langword="true"/> if all events register successfully</returns>
-		public virtual bool Start(ref Base plugin)
+		public virtual bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (this.Running)
 			{
@@ -44,9 +44,9 @@ namespace CS2StratRoulette.Strategies
 		/// <summary>
 		/// Register required event listeners in order to enforce the strategy
 		/// </summary>
-		/// <param name="plugin">Reference to <see cref="Base"/></param>
+		/// <param name="plugin">Reference to <see cref="CS2StratRoulettePlugin"/></param>
 		/// <returns><see langword="true"/> if all events deregister successfully</returns>
-		public virtual bool Stop(ref Base plugin)
+		public virtual bool Stop(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!this.Running)
 			{

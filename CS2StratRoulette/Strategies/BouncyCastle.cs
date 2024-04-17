@@ -17,7 +17,7 @@ namespace CS2StratRoulette.Strategies
 		private const string Enable = "sv_bounce 6";
 		private const string Disable = "sv_bounce 0";
 
-		public override bool Start(ref Base plugin)
+		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
 			{
@@ -29,7 +29,7 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		public override bool Stop(ref Base plugin)
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Stop(ref plugin))
 			{
