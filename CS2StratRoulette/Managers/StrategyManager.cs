@@ -1,3 +1,4 @@
+using CS2StratRoulette.Extensions;
 using CS2StratRoulette.Interfaces;
 using CS2StratRoulette.Strategies;
 using CounterStrikeSharp.API.Modules.Utils;
@@ -13,6 +14,7 @@ namespace CS2StratRoulette.Managers
 		private static readonly List<System.Type> strategies = new(50);
 		private static readonly StringBuilder builder = new();
 
+		private static int index;
 		private static Strategy? activeStrategy;
 
 		public static string Name =>
@@ -35,6 +37,8 @@ namespace CS2StratRoulette.Managers
 				}
 			}
 
+			StrategyManager.Shuffle();
+
 			System.Console.WriteLine(
 				$"[CS2StratRoulette::StrategyManager]: Loaded {StrategyManager.strategies.Count} strategies"
 			);
@@ -47,7 +51,17 @@ namespace CS2StratRoulette.Managers
 			StrategyManager.strategies.Clear();
 		}
 
-		public static void SetRandomStrategy()
+		public static void Shuffle()
+		{
+			if (StrategyManager.strategies.Count > 2)
+			{
+				System.Random.Shared.Shuffle(StrategyManager.strategies);
+			}
+
+			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: Shuffled");
+		}
+
+		public static void Next()
 		{
 			if (StrategyManager.strategies.Count == 0)
 			{
@@ -56,9 +70,13 @@ namespace CS2StratRoulette.Managers
 				return;
 			}
 
-			var idx = System.Random.Shared.Next(StrategyManager.strategies.Count);
+			if (StrategyManager.index >= StrategyManager.strategies.Count)
+			{
+				StrategyManager.Shuffle();
+				StrategyManager.index = 0;
+			}
 
-			StrategyManager.SetActiveStrategy(StrategyManager.strategies[idx]);
+			StrategyManager.SetActiveStrategy(StrategyManager.strategies[StrategyManager.index++]);
 		}
 
 		public static bool Start()
@@ -150,7 +168,7 @@ namespace CS2StratRoulette.Managers
 
 			StrategyManager.activeStrategy = strategy;
 
-			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: Picked {0}", StrategyManager.Name);
+			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: Set {0}", StrategyManager.Name);
 
 			return true;
 		}
