@@ -95,7 +95,7 @@ namespace CS2StratRoulette.Strategies
 
 			var controller = @event.Userid;
 
-			if (!controller.TryGetPlayerPawn(out var pawn))
+			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
 			{
 				return HookResult.Continue;
 			}
