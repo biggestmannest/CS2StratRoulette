@@ -1,9 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Helpers;
-using CS2StratRoulette.Interfaces;
+using CS2StratRoulette.Managers;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core;
-using CS2StratRoulette.Managers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette
 {
@@ -23,7 +22,7 @@ namespace CS2StratRoulette
 			}
 
 			StrategyManager.PostStop();
-			StrategyManager.SetRandomStrategy();
+			StrategyManager.Next();
 
 			var started = StrategyManager.Start();
 
