@@ -224,14 +224,14 @@ namespace CS2StratRoulette.Managers
 				return;
 			}
 
-			const string hidden = "Hidden";
-
 			var name = StrategyManager.activeStrategy.Name;
 			var description = StrategyManager.activeStrategy.Description;
 
 			if (!StrategyManager.activeStrategy.Flags.HasFlag(StrategyFlags.AlwaysVisible) &&
 				System.Random.Shared.Next(10) < 3) // 40% to be hidden
 			{
+				const string hidden = "Hidden";
+
 				name = hidden;
 				description = hidden;
 			}
