@@ -107,6 +107,7 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			System.Console.WriteLine($"[Gladiator::OnPlayerDeath]: {@event.Userid.PlayerName} died");
+
 			this.PickGladiators();
 
 			return HookResult.Continue;
@@ -124,9 +125,10 @@ namespace CS2StratRoulette.Strategies
 			this.ct = Gladiator.PickGladiator(this.ct, this.cts, this.bounds.Gladiators.ct);
 			this.t = Gladiator.PickGladiator(this.t, this.ts, this.bounds.Gladiators.t);
 
-			foreach (var players in Utilities.GetPlayers())
+			foreach (var controller in Utilities.GetPlayers())
 			{
-				var message = "";
+				string message;
+
 				if (this.ct is null && this.t is null)
 				{
 					message = "It's a draw.";
@@ -144,7 +146,7 @@ namespace CS2StratRoulette.Strategies
 					message = $"Next fight: {this.ct?.PlayerName} vs {this.t?.PlayerName}. Good luck!";
 				}
 
-				players.PrintToCenter(message);
+				controller.PrintToCenter(message);
 			}
 		}
 
@@ -209,6 +211,7 @@ namespace CS2StratRoulette.Strategies
 			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
 			{
 				System.Console.WriteLine("[Gladiator::PickGladiator]: controller null or invalid");
+
 				return null;
 			}
 
@@ -216,7 +219,7 @@ namespace CS2StratRoulette.Strategies
 
 			Server.NextFrame(() =>
 			{
-				pawn.Teleport(position, pawn.AbsRotation ?? pawn.V_angle, Vector.Zero);
+				pawn.Teleport(position, pawn.V_angle, Vector.Zero);
 
 				controller.GiveNamedItem(CsItem.KnifeT);
 				controller.EquipKnife();
