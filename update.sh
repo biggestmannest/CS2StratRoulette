@@ -2,12 +2,10 @@
 
 mode=Release
 
-while getopts "d:t:b:" opt; do
+while getopts "d" opt; do
   case "$opt" in
     "d") mode=Debug ;;
-    "t") git_tag="$OPTARG" ;;
-    "b") git_branch="$OPTARG" ;;
-    "help") git_branch="$OPTARG" ;;
+    "*") exit 1 ;;
   esac
 done
 
