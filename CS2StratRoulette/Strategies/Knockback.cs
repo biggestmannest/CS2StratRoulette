@@ -116,11 +116,9 @@ namespace CS2StratRoulette.Strategies
 
 			velocity += (Knockback.Velocity * weight).Multi(forward * -1f);
 
-			pawn.Teleport(
-				pawn.AbsOrigin ?? Vector.Zero,
-				vAngle,
-				velocity
-			);
+			pawn.AbsVelocity.X = velocity.X;
+			pawn.AbsVelocity.Y = velocity.Y;
+			pawn.AbsVelocity.Z = velocity.Z;
 
 			return HookResult.Continue;
 		}
