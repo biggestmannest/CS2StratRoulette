@@ -6,6 +6,7 @@ using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Managers
 {
@@ -223,6 +224,18 @@ namespace CS2StratRoulette.Managers
 				return;
 			}
 
+			const string hidden = "Hidden";
+
+			var name = StrategyManager.activeStrategy.Name;
+			var description = StrategyManager.activeStrategy.Description;
+
+			if (!StrategyManager.activeStrategy.Flags.HasFlag(StrategyFlags.AlwaysVisible) &&
+				System.Random.Shared.Next(10) < 3) // 40% to be hidden
+			{
+				name = hidden;
+				description = hidden;
+			}
+
 			const char newLine = '\u2029';
 
 			StrategyManager.builder.Clear();
@@ -232,10 +245,10 @@ namespace CS2StratRoulette.Managers
 			StrategyManager.builder.Append('-', 80);
 			StrategyManager.builder.Append(newLine);
 			StrategyManager.builder.Append(ChatColors.Green);
-			StrategyManager.builder.Append(StrategyManager.activeStrategy.Name);
+			StrategyManager.builder.Append(name);
 			StrategyManager.builder.Append(newLine);
 			StrategyManager.builder.Append(ChatColors.Silver);
-			StrategyManager.builder.Append(StrategyManager.activeStrategy.Description);
+			StrategyManager.builder.Append(description);
 			StrategyManager.builder.Append(newLine);
 			StrategyManager.builder.Append(ChatColors.Blue);
 			StrategyManager.builder.Append('-', 80);

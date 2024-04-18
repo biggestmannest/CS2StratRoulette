@@ -16,7 +16,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"I hope you like your new weapon :)";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private readonly System.Random random = new();
 

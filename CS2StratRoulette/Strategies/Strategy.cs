@@ -22,7 +22,8 @@ namespace CS2StratRoulette.Strategies
 		/// <summary>
 		/// Strategy settings.
 		/// </summary>
-		public virtual StrategyFlags Flags { get; protected set; } = StrategyFlags.None;
+		public virtual StrategyFlags Flags =>
+			StrategyFlags.None;
 
 		/// <summary>
 		/// Register required event listeners in order to enforce the strategy

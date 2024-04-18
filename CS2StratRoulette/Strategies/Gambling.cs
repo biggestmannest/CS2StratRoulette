@@ -4,6 +4,7 @@ using System.Globalization;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
@@ -18,6 +19,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			$"{ChatColors.LightRed}Pick a number between 1 and 10 in chat. You have 10 seconds. Winners will be announced after the 10 seconds have passed";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private static readonly System.Random Random = new();
 

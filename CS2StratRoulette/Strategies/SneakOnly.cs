@@ -1,5 +1,6 @@
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -11,6 +12,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Any footstep noises will kill you. Jumping/falling counts too.";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -43,7 +47,9 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			if (@event.Userid.IsValid && @event.Step)
+			if (@event.Step &&
+				@event.Userid is not null &&
+				@event.Userid.IsValid)
 			{
 				@event.Userid.CommitSuicide(false, true);
 			}

@@ -1,6 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -15,6 +16,9 @@ namespace CS2StratRoulette.Strategies
 
 		private const string Enable = "sv_jump_impulse 1";
 		private const string Disable = "sv_jump_impulse 301.993";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

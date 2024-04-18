@@ -36,7 +36,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"Spams fake cheat advertisements in the chat.";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private readonly System.Random random = new();
 

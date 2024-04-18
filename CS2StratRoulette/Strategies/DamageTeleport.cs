@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Frozen;
+using System.Collections.Generic;
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
@@ -11,21 +12,22 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class DamageTeleport : Strategy
 	{
+		private static readonly FrozenDictionary<string, Vector[]> Maps =
+			new Dictionary<string, Vector[]>(System.StringComparer.OrdinalIgnoreCase)
+			{
+				{ "de_mirage", RandomTPs.Mirage },
+				{ "de_overpass", RandomTPs.Overpass },
+				{ "de_nuke", RandomTPs.Nuke },
+				{ "de_dust2", RandomTPs.Dust2 },
+				{ "cs_italy", RandomTPs.Italy },
+				{ "de_vertigo", RandomTPs.Vertigo },
+			}.ToFrozenDictionary();
+
 		public override string Name =>
 			"aghhhh!!! dont shoot!!!!!";
 
 		public override string Description =>
 			"You teleport to a random place when you are shot.";
-
-		private static readonly Dictionary<string, Vector[]> Maps = new(System.StringComparer.OrdinalIgnoreCase)
-		{
-			{ "de_mirage", RandomTPs.Mirage },
-			{ "de_overpass", RandomTPs.Overpass },
-			{ "de_nuke", RandomTPs.Nuke },
-			{ "de_dust2", RandomTPs.Dust2 },
-			{ "cs_italy", RandomTPs.Italy },
-			{ "de_vertigo", RandomTPs.Vertigo },
-		};
 
 		private static readonly System.Random Random = new();
 
@@ -68,7 +70,7 @@ namespace CS2StratRoulette.Strategies
 
 			var n = spots.Length;
 
-			if (!player.TryGetPlayerPawn(out var pawn))
+			if (player is null || !player.TryGetPlayerPawn(out var pawn))
 			{
 				return HookResult.Continue;
 			}
@@ -86,7 +88,7 @@ namespace CS2StratRoulette.Strategies
 				pawn.Teleport(
 					position,
 					angle,
-					VectorExtensions.Zero
+					Vector.Zero
 				);
 			});
 

@@ -14,7 +14,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"You can only use your primary while at 100 health.";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -49,7 +50,7 @@ namespace CS2StratRoulette.Strategies
 
 			var controller = @event.Userid;
 
-			if (!controller.TryGetPlayerPawn(out var pawn))
+			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
 			{
 				return HookResult.Continue;
 			}

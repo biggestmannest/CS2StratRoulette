@@ -15,7 +15,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"glhf";
 
-		public override StrategyFlags Flags => StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private readonly System.Random random = new();
 

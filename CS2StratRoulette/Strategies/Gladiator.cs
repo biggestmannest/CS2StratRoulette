@@ -7,6 +7,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -18,6 +19,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Fuckin' Gladiator ya fuck!";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private GladiatorMapBounds bounds;
 
@@ -95,6 +99,7 @@ namespace CS2StratRoulette.Strategies
 		private HookResult OnPlayerDeath(EventPlayerDeath @event, GameEventInfo _)
 		{
 			if (!this.Running ||
+				@event.Userid is null ||
 				(@event.Userid.SteamID != this.ct?.SteamID &&
 				 @event.Userid.SteamID != this.t?.SteamID))
 			{
@@ -186,7 +191,7 @@ namespace CS2StratRoulette.Strategies
 						// @todo Z
 						new(min.X + (stepX * x), min.Y + (stepY * y), min.Z),
 						pawn.V_angle,
-						VectorExtensions.Zero
+						Vector.Zero
 					);
 				}
 			}
@@ -211,7 +216,7 @@ namespace CS2StratRoulette.Strategies
 
 			Server.NextFrame(() =>
 			{
-				pawn.Teleport(position, pawn.AbsRotation ?? pawn.V_angle, VectorExtensions.Zero);
+				pawn.Teleport(position, pawn.AbsRotation ?? pawn.V_angle, Vector.Zero);
 
 				controller.GiveNamedItem(CsItem.KnifeT);
 				controller.EquipKnife();
@@ -244,7 +249,7 @@ namespace CS2StratRoulette.Strategies
 			{
 				entity.DispatchSpawn();
 				entity.SetModel(Models.Fence);
-				entity.Teleport(position, angle, VectorExtensions.Zero);
+				entity.Teleport(position, angle, Vector.Zero);
 			});
 		}
 	}

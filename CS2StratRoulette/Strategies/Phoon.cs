@@ -19,7 +19,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"ADMIN HE'S DOING IT SIDEWAYS";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

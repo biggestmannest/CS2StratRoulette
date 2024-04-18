@@ -6,6 +6,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -17,6 +18,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Get the highest velocity possible, the team with the least average velocity loses.";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private readonly List<CCSPlayerController> ts = new(Server.MaxPlayers / 2);
 		private readonly List<CCSPlayerController> cts = new(Server.MaxPlayers / 2);

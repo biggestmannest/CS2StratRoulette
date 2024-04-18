@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -16,6 +17,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"garry simon's modifications.";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private readonly System.Random random = new();
 
@@ -70,6 +74,7 @@ namespace CS2StratRoulette.Strategies
 				Server.NextFrame(() =>
 				{
 					pawn.SetModel(Models.Props[this.random.Next(Models.Props.Length)]);
+
 					Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
 				});
 			}
@@ -109,7 +114,7 @@ namespace CS2StratRoulette.Strategies
 		{
 			var controller = @event.Userid;
 
-			if (!controller.TryGetPlayerPawn(out var pawn))
+			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
 			{
 				return HookResult.Continue;
 			}

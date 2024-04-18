@@ -1,6 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -12,6 +13,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"You have no money this round.";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		/// <summary>
 		/// Array storing the player's money indexed by their <see cref="CCSPlayerController.Slot"/>
@@ -41,9 +45,12 @@ namespace CS2StratRoulette.Strategies
 
 				this.accounts[controller.Slot] = moneyServices.Account;
 
-				moneyServices.Account = 0;
+				Server.NextFrame(() =>
+				{
+					moneyServices.Account = 0;
 
-				Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
+					Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
+				});
 			}
 
 			return true;
@@ -70,9 +77,12 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				moneyServices.Account += this.accounts[controller.Slot];
+				Server.NextFrame(() =>
+				{
+					moneyServices.Account += this.accounts[controller.Slot];
 
-				Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
+					Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
+				});
 			}
 
 			return true;

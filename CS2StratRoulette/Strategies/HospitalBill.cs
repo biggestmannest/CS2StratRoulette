@@ -15,7 +15,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"When you die all other players in your team will lose $500 to pay for your hospital bills.";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

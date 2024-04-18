@@ -1,5 +1,4 @@
-﻿using CS2StratRoulette.Enums;
-using CS2StratRoulette.Extensions;
+﻿using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
 
@@ -13,8 +12,6 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"Every time you are shot, you want to run away.";
-
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -47,10 +44,10 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			if (@event.Userid.IsValid)
+			if (@event.Userid.TryGetPlayerController(out var controller))
 			{
-				@event.Userid.EquipKnife();
-				@event.Userid.ExecuteClientCommandFromServer("say \"OUCH!!!!!!!!!!!!!!!!\"");
+				controller.EquipKnife();
+				controller.ExecuteClientCommandFromServer("say \"OUCH!!!!!!!!!!!!!!!!\"");
 			}
 
 			return HookResult.Continue;

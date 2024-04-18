@@ -1,15 +1,16 @@
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
-using CS2StratRoulette.Helpers;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
+	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	// ReSharper disable once InconsistentNaming
 	public sealed class VIP : Strategy
 	{
@@ -19,7 +20,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"One player from each team has been made VIP. If the VIP dies you lose the round.";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private readonly System.Random random = new();
 
@@ -94,7 +96,7 @@ namespace CS2StratRoulette.Strategies
 
 			var controller = @event.Userid;
 
-			if (!controller.IsValid)
+			if (controller is null || !controller.IsValid)
 			{
 				return HookResult.Continue;
 			}

@@ -1,5 +1,4 @@
-﻿using CS2StratRoulette.Enums;
-using CS2StratRoulette.Extensions;
+﻿using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
@@ -11,15 +10,13 @@ namespace CS2StratRoulette.Strategies
 	{
 		private const float Interval = 5f;
 
+		private static readonly System.Random Random = new();
+
 		public override string Name =>
 			"Clumsy";
 
 		public override string Description =>
 			"First day on the job";
-
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
-
-		private static readonly System.Random Random = new();
 
 		private Timer? timer;
 

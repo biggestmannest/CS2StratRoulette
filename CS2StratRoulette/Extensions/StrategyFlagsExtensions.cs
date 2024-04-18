@@ -6,15 +6,11 @@ namespace CS2StratRoulette.Extensions
 	public static class StrategyFlagsExtensions
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool Has(this StrategyFlags @this, StrategyFlags flag) =>
-			((@this & flag) != StrategyFlags.None);
+		public static StrategyFlags Remove(this ref StrategyFlags @this, StrategyFlags flag) =>
+			@this &= ~flag;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static StrategyFlags Remove(this StrategyFlags @this, StrategyFlags flag) =>
-			(@this & ~flag);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static StrategyFlags Add(this StrategyFlags @this, StrategyFlags flag) =>
-			(@this | flag);
+		public static StrategyFlags Add(this ref StrategyFlags @this, StrategyFlags flag) =>
+			@this |= flag;
 	}
 }

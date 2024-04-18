@@ -12,11 +12,9 @@ namespace CS2StratRoulette.Strategies
 	public sealed class TasersOnly : Strategy
 	{
 		private const string InfiniteTasersEnable = "mp_taser_recharge_time 0";
-
 		private const string InfiniteTasersDisable = "mp_taser_recharge_time 30";
 
 		private const string PartyModeEnable = "sv_party_mode true";
-
 		private const string PartyModeDisable = "sv_party_mode false";
 
 		public override string Name =>
@@ -25,7 +23,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"You can only use tasers, with instant recharge time.";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

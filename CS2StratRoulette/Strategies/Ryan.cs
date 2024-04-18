@@ -1,8 +1,6 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Timers;
-using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
@@ -10,19 +8,16 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Ryan : Strategy
 	{
+		private const float Interval = 6.5f;
+		private const string Sounds = "sounds/sfx/ryan/ryan";
+
 		public override string Name =>
 			"Callouts";
 
 		public override string Description =>
 			"Better listen to the voices!";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
-
-		private const string Sounds = "sounds/sfx/ryan/ryan";
-
-		private readonly Random random = new();
-
-		private const float Interval = 6.5f;
+		private readonly System.Random random = new();
 
 		private Timer? timer;
 
@@ -52,17 +47,18 @@ namespace CS2StratRoulette.Strategies
 
 		private void OnInterval()
 		{
-			if (this.random.Next(2) == 0)
+			if (this.random.FiftyFifty())
 			{
 				return;
 			}
 
 			var randomNum = this.random.Next(1, 32).Str().PadLeft(2, '0');
-			foreach (var players in Utilities.GetPlayers())
+
+			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (players.IsValid)
+				if (controller.TryGetPlayerPawn(out var pawn) && pawn.IsAlive())
 				{
-					players.ExecuteClientCommand($"play {Ryan.Sounds}_{randomNum}");
+					controller.ExecuteClientCommand($"play {Ryan.Sounds}_{randomNum}");
 				}
 			}
 		}

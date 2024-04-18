@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Constants;
+using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
@@ -16,15 +18,19 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"Hope you like your new position :)";
 
-		private static readonly Dictionary<string, Vector[]> Maps = new(System.StringComparer.OrdinalIgnoreCase)
-		{
-			{ "de_mirage", RandomTPs.Mirage },
-			{ "de_overpass", RandomTPs.Overpass },
-			{ "de_nuke", RandomTPs.Nuke },
-			{ "de_dust2", RandomTPs.Dust2 },
-			{ "cs_italy", RandomTPs.Italy },
-			{ "de_vertigo", RandomTPs.Vertigo },
-		};
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
+
+		private static readonly FrozenDictionary<string, Vector[]> Maps =
+			new Dictionary<string, Vector[]>(System.StringComparer.OrdinalIgnoreCase)
+			{
+				{ "de_mirage", RandomTPs.Mirage },
+				{ "de_overpass", RandomTPs.Overpass },
+				{ "de_nuke", RandomTPs.Nuke },
+				{ "de_dust2", RandomTPs.Dust2 },
+				{ "cs_italy", RandomTPs.Italy },
+				{ "de_vertigo", RandomTPs.Vertigo },
+			}.ToFrozenDictionary();
 
 		private const string BuyAnywhereEnable = "mp_buy_anywhere 1";
 		private const string BuyAnywhereDisable = "mp_buy_anywhere 0";
@@ -69,8 +75,8 @@ namespace CS2StratRoulette.Strategies
 				{
 					pawn.Teleport(
 						position,
-						pawn.AbsRotation,
-						VectorExtensions.Zero
+						pawn.V_angle,
+						Vector.Zero
 					);
 				});
 			}

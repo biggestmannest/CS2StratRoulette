@@ -2,6 +2,7 @@ using CS2StratRoulette.Constants;
 using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -13,6 +14,9 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"*whatever sound chickens make*";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

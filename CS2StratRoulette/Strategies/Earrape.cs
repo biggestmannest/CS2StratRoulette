@@ -28,7 +28,8 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"Everyone gets a Negev and decoy grenades, successfully ruining the enemies ears.";
 
-		public override StrategyFlags Flags { get; protected set; } = StrategyFlags.Hidden;
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		private readonly System.Random random = new();
 		private Timer? timer;

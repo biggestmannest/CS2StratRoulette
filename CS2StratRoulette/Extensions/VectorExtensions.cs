@@ -4,7 +4,6 @@ namespace CS2StratRoulette.Extensions
 {
 	public static class VectorExtensions
 	{
-		public static readonly Vector Zero = new(0f, 0f, 0f);
 		public static readonly Vector One = new(1f, 1f, 1f);
 
 		public static readonly Vector Up = new(0f, 0f, 1f);
