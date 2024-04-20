@@ -92,28 +92,31 @@ namespace CS2StratRoulette.Extensions
 
 		public static void RemoveC4(this CCSPlayerPawn pawn)
 		{
+			const string c4 = "weapon_c4";
+
+#if DEBUG
+			System.Console.WriteLine($"[PlayerExtensions::RemoveC4] --- {pawn.Globalname} ---");
+#endif
 			pawn.ForEachWeapon((weapon) =>
 			{
 #if DEBUG
 				System.Console.WriteLine($"[PlayerExtensions::RemoveC4] {weapon.DesignerName}");
 #endif
-				if (!string.Equals(weapon.DesignerName, "weapon_c4", System.StringComparison.OrdinalIgnoreCase))
+				if (!string.Equals(weapon.DesignerName, c4, System.StringComparison.OrdinalIgnoreCase))
 				{
 					return;
 				}
 
-#if DEBUG
-				if (weapon.VData is null)
+				if (pawn.ItemServices is null)
 				{
 					return;
 				}
 
-				var data = new CCSWeaponBaseVData(weapon.VData.Handle);
+				var service = new CCSPlayer_ItemServices(pawn.ItemServices.Handle);
 
-				System.Console.WriteLine($"[PlayerExtensions::RemoveC4] {data.WeaponType}");
-#endif
+				service.DropActivePlayerWeapon(weapon);
 
-				pawn.RemovePlayerItem(weapon);
+				weapon.Remove();
 			});
 		}
 
