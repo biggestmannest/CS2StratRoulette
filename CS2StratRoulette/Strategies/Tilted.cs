@@ -39,7 +39,7 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				if (pawn.AbsOrigin is null || pawn.AbsRotation is null)
+				if (pawn.AbsOrigin is null || pawn.AbsRotation is null || !pawn.IsAlive())
 				{
 					continue;
 				}
@@ -52,6 +52,33 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				pawn.AbsRotation.Z = float.Abs(pawn.AbsRotation.Z - rotation);
+
+				pawn.Teleport(pawn.AbsOrigin, pawn.AbsRotation, pawn.AbsVelocity);
+			}
+
+			return true;
+		}
+
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
+
+			foreach (var controller in Utilities.GetPlayers())
+			{
+				if (!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				if (pawn.AbsRotation is null || !pawn.IsAlive())
+				{
+					continue;
+				}
+
+				pawn.AbsRotation.Z = 0f;
 
 				pawn.Teleport(pawn.AbsOrigin, pawn.AbsRotation, pawn.AbsVelocity);
 			}
