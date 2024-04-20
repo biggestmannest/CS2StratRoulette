@@ -5,10 +5,8 @@ using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API;
 using CS2StratRoulette.Managers;
-#if DEBUG
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Extensions;
-#endif
 
 namespace CS2StratRoulette
 {
@@ -17,16 +15,47 @@ namespace CS2StratRoulette
 	// ReSharper disable once InconsistentNaming
 	public sealed partial class CS2StratRoulettePlugin
 	{
-		[ConsoleCommand("set_strat", "Sets the active strategy")]
-		[CommandHelper(1, "[strat]")]
+		private const string Prefix = "[SRP]";
+
+		[ConsoleCommand("css_srp_toggle", "Toggles the plugin off/on")]
 		[RequiresPermissions("@css/root")]
-		public void OnStratCommand(CCSPlayerController? _, CommandInfo commandInfo)
+		public void OnToggleCommand(CCSPlayerController? _, CommandInfo info)
 		{
-			var name = commandInfo.GetArg(1);
+			var active = !this.Active;
+
+			if (active)
+			{
+				StrategyManager.Start();
+			}
+			else
+			{
+				StrategyManager.Kill();
+			}
+
+			info.ReplyToCommand(
+				(active)
+					? $"{CS2StratRoulettePlugin.Prefix} {ChatColors.Green}Started SRP"
+					: $"{CS2StratRoulettePlugin.Prefix} {ChatColors.LightRed}Stopped SRP"
+			);
+
+			this.Active = active;
+		}
+
+		[ConsoleCommand("css_srp_set", "Sets and starts given strategy")]
+		[CommandHelper(1, "[strategy]")]
+		[RequiresPermissions("@css/root")]
+		public void OnSetStrategyCommand(CCSPlayerController? _, CommandInfo info)
+		{
+			if (!this.Active)
+			{
+				return;
+			}
+
+			var name = info.GetArg(1);
 
 			if (!StrategyManager.SetActiveStrategy(name))
 			{
-				commandInfo.ReplyToCommand("[set_strat] Could not find or instantiate strategy");
+				info.ReplyToCommand($"{CS2StratRoulettePlugin.Prefix} Could not find or instantiate strategy");
 
 				return;
 			}
@@ -38,11 +67,39 @@ namespace CS2StratRoulette
 				StrategyManager.Announce();
 			}
 
-			commandInfo.ReplyToCommand(
+			info.ReplyToCommand(
 				(result)
-					? $"[set_strat] set active strategy to {StrategyManager.Name}"
-					: "[set_strat] strategy not found"
+					? $"{CS2StratRoulettePlugin.Prefix} Set strategy to {StrategyManager.Name}"
+					: $"{CS2StratRoulettePlugin.Prefix} Failed starting strategy"
 			);
+		}
+
+		[ConsoleCommand("css_srp_start", "Starts the current strategy")]
+		[RequiresPermissions("@css/root")]
+		public void OnStartStrategyCommand(CCSPlayerController? _, CommandInfo info)
+		{
+			if (!this.Active)
+			{
+				return;
+			}
+
+			info.ReplyToCommand(StrategyManager.Start()
+									? $"{CS2StratRoulettePlugin.Prefix} {ChatColors.Green}Started"
+									: $"{CS2StratRoulettePlugin.Prefix} {ChatColors.LightRed}Failed starting");
+		}
+
+		[ConsoleCommand("css_srp_stop", "Stops the current strategy")]
+		[RequiresPermissions("@css/root")]
+		public void OnStopStrategyCommand(CCSPlayerController? _, CommandInfo info)
+		{
+			if (!this.Active)
+			{
+				return;
+			}
+
+			info.ReplyToCommand(StrategyManager.Kill()
+									? $"{CS2StratRoulettePlugin.Prefix} {ChatColors.Green}Stopped"
+									: $"{CS2StratRoulettePlugin.Prefix} {ChatColors.LightRed}Failed stopping");
 		}
 
 		[ConsoleCommand("css_map", "Change map")]
@@ -56,12 +113,12 @@ namespace CS2StratRoulette
 		}
 
 #if DEBUG
-		[ConsoleCommand("props", "")]
+		[ConsoleCommand("srp_props", "")]
 		[CommandHelper(1, "[type]")]
 		[RequiresPermissions("@css/root")]
-		public void OnPropsCommand(CCSPlayerController? player, CommandInfo commandInfo)
+		public void OnPropsCommand(CCSPlayerController? _, CommandInfo info)
 		{
-			var name = commandInfo.GetArg(1);
+			var name = info.GetArg(1);
 
 			foreach (var entity in Utilities.GetAllEntities())
 			{
@@ -81,9 +138,19 @@ namespace CS2StratRoulette
 			}
 		}
 
-		[ConsoleCommand("roll", "")]
+		[ConsoleCommand("css_srp_sv")]
 		[RequiresPermissions("@css/root")]
-		public void OnRollCommand(CCSPlayerController? player, CommandInfo commandInfo)
+		public void OnSvCommand(CCSPlayerController? _, CommandInfo __)
+		{
+			const string cmd =
+				"sv_cheats 1;mp_freezetime 0;mp_roundtime_defuse 60;mp_roundtime_hostage 60;mp_roundtime 60;mp_buy_anywhere 1;sv_infinite_ammo 1;mp_maxmoney 65535;mp_startmoney 65535;mp_afterroundmoney 65535;mp_buytime 60000;mp_restartgame 1";
+
+			Server.ExecuteCommand(cmd);
+		}
+
+		[ConsoleCommand("srp_roll")]
+		[RequiresPermissions("@css/root")]
+		public void OnRollCommand(CCSPlayerController? _, CommandInfo __)
 		{
 			foreach (var controller in Utilities.GetPlayers())
 			{

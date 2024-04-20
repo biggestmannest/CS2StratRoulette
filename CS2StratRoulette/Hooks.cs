@@ -14,6 +14,11 @@ namespace CS2StratRoulette
 		[GameEventHandler]
 		public HookResult OnRoundStart(EventRoundStart _, GameEventInfo _2)
 		{
+			if (!this.Active)
+			{
+				return HookResult.Continue;
+			}
+
 			var rules = Game.Rules();
 
 			if (rules is not null && rules.WarmupPeriod)
@@ -37,7 +42,38 @@ namespace CS2StratRoulette
 		[GameEventHandler]
 		public HookResult OnRoundEnd(EventRoundEnd _, GameEventInfo __)
 		{
+			if (!this.Active)
+			{
+				return HookResult.Continue;
+			}
+
 			StrategyManager.Stop();
+
+			return HookResult.Continue;
+		}
+
+		[GameEventHandler]
+		public HookResult OnGameEnd(EventGameEnd _, GameEventInfo __)
+		{
+			if (!this.Active)
+			{
+				return HookResult.Continue;
+			}
+
+			StrategyManager.Kill();
+
+			return HookResult.Continue;
+		}
+
+		[GameEventHandler]
+		public HookResult OnMapTransition(EventMapTransition _, GameEventInfo __)
+		{
+			if (!this.Active)
+			{
+				return HookResult.Continue;
+			}
+
+			StrategyManager.Kill();
 
 			return HookResult.Continue;
 		}

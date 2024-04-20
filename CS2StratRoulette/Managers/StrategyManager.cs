@@ -130,10 +130,13 @@ namespace CS2StratRoulette.Managers
 			}
 		}
 
-		public static void Kill()
+		public static bool Kill()
 		{
-			StrategyManager.Stop();
+			var result = StrategyManager.Stop();
+
 			StrategyManager.PostStop();
+
+			return result;
 		}
 
 		public static bool SetActiveStrategy(string name)
