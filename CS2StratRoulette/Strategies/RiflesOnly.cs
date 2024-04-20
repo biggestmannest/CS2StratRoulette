@@ -27,7 +27,6 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
-
 			Server.ExecuteCommand(RiflesOnly.Enable);
 
 			foreach (var controller in Utilities.GetPlayers())
@@ -36,8 +35,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					continue;
 				}
-
-				controller.EquipKnife();
+				Server.NextFrame(() => { controller.EquipKnife(); });
 
 				pawn.KeepWeaponsByType(
 					CSWeaponType.WEAPONTYPE_KNIFE,
