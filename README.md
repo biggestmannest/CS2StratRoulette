@@ -1,8 +1,22 @@
-# CS2StratRoulette
+<div align="center">
+<h1>CS2 Strat Roulette</h1>
 
-Get random enforced strategies in competitive CS2
+[![License](https://img.shields.io/github/license/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=codesandbox&logoColor=eeeeee&color=aaff44&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=starship&logoColor=eeeeee&color=ffcc11&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/stargazers)
+[![Issues](https://img.shields.io/github/issues-raw/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=gitbook&logoColor=eeeeee&color=9c0000&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/issues)
+[![CounterStrikeSharp](https://img.shields.io/github/v/release/roflmuffin/CounterStrikeSharp?label=CounterStrikeSharp&style=for-the-badge&logo=csharp&logoColor=eeeeee&color=004cc7&labelColor=222222)](https://github.com/roflmuffin/CounterStrikeSharp)
 
-## Resources
+<h3>Counter-Strike 2 plugin for getting random enforced strategies each round</h3>
 
-- [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) ([docs](https://docs.cssharp.dev/))
-- [CS2 Events List](https://cs2.poggu.me/dumped-data/game-events/#player_activate)
+</div>
+
+Inspired by both the [CSGO chaos mod](https://github.com/b0ink/csgo-chaos-mod) and [CSGO Strat Roulette](https://strat-roulette.github.io/), this plugin has over 50 fun strategies to spice up your regular game of Counter-Strike 2. Every round, players may experience game-changing twists such as: <b>Gladiator</b>, <b>Retakes</b>, <b>VIP</b>, <b>Tanks</b> and much more!
+
+## Requirements
+- [CounterStrikeSharp v213+](https://github.com/roflmuffin/CounterStrikeSharp)
+- [SourceMod 2.0+](https://www.sourcemm.net/downloads.php?branch=dev)
+
+## Installation
+- Make a folder called <b>"CS2StratRoulette"</b> inside </b>csgo/addons/counterstrikesharp/plugins/</b>
+- Download the latest [release](https://github.com/biggestmannest/CS2StratRoulette/releases) of the plugin
+- Copy the 3 files from the zip folder into the <b>CS2StratRoulette</b> folder
