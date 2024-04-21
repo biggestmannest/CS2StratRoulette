@@ -214,5 +214,21 @@ namespace CS2StratRoulette.Extensions
 				func(entity);
 			}
 		}
+		/// <summary>
+		/// Sets the clip and reserve ammo of a weapon.
+		/// </summary>
+		/// <param name="weapon">The weapon</param>
+		/// <param name="clip">Main clip ammo</param>
+		/// <param name="reserve">Reserve ammo</param>
+		public static void SetAmmo(this CBasePlayerWeapon weapon, int clip, int reserve)
+		{
+			if (!weapon.IsValid)
+			{
+				return;
+			}
+
+			weapon.Clip1 = clip;
+			weapon.ReserveAmmo[0] = reserve;
+		}
 	}
 }

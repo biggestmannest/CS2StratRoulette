@@ -41,7 +41,7 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			this.number = (Gambling.Random.Next(10) + 1);
-
+			
 			plugin.RegisterEventHandler<EventPlayerChat>(this.OnNumberPicked);
 
 			this.timer = new Timer(Gambling.GuessingDuration, this.OnGuessingStop, 0);
@@ -112,6 +112,10 @@ namespace CS2StratRoulette.Strategies
 
 					Gambling.GiveUpgrade(controller);
 				}
+				else
+				{
+					Gambling.Punish(controller);
+				}
 
 				controller.PrintToCenter(msg);
 			}
@@ -130,6 +134,26 @@ namespace CS2StratRoulette.Strategies
 				pawn.Health = 200;
 			});
 
+			Server.NextFrame(() =>
+			{
+				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
+				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
+			});
+		}
+
+		private static void Punish(CCSPlayerController controller)
+		{
+			if (!controller.TryGetPlayerPawn(out var pawn))
+			{
+				return;
+			}
+			
+			Server.NextFrame(() =>
+			{
+				pawn.MaxHealth -= 40;
+				pawn.Health -= 40;
+			});
+			
 			Server.NextFrame(() =>
 			{
 				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");

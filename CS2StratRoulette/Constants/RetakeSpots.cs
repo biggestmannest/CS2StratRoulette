@@ -6,21 +6,65 @@ namespace CS2StratRoulette.Constants
 {
 	public static class RetakeSpots
 	{
-		public static readonly Vector[] MirageA =
-		{
-			new(-254f, -2134f, -175f),
-			new(-555f, -2104f, -175f),
-			new(-603f, -1984f, -175f),
-			new(-323f, -2037f, -175f),
-		};
-
-		public static readonly Vector[] MirageB =
-		{
-			new(-1978f, 434f, -159f),
-			new(-2198f, 89f, -159f),
-			new(-2001f, 159f, -159f),
-			new(-1919f, 252f, -159f),
-		};
+		private static readonly AllRetakeSpots Mirage = new(
+			"de_mirage",
+			new Vector[] //Bomb A
+			{
+				new(-254f, -2134f, -175f),
+				new(-555f, -2104f, -175f),
+				new(-603f, -1984f, -175f),
+				new(-323f, -2037f, -175f),
+			},
+			new Vector[] //Bomb B
+			{
+				new(-1978f, 434f, -159f),
+				new(-2198f, 89f, -159f),
+				new(-2001f, 159f, -159f),
+				new(-1919f, 252f, -159f),
+			},
+			new Vector[] //CTsA
+			{
+				//Ramp
+				new(804f, -1081f, -248f),
+				//Palace
+				new(1206f, -1425f, -154f),
+				//Underpass
+				new(-1012f, -83f, -354f),
+				//Top Mid
+				new(150f, -641f, -156f),
+				//Market
+				new(-1586f, -639f, -154),
+			},
+			new Vector[] //CTsB
+			{
+				//Short
+				new(-298f, -436f, -153f),
+				//Back Alley -> Aps
+				new(-450f, 566f, -66f),
+				//Underpass
+				new(-976f, 417f, -354f),
+				//CT
+				new(-1193f, -2305f, -176f),
+				//Jungle
+				new(-1163f, -1367f, -153f),
+			},
+			new Vector[] //TsA
+			{
+				new(-399f, -2121f, -166f),
+				new(-766f, -1962f, -166f),
+				new(108f, -1941f, -154f),
+				new(-177f, -2341f, -154f),
+				new(-3443f, -1521f, -154f),
+			},
+			new Vector[] //TsB
+			{
+				new(-2146f, 786f, -114),
+				new(-2512f, 269f, -154f),
+				new(-1633f, 612f, -154f),
+				new(-2196f, 511f, -154f),
+				new(-1623f, -189f, -153f),
+			}
+		);
 
 		public static readonly Vector[] OverpassA =
 		{
@@ -204,7 +248,7 @@ namespace CS2StratRoulette.Constants
 				Vector[] ctsB,
 				Vector[] tsA,
 				Vector[] tsB
-				)
+			)
 			{
 				this.Map = map;
 				this.BombA = bombA;
