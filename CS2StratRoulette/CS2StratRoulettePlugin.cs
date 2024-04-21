@@ -21,6 +21,8 @@ namespace CS2StratRoulette
 		public override string ModuleAuthor =>
 			"Snake, bigman & wsrvn (i guess)";
 
+		public bool Active { get; private set; } = true;
+
 		public override void Load(bool hotReload)
 		{
 			CS2StratRoulettePlugin.Instance = this;
