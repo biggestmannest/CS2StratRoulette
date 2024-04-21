@@ -17,6 +17,6 @@ Inspired by both the [CSGO chaos mod](https://github.com/b0ink/csgo-chaos-mod) a
 - [SourceMod 2.0+](https://www.sourcemm.net/downloads.php?branch=dev)
 
 ## Installation
-- Make a folder called `"CS2StratRoulette"` inside `csgo/addons/counterstrikesharp/plugins/`
+- Make a folder called `CS2StratRoulette` inside `csgo/addons/counterstrikesharp/plugins/`
 - Download the latest [release](https://github.com/biggestmannest/CS2StratRoulette/releases) of the plugin
 - Copy the 3 files from the zip folder into the `CS2StratRoulette` folder
