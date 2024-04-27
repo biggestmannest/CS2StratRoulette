@@ -1,4 +1,5 @@
 ﻿using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Core.Attributes;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Managers;
 using JetBrains.Annotations;
@@ -6,6 +7,7 @@ using JetBrains.Annotations;
 namespace CS2StratRoulette
 {
 	[UsedImplicitly(ImplicitUseTargetFlags.Members)]
+	[MinimumApiVersion(217)]
 	// ReSharper disable once InconsistentNaming
 	public sealed partial class CS2StratRoulettePlugin : BasePlugin
 	{
