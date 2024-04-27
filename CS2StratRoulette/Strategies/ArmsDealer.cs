@@ -63,14 +63,14 @@ namespace CS2StratRoulette.Strategies
 
 			if (ct is not null)
 			{
-				var menu = ArmsDealer.MakeMenu();
+				var menu = ArmsDealer.MakeMenu(ref plugin);
 
 				MenuManager.OpenCenterHtmlMenu(plugin, ct, menu);
 			}
 
 			if (t is not null)
 			{
-				var menu = ArmsDealer.MakeMenu();
+				var menu = ArmsDealer.MakeMenu(ref plugin);
 
 				MenuManager.OpenCenterHtmlMenu(plugin, t, menu);
 			}
@@ -91,9 +91,9 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		private static CenterHtmlMenu MakeMenu()
+		private static CenterHtmlMenu MakeMenu(ref CS2StratRoulettePlugin plugin)
 		{
-			var menu = new CenterHtmlMenu("Pick your team's loadout")
+			var menu = new CenterHtmlMenu("Pick your team's loadout", plugin)
 			{
 				PostSelectAction = PostSelectAction.Close,
 			};
