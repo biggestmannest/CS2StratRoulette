@@ -91,7 +91,7 @@ namespace CS2StratRoulette.Strategies
 		{
 			var n = this.number.Str();
 			var correct = $"You got it! The correct number was {n}. Enjoy the 200HP.";
-			var wrong = $"You got it wrong. The correct number was {n}. L";
+			var wrong = $"You got it wrong. The correct number was {n}. L (-40 HP)";
 
 			for (var index = 0; index < this.guesses.Length; index++)
 			{
@@ -136,8 +136,8 @@ namespace CS2StratRoulette.Strategies
 
 			Server.NextFrame(() =>
 			{
-				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
-				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
+				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iMaxHealth");
+				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iHealth");
 			});
 		}
 
@@ -156,8 +156,8 @@ namespace CS2StratRoulette.Strategies
 			
 			Server.NextFrame(() =>
 			{
-				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
-				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
+				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iMaxHealth");
+				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iHealth");
 			});
 		}
 	}

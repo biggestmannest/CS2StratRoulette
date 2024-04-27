@@ -1,3 +1,4 @@
+using System;
 using CS2StratRoulette.Constants;
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
@@ -229,6 +230,31 @@ namespace CS2StratRoulette.Extensions
 
 			weapon.Clip1 = clip;
 			weapon.ReserveAmmo[0] = reserve;
+		}
+		
+		/// <summary>
+		/// Checks if a player pawn has a weapon.
+		/// </summary>
+		/// <param name="player">The PlayerPawn</param>
+		/// <param name="weaponName">The weapon name</param>
+		public static bool HasWeapon(this CCSPlayerPawn player, string weaponName)
+		{
+			if (!player.IsValid)
+			{
+				return false;
+			}
+			
+			var found = false;
+			
+			player.ForEachWeapon(weapon =>
+			{
+				if (weapon.DesignerName.Equals(weaponName, StringComparison.OrdinalIgnoreCase))
+				{
+					found = true;
+				}
+			});
+			
+			return found;
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Managers;
@@ -37,7 +38,24 @@ namespace CS2StratRoulette
 					{
 						manifest.AddResource(model);
 					}
+
+					foreach (var model2 in Models.Props2)
+					{
+						manifest.AddResource(model2);
+					}
 				});
+			}
+			else
+			{
+				foreach (var model in Models.Props)
+				{
+					Server.PrecacheModel(model);
+				}
+
+				foreach (var model2 in Models.Props2)
+				{
+					Server.PrecacheModel(model2);
+				}
 			}
 
 			StrategyManager.Load();

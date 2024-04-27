@@ -19,7 +19,7 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"Bomb will be planted at a random bombsite. T's have to defend, CT's have to retake the site and defuse.";
 
-		private const string ExtendC4Timer = "mp_c4timer 55";
+		private const string ExtendC4Timer = "mp_c4timer 60";
 		private const string NormalC4Timer = "mp_c4timer 40";
 
 		private readonly List<CCSPlayerController> cts = new(Server.MaxPlayers / 2);
@@ -69,11 +69,21 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var player in Utilities.GetPlayers())
 			{
+				if (!player.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
 				player.PrintToCenter(siteAnnouncement);
 
 				if (player.Team is CsTeam.CounterTerrorist)
 				{
 					player.GiveNamedItem("item_defuser");
+				}
+
+				if (player.Team is CsTeam.Terrorist)
+				{
+					pawn.RemoveC4();
 				}
 			}
 
@@ -113,7 +123,7 @@ namespace CS2StratRoulette.Strategies
 			{
 				return;
 			}
-			
+
 			this.bombsite = (Retakes.Random.FiftyFifty() ? BombSite.A : BombSite.B);
 			var randomSite = this.bombsite is BombSite.A ? map.BombA : map.BombB;
 
@@ -137,7 +147,7 @@ namespace CS2StratRoulette.Strategies
 			bombEntity.AbsOrigin.Z = player.AbsOrigin.Z;
 			bombEntity.HasExploded = false;
 
-			
+
 			bombEntity.BombSite = (int)this.bombsite;
 
 			bombEntity.BombTicking = true;
@@ -200,7 +210,8 @@ namespace CS2StratRoulette.Strategies
 					{
 						pawn.ForEachWeapon((weapon) =>
 						{
-							if (!string.Equals(weapon.DesignerName, "weapon_c4", System.StringComparison.OrdinalIgnoreCase))
+							if (!string.Equals(weapon.DesignerName, "weapon_c4",
+								    System.StringComparison.OrdinalIgnoreCase))
 							{
 								return;
 							}

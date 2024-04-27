@@ -33,6 +33,8 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				pawn.Render = Color.FromArgb(byte.MaxValue / 2, pawn.Render);
+
+				Utilities.SetStateChanged(pawn, "CBaseModelEntity", "m_clrRender");
 			}
 
 			return true;
@@ -53,6 +55,8 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				pawn.Render = Color.FromArgb(byte.MaxValue, pawn.Render);
+
+				Utilities.SetStateChanged(pawn, "CBaseModelEntity", "m_clrRender");
 			}
 
 			return true;
