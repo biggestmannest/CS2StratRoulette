@@ -95,7 +95,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
 					Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
-					Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
+					Utilities.SetStateChanged(controller, "CCSPlayerPawn", "m_ArmorValue");
 				});
 			}
 
@@ -122,7 +122,7 @@ namespace CS2StratRoulette.Strategies
 			{
 				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iMaxHealth");
 				Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
-				Utilities.SetStateChanged(controller, "CCSPlayerPawnBase", "m_ArmorValue");
+				Utilities.SetStateChanged(controller, "CCSPlayerPawn", "m_ArmorValue");
 			});
 
 			Server.NextFrame(() =>
