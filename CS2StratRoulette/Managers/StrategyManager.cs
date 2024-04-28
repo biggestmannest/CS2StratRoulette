@@ -78,6 +78,15 @@ namespace CS2StratRoulette.Managers
 			}
 
 			StrategyManager.SetActiveStrategy(StrategyManager.strategies[StrategyManager.index++]);
+
+			if (StrategyManager.activeStrategy is not null && !StrategyManager.activeStrategy.CanRun())
+			{
+				System.Console.WriteLine(
+					$"[CS2StratRoulette::StrategyManager]: Can't run {StrategyManager.Name} in current round"
+				);
+
+				StrategyManager.Next();
+			}
 		}
 
 		public static bool Start()

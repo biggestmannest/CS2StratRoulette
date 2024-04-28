@@ -58,5 +58,14 @@ namespace CS2StratRoulette.Strategies
 
 			return true;
 		}
+
+		/// <summary>
+		/// Checks if the strategy can run in the current round.
+		/// </summary>
+		/// <returns><see langword="true"/> if the strategy can run</returns>
+		public virtual bool CanRun()
+		{
+			return true;
+		}
 	}
 }
