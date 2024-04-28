@@ -4,6 +4,7 @@ using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API.Core;
 using CS2StratRoulette.Constants;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -18,6 +19,18 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags =>
 			StrategyFlags.AlwaysVisible;
+
+		public override bool CanRun()
+		{
+			var rules = Game.Rules();
+
+			if (rules is null)
+			{
+				return false;
+			}
+
+			return rules.TotalRoundsPlayed is not (0 or 11);
+		}
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
