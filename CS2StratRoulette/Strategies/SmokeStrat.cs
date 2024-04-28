@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Constants;
 
@@ -17,7 +18,7 @@ namespace CS2StratRoulette.Strategies
 				{ "de_mirage", SmokeSpots.Mirage },
 				{ "de_nuke", SmokeSpots.Nuke },
 				{ "de_vertigo", SmokeSpots.Vertigo },
-				{ "cs_italy", SmokeSpots.Italy }
+				{ "cs_italy", SmokeSpots.Italy },
 			}.ToFrozenDictionary();
 
 		public override string Name =>
@@ -25,6 +26,10 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"was it a jump throw or a run throw?? or a normal throw... whats the lineup again???";
+
+		private Timer? timer;
+
+		private const float Interval = 21f;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -35,15 +40,38 @@ namespace CS2StratRoulette.Strategies
 
 			var serverMap = Server.MapName;
 
-			if (!SmokeStrat.Maps.TryGetValue(serverMap, out var spots))
+			if (!SmokeStrat.Maps.TryGetValue(serverMap, out var positions))
 			{
 				return false;
 			}
 
-			var velocity = new Vector(0f, 0f, 0f);
-			var angle = new QAngle(0f, 0f, 0f);
+			SmokeStrat.OnInterval(positions);
 
-			foreach (var position in spots)
+			this.timer = new Timer(SmokeStrat.Interval, () => { SmokeStrat.OnInterval(positions); }, TimerFlags.REPEAT);
+
+			return true;
+		}
+
+		public override bool Stop(ref CS2StratRoulettePlugin plugin)
+		{
+			if (!base.Stop(ref plugin))
+			{
+				return false;
+			}
+
+			this.timer?.Kill();
+
+			return true;
+		}
+
+		private static void OnInterval(Vector[] positions)
+		{
+			var serverMap = Server.MapName;
+
+			var velocity = Vector.Zero;
+			var angle = QAngle.Zero;
+
+			foreach (var position in positions)
 			{
 				Signatures.CreateSmoke.Invoke(
 					position.Handle,
@@ -55,8 +83,6 @@ namespace CS2StratRoulette.Strategies
 					2
 				);
 			}
-
-			return true;
 		}
 	}
 }

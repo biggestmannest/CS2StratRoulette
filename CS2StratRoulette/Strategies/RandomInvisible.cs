@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using CounterStrikeSharp.API;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -39,6 +40,8 @@ namespace CS2StratRoulette.Strategies
 
 			Utilities.SetStateChanged(pawn, "CBaseModelEntity", "m_clrRender");
 
+			this.randomPlayer.PrintToCenter("You have been made invisible.");
+
 			return true;
 		}
 
@@ -47,6 +50,11 @@ namespace CS2StratRoulette.Strategies
 			if (!base.Stop(ref plugin))
 			{
 				return false;
+			}
+
+			if (this.randomPlayer is null)
+			{
+				return true;
 			}
 
 			if (!this.randomPlayer.TryGetPlayerPawn(out var pawn))

@@ -24,45 +24,67 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
-				//Ramp
-				new(804f, -1081f, -248f),
+				//Kitchen
+				new(-1654f, -693f, -154f),
+				//Kitchen
+				new(-2149f, -570f, -154f),
 				//Palace
-				new(1206f, -1425f, -154f),
-				//Underpass
-				new(-1012f, -83f, -354f),
-				//Top Mid
-				new(150f, -641f, -156f),
-				//Market
-				new(-1586f, -639f, -154),
-			},
-			new Vector[]
-			{
+				new(1341f, -1312f, -154f),
+				//Palace
+				new(1316f, -1068f, -154f),
+				//T Spawn
+				new(1221f, -425f, -152f),
 				//Short
-				new(-298f, -436f, -153f),
-				//Back Alley -> Aps
-				new(-450f, 566f, -66f),
-				//Underpass
-				new(-976f, 417f, -354f),
-				//CT
-				new(-1193f, -2305f, -176f),
-				//Jungle
-				new(-1163f, -1367f, -153f),
+				new(204f, -134f, -153f),
+				//Top mid
+				new(420f, -838f, -151f)
 			},
 			new Vector[]
 			{
-				new(-399f, -2121f, -166f),
-				new(-766f, -1962f, -166f),
-				new(108f, -1941f, -154f),
-				new(-177f, -2341f, -154f),
-				new(-3443f, -1521f, -154f),
+				// house
+				new Vector(20f, 805f, -121f),
+				// back alley
+				new Vector(-254f, 815f, -123f),
+				// tunnel
+				new Vector(-978f, 420f, -353f),
+				// tunnel
+				new Vector(-1000f, 148f, -353f),
+				// short
+				new Vector(-780f, -400f, -154f),
+				// short
+				new Vector(-464f, -410f, -153f),
+				// window
+				new Vector(-1180f, -1008f, -153f),
+				// window -> market
+				new Vector(-1594f, -808f, -153f),
+				// ladder room
+				new Vector(-1170f, -294f, -42f),
+				// B apps
+				new Vector(-1076f, 418f, -65f),
 			},
 			new Vector[]
 			{
-				new(-2146f, 786f, -114),
-				new(-2512f, 269f, -154f),
-				new(-1633f, 612f, -154f),
-				new(-2196f, 511f, -154f),
-				new(-1623f, -189f, -153f),
+				new(-235f, -2355f, -154f),
+				new(-325f, -1546f, -154f),
+				new(125f, -1928f, -154f),
+				new(-5f, -2157f, -154f),
+				new(-406f, -2370f, -154f),
+				new(-129f, -1433f, -58f),
+				new(-222f, -1552f, -40f),
+				new(-437f, -1550f, -26f),
+			},
+			new Vector[]
+			{
+				new(-1920f, 400f, -75f),
+				new(-2180f, 100f, -145f),
+				new(-2528f, 290f, -153f),
+				new(-2620f, 116f, -150f),
+				new(-2300f, 788f, -110f),
+				new(-1958f, 833f, -10f),
+				new(-1730f, 705f, -34f),
+				new(-1285f, 488f, -153f),
+				new(-1064f, 196f, -158f),
+				new(-1597f, -196f, -151f),
 			}
 		);
 
@@ -84,45 +106,71 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
-				//Walkway -> Under A
-				new(-1848f, 8f, 146f),
-				//Heaven
-				new(-1685f, 500f, 274f),
-				//Connector
-				new(-1899f, -1259f, 258f),
-				//Fountain
-				new(-2335f, -2135f, 490f),
-				//Park
-				new(-3671f, -1514f, 509f)
+				//connector
+				new(-2080f, -891f, 146f),
+				//connector
+				new(-1711f, -1055f, 114f),
+				//long
+				new(-3592f, -2002f, 495f),
+				//long
+				new(-3837f, -1805f, 505f),
+				//toilet
+				new(-3325f, -924f, 506f),
+				//under A
+				new(-2173f, 256f, 146f),
+				//under A
+				new(-1871f, 572f, 122f),
+				//heaven
+				new(-1832f, 546f, 274f),
+				//heaven
+				new(-2159f, 923f, 274f),
 			},
 			new Vector[]
 			{
-				//T Spawn -> Alley
-				new(-734f, -1567f, 163f),
-				//Tunnels -> Connector
-				new(-1802f, -1648f, 114f),
-				//Bank
-				new(-2500f, -1304f, 498f),
-				//Tunnels
-				new(-1655f, -2004f, 354f),
-				//Connector
-				new(-2343f, -1327f, 450f),
+				// connector
+				new(-1780f, -1077f, 114f),
+				// connector
+				new(-2012f, -975f, 146f),
+				// ct
+				new(-2012f, 858f, 498f),
+				// bank
+				new(-2656f, 1360f, 492f),
+				// "storage room"
+				new(-2418f, 1130f, 370f),
+				// heaven
+				new(-1880f, 420f, 274f),
+				// "under A"
+				new(-1883f, 578f, 122f),
+				// "canal"
+				new(-254f, -1270f, 34f),
+				// "pipe"
+				new(-898f, -954f, 39f),
+				// water
+				new(-1510f, -386f, 39f),
 			},
 			new Vector[]
 			{
-				new(-2146f, 440f, 498f),
-				new(-1852f, 632f, 490f),
-				new(-2566f, 780f, 490f),
-				new(-2224f, 1035f, 498f),
-				new(-2335, 368f, 500f),
+				new(-2226f, 1018f, 498f),
+				new(-2568f, 1138f, 498f),
+				new(-2353f, 1249f, 498f),
+				new(-2211f, 470f, 498f),
+				new(-2576f, 785f, 490f),
+				new(-2444f, 807f, 490f),
+				new(-1969f, 589f, 490f),
+				new(-2373f, 1092f, 498f),
 			},
 			new Vector[]
 			{
-				new(-799f, 418f, 114f),
-				new(-1387f, 281f, 34f),
-				new(-727f, -97f, 57f),
-				new(-1206f, 67f, 118),
-				new(-1152f, -106f, 118f),
+				new(-1130f, -80f, 117f),
+				new(-800f, 430f, 115f),
+				new(-1726f, 75f, 130f),
+				new(-2015f, -422f, 146f),
+				new(-230f, 104f, 35f),
+				new(-900f, 204f, 114f),
+				new(-1440f, 516f, 43f),
+				new(-1890f, 250f, 183f),
+				new(-1582f, -108f, 146f),
+				new(-982f, -590f, 114f),
 			}
 		);
 

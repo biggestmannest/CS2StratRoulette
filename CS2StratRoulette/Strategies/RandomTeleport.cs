@@ -37,6 +37,11 @@ namespace CS2StratRoulette.Strategies
 
 		private static readonly System.Random Random = new();
 
+		public override bool CanRun()
+		{
+			return RandomTeleport.Maps.ContainsKey(Server.MapName);
+		}
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))

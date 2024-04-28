@@ -19,6 +19,9 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"Bomb will be planted at a random bombsite. T's have to defend, CT's have to retake the site and defuse.";
 
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
+
 		private const string ExtendC4Timer = "mp_c4timer 60";
 		private const string NormalC4Timer = "mp_c4timer 40";
 
@@ -76,10 +79,10 @@ namespace CS2StratRoulette.Strategies
 
 				player.PrintToCenter(siteAnnouncement);
 
-				if (player.Team is CsTeam.CounterTerrorist)
-				{
-					player.GiveNamedItem("item_defuser");
-				}
+				// if (player.Team is CsTeam.CounterTerrorist)
+				// {
+				// 	player.GiveNamedItem("item_defuser");
+				// }
 
 				if (player.Team is CsTeam.Terrorist)
 				{
@@ -115,6 +118,11 @@ namespace CS2StratRoulette.Strategies
 			NativeAPI.SetEventInt(eventPtr, "site", (int)bombSite);
 
 			NativeAPI.FireEvent(eventPtr, false);
+		}
+
+		public override bool CanRun()
+		{
+			return RetakeSpots.Maps.ContainsKey(Server.MapName);
 		}
 
 		private void PlantTheBomb(CCSPlayerController player)
