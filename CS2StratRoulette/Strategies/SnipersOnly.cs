@@ -31,7 +31,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			return rules.TotalRoundsPlayed is not (0 or 11);
+			return rules.TotalRoundsPlayed is not (0 or 12);
 		}
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
