@@ -1,23 +1,19 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
-using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
-	public sealed class BouncyCastle : Strategy
+	public sealed class Silvers : Strategy
 	{
-		private const string Enable = "sv_bounce 6";
-		private const string Disable = "sv_bounce 0";
-
 		public override string Name =>
-			"Bouncy Castle";
+			"Silvers";
 
 		public override string Description =>
-			"You can bounce off of walls. (you need to jump into them first)";
+			"nice aim!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
-		public override StrategyFlags Flags =>
-			StrategyFlags.AlwaysVisible;
+		private const string Enable = "sv_cheats 1;weapon_accuracy_forcespread 1;sv_cheats 0";
+		private const string Disable = "sv_cheats 1;weapon_accuracy_forcespread 0;sv_cheats 0";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -26,7 +22,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(BouncyCastle.Enable);
+			Server.ExecuteCommand(Silvers.Enable);
 
 			return true;
 		}
@@ -38,8 +34,8 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			Server.ExecuteCommand(BouncyCastle.Disable);
-
+			Server.ExecuteCommand(Silvers.Disable);
+            
 			return true;
 		}
 	}
