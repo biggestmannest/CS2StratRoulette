@@ -12,7 +12,9 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Gambling : Strategy
 	{
-		private const float GuessingDuration = 10f;
+		private const float GuessingDuration = 15f;
+
+		private static readonly System.Random Random = new();
 
 		public override string Name =>
 			"Roulette";
@@ -23,14 +25,13 @@ namespace CS2StratRoulette.Strategies
 		public override StrategyFlags Flags =>
 			StrategyFlags.AlwaysVisible;
 
-		private static readonly System.Random Random = new();
-
 		/// <summary>
 		/// Array storing the player's guessed number indexed by their <see cref="CCSPlayerController.Slot"/>
 		/// </summary>
-		private readonly int[] guesses = new int[Server.MaxPlayers];
+		private readonly int[] players = new int[Server.MaxPlayers];
 
 		private int number;
+		private float endTime;
 		private Timer? timer;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
@@ -41,10 +42,11 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			this.number = (Gambling.Random.Next(10) + 1);
+			this.endTime = Server.CurrentTime + Gambling.GuessingDuration;
 
 			plugin.RegisterEventHandler<EventPlayerChat>(this.OnNumberPicked);
 
-			this.timer = new Timer(Gambling.GuessingDuration, this.OnGuessingStop, 0);
+			this.timer = new Timer(1f, this.OnInterval, 0);
 
 			return true;
 		}
@@ -77,32 +79,61 @@ namespace CS2StratRoulette.Strategies
 
 			var controller = Utilities.GetPlayerFromUserid(@event.Userid);
 
-			if (this.guesses[controller.Slot] != default)
+			if (controller is null || this.players[controller.Slot] != default)
 			{
 				return HookResult.Continue;
 			}
 
-			this.guesses[controller.Slot] = num;
+			this.players[controller.Slot] = num;
 
 			return HookResult.Continue;
 		}
 
-		private void OnGuessingStop()
+		private void OnInterval()
 		{
-			var n = this.number.Str();
-			var correct = $"You got it! The correct number was {n}. Enjoy the 200HP.";
-			var wrong = $"You got it wrong. The correct number was {n}. L (-40 HP)";
+			var time = Server.CurrentTime;
+			var ended = time >= this.endTime;
 
-			for (var index = 0; index < this.guesses.Length; index++)
+			if (ended)
 			{
-				var controller = Utilities.GetPlayerFromSlot(index);
+				this.End();
+				this.timer?.Kill();
+
+				return;
+			}
+
+			var message = $"Time left to guess: {(this.endTime - time).Str("F0")}";
+
+			for (var slot = 0; slot < Server.MaxPlayers; slot++)
+			{
+				var controller = Utilities.GetPlayerFromSlot(slot);
 
 				if (controller is null || !controller.IsValid)
 				{
 					continue;
 				}
 
-				var guess = this.guesses[index];
+				controller.PrintToCenter(message);
+			}
+		}
+
+		private void End()
+		{
+			var n = this.number.Str();
+
+			var correct = $"You got it! The correct number was {n}. Enjoy the 200HP.";
+			var wrong = $"You got it wrong. The correct number was {n}. L (-40 HP)";
+
+			for (var slot = 0; slot < Server.MaxPlayers; slot++)
+			{
+				var controller = Utilities.GetPlayerFromSlot(slot);
+
+				if (controller is null || !controller.IsValid)
+				{
+					continue;
+				}
+
+				var guess = this.players[slot];
 				var won = (guess == this.number);
 				var msg = wrong;
 
@@ -148,15 +179,9 @@ namespace CS2StratRoulette.Strategies
 				return;
 			}
 
-			Server.NextFrame(() =>
-			{
-				pawn.Health -= 40;
-			});
+			Server.NextFrame(() => { pawn.Health -= 40; });
 
-			Server.NextFrame(() =>
-			{
-				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iHealth");
-			});
+			Server.NextFrame(() => { Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iHealth"); });
 		}
 	}
 }
