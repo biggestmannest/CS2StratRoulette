@@ -52,7 +52,7 @@ namespace CS2StratRoulette.Constants
 				//short
 				new(-354f, -413f, -153f),
 				//back alley
-				new(-211f, 194f, -122f),
+				new(-251f, 395f, -66f),
 				// house
 				new(20f, 805f, -121f),
 				// back alley
