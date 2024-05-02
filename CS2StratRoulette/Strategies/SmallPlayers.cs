@@ -28,6 +28,11 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
+				if (pawn.CBodyComponent is null || pawn.CBodyComponent.SceneNode is null)
+				{
+					return false;
+				}
+
 				pawn.CBodyComponent.SceneNode.GetSkeletonInstance().Scale = 0.6f;
 
 				pawn.VelocityModifier = 1.5f;
@@ -79,7 +84,7 @@ namespace CS2StratRoulette.Strategies
 		{
 			var player = @event.Userid;
 
-			if (!player.TryGetPlayerPawn(out var pawn))
+			if (player is null || !player.TryGetPlayerPawn(out var pawn))
 			{
 				return HookResult.Continue;
 			}
