@@ -66,7 +66,14 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				FireRain.SpawnFire(Utilities.GetPlayerFromSlot(slot));
+				var controller = Utilities.GetPlayerFromSlot(slot);
+
+				if (controller is null)
+				{
+					continue;
+				}
+
+				FireRain.SpawnFire(controller);
 			}
 		}
 
