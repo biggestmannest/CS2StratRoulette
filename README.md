@@ -1,7 +1,7 @@
 <div align="center">
 <h1>CS2 Strat Roulette</h1>
 
-[![License](https://img.shields.io/github/license/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=codesandbox&logoColor=eeeeee&color=aaff44&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=codesandbox&logoColor=eeeeee&color=aaff44&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/blob/master/LICENSE)
 [![Stars](https://img.shields.io/github/stars/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=starship&logoColor=eeeeee&color=ffcc11&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/stargazers)
 [![Issues](https://img.shields.io/github/issues-raw/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=gitbook&logoColor=eeeeee&color=9c0000&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/issues)
 [![CounterStrikeSharp](https://img.shields.io/github/v/release/roflmuffin/CounterStrikeSharp?label=CounterStrikeSharp&style=for-the-badge&logo=csharp&logoColor=eeeeee&color=004cc7&labelColor=222222)](https://github.com/roflmuffin/CounterStrikeSharp)
