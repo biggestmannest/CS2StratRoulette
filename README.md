@@ -12,10 +12,11 @@
 
 Inspired by both the [CSGO chaos mod](https://github.com/b0ink/csgo-chaos-mod) and [CSGO Strat Roulette](https://strat-roulette.github.io/), this plugin has over 50 fun strategies to spice up your regular game of Counter-Strike 2. Every round, players may experience game-changing twists such as: <b>Gladiator</b>, <b>Retakes</b>, <b>VIP</b>, <b>Tanks</b> and much more!
 
-# Please keep in mind that this plugin will most likely not be supported/maintained for future versions.
+> [!WARNING]
+> Please keep in mind that this plugin will most likely not be supported/maintained for future versions.
 
 ## Requirements
-- [CounterStrikeSharp v213+](https://github.com/roflmuffin/CounterStrikeSharp)
+- [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)
 - [SourceMod 2.0+](https://www.sourcemm.net/downloads.php?branch=dev)
 
 ## Installation
