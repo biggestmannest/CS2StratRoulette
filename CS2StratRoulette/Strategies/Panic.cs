@@ -11,7 +11,7 @@ namespace CS2StratRoulette.Strategies
 			"Panic";
 
 		public override string Description =>
-			"Every time you are shot, you want to run away.";
+			"Every time you are shot, you unequip your primary.";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
