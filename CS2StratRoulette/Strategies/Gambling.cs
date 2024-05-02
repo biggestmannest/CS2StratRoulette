@@ -41,7 +41,7 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			this.number = (Gambling.Random.Next(10) + 1);
-			
+
 			plugin.RegisterEventHandler<EventPlayerChat>(this.OnNumberPicked);
 
 			this.timer = new Timer(Gambling.GuessingDuration, this.OnGuessingStop, 0);
@@ -147,16 +147,14 @@ namespace CS2StratRoulette.Strategies
 			{
 				return;
 			}
-			
+
 			Server.NextFrame(() =>
 			{
-				pawn.MaxHealth -= 40;
 				pawn.Health -= 40;
 			});
-			
+
 			Server.NextFrame(() =>
 			{
-				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iMaxHealth");
 				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iHealth");
 			});
 		}

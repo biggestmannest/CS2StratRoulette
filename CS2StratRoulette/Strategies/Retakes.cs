@@ -34,6 +34,11 @@ namespace CS2StratRoulette.Strategies
 
 		private string mapName = string.Empty;
 
+		public override bool CanRun()
+		{
+			return RetakeSpots.Maps.ContainsKey(Server.MapName);
+		}
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -118,11 +123,6 @@ namespace CS2StratRoulette.Strategies
 			NativeAPI.SetEventInt(eventPtr, "site", (int)bombSite);
 
 			NativeAPI.FireEvent(eventPtr, false);
-		}
-
-		public override bool CanRun()
-		{
-			return RetakeSpots.Maps.ContainsKey(Server.MapName);
 		}
 
 		private void PlantTheBomb(CCSPlayerController player)

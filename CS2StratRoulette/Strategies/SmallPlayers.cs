@@ -56,6 +56,11 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
+				if (pawn.CBodyComponent is null || pawn.CBodyComponent.SceneNode is null)
+				{
+					return false;
+				}
+
 				pawn.CBodyComponent.SceneNode.GetSkeletonInstance().Scale = 1f;
 
 				pawn.VelocityModifier = 1f;

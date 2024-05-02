@@ -1,4 +1,3 @@
-using System;
 using CS2StratRoulette.Constants;
 using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
@@ -248,7 +247,7 @@ namespace CS2StratRoulette.Extensions
 			
 			player.ForEachWeapon(weapon =>
 			{
-				if (weapon.DesignerName.Equals(weaponName, StringComparison.OrdinalIgnoreCase))
+				if (weapon.DesignerName.Equals(weaponName, System.StringComparison.OrdinalIgnoreCase))
 				{
 					found = true;
 				}
