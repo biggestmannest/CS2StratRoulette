@@ -214,5 +214,46 @@ namespace CS2StratRoulette.Extensions
 				func(entity);
 			}
 		}
+		/// <summary>
+		/// Sets the clip and reserve ammo of a weapon.
+		/// </summary>
+		/// <param name="weapon">The weapon</param>
+		/// <param name="clip">Main clip ammo</param>
+		/// <param name="reserve">Reserve ammo</param>
+		public static void SetAmmo(this CBasePlayerWeapon weapon, int clip, int reserve)
+		{
+			if (!weapon.IsValid)
+			{
+				return;
+			}
+
+			weapon.Clip1 = clip;
+			weapon.ReserveAmmo[0] = reserve;
+		}
+		
+		/// <summary>
+		/// Checks if a player pawn has a weapon.
+		/// </summary>
+		/// <param name="player">The PlayerPawn</param>
+		/// <param name="weaponName">The weapon name</param>
+		public static bool HasWeapon(this CCSPlayerPawn player, string weaponName)
+		{
+			if (!player.IsValid)
+			{
+				return false;
+			}
+			
+			var found = false;
+			
+			player.ForEachWeapon(weapon =>
+			{
+				if (weapon.DesignerName.Equals(weaponName, System.StringComparison.OrdinalIgnoreCase))
+				{
+					found = true;
+				}
+			});
+			
+			return found;
+		}
 	}
 }

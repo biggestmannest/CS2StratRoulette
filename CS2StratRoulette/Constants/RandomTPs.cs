@@ -25,11 +25,10 @@ namespace CS2StratRoulette.Constants
 			new(-2570f, 287f, -154f),
 			new(-557f, -1035f, -165f),
 			new(-1138f, -1387f, -153f),
-			//ladder room, a lot of room for error so X and Y have to be specific.
-			new(-1032.11f, -96.35f, -154f),
+			new(-1032f, -96f, -154f),
 			new(492f, 821f, -122f),
 			new(945f, -2262f, -26f),
-			new(-177.75f, -2333f, -154f),
+			new(-178f, -2333f, -154f),
 			new(-908f, -2352f, -154f),
 			new(465f, -662f, -147f),
 		};
@@ -44,7 +43,6 @@ namespace CS2StratRoulette.Constants
 			new(-123f, -997f, -402f),
 			new(182f, -948.35f, -274f),
 			new(111f, -1010f, -82f),
-			//z specific because they might clip into silo which we DONT want!!!!!!
 			new(87f, -1649f, -5f),
 			new(746f, -1716f, -226f),
 			new(761f, -1070f, -402f),
@@ -66,12 +64,6 @@ namespace CS2StratRoulette.Constants
 
 		public static readonly Vector[] Overpass =
 		{
-			/*
-			 * I FUCKING HATE THIS MAP
-			 * I WALK IN A STRAIGHT LINE ON A STRAIGHT FUCKING PAVED ROAD
-			 * AND MY Z GOES +-2.5 FOR NO FUCKING REASON
-			 * FIX YOUR SHIT MORONS
-			 */
 			new(-2240f, -801f, 404f),
 			new(-2625f, -1800f, 490f),
 			new(-2962f, -1292f, 539f),
@@ -96,7 +88,7 @@ namespace CS2StratRoulette.Constants
 			new(-416f, 312.45f, 5f),
 			new(-1427f, 362f, 23f),
 			new(-1849f, -1753.30f, 114f),
-			new(-3106.33f, 383.77f, 498f),
+			new(-3106f, 383f, 498f),
 		};
 
 		public static readonly Vector[] Dust2 =
@@ -184,6 +176,35 @@ namespace CS2StratRoulette.Constants
 			new(-2613f, 195f, 11765f),
 			new(-2162f, 178f, 11630f),
 			new(-804f, -435f, 11833f),
+		};
+
+		public static readonly Vector[] Inferno =
+		{
+			new(920f, 633f, 116f),
+			new(931f, -696f, 5f),
+			new(-298f, -444f, 206f),
+			new(-558f, 447f, 55f),
+			new(-181f, 287f, 206f),
+			new(1464f, 891f, 154f),
+			new(1824, 1346f, 174f),
+			new(996f, 3133f, 142f),
+			new(716f, 3239f, 174f),
+			new(252f, 1287f, 122f),
+			new(-533f, 896f, 40f),
+			new(-1012f, -305f, 18f),
+			new(330f, -286f, 111f),
+			new(1060f, -212f, 270f),
+			new(1435f, -334f, 315f),
+			new(1865f, -205f, 274f),
+			new(2466f, -127f, 111f),
+			new(2090f, -230f, 110f),
+			new(2568f, 506f, 230f),
+			new(2446f, 1400f, 172f),
+			new(2546f, 1141f, 172f),
+			new(456f, 3536f, 179f),
+			new(283f, 305f, 6f),
+			new(-382f, -104f, 206f),
+			new(185f, 40f, 222f),
 		};
 	}
 }

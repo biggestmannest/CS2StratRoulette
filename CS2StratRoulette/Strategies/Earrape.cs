@@ -7,6 +7,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using CS2StratRoulette.Constants;
 
 namespace CS2StratRoulette.Strategies
@@ -105,7 +106,6 @@ namespace CS2StratRoulette.Strategies
 
 			return true;
 		}
-
 		private static void OnInterval()
 		{
 			foreach (var controller in Utilities.GetPlayers())
@@ -115,9 +115,10 @@ namespace CS2StratRoulette.Strategies
 					continue;
 				}
 
-				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_GRENADE);
-
-				controller.GiveNamedItem(CsItem.Decoy);
+				if (!pawn.HasWeapon("weapon_decoy"))
+				{
+					controller.GiveNamedItem(CsItem.Decoy);
+				}
 			}
 		}
 	}
