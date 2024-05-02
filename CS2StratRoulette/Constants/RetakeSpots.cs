@@ -24,6 +24,12 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//kitchen
+				new(-1869f, -615f, -154f),
+				//top mid
+				new(234f, -173f, -154f),
+				//ramp
+				new(1028f, -1056f, -249f),
 				//Kitchen
 				new(-1654f, -693f, -154f),
 				//Kitchen
@@ -37,33 +43,41 @@ namespace CS2StratRoulette.Constants
 				//Short
 				new(204f, -134f, -153f),
 				//Top mid
-				new(420f, -838f, -151f)
+				new(420f, -838f, -151f),
 			},
 			new Vector[]
 			{
+				//Tunnel
+				new(-999f, -5f, -354f),
+				//short
+				new(-354f, -413f, -153f),
+				//back alley
+				new(-211f, 194f, -122f),
 				// house
-				new Vector(20f, 805f, -121f),
+				new(20f, 805f, -121f),
 				// back alley
-				new Vector(-254f, 815f, -123f),
+				new(-254f, 815f, -123f),
 				// tunnel
-				new Vector(-978f, 420f, -353f),
+				new(-978f, 420f, -353f),
 				// tunnel
-				new Vector(-1000f, 148f, -353f),
+				new(-1000f, 148f, -353f),
 				// short
-				new Vector(-780f, -400f, -154f),
+				new(-780f, -400f, -154f),
 				// short
-				new Vector(-464f, -410f, -153f),
+				new(-464f, -410f, -153f),
 				// window
-				new Vector(-1180f, -1008f, -153f),
+				new(-1180f, -1008f, -153f),
 				// window -> market
-				new Vector(-1594f, -808f, -153f),
+				new(-1594f, -808f, -153f),
 				// ladder room
-				new Vector(-1170f, -294f, -42f),
+				new(-1170f, -294f, -42f),
 				// B apps
-				new Vector(-1076f, 418f, -65f),
+				new(-1076f, 418f, -65f),
 			},
 			new Vector[]
 			{
+				new(-540f, -2369f, -155f),
+				new(-749f, -2202f, -166f),
 				new(-235f, -2355f, -154f),
 				new(-325f, -1546f, -154f),
 				new(125f, -1928f, -154f),
@@ -106,6 +120,8 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//fountain
+				new(-2748f, -1910f, 490f),
 				//connector
 				new(-2080f, -891f, 146f),
 				//connector
@@ -150,6 +166,8 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(-2851f, 626f, 498f),
+				new(-2023f, 691f, 490f),
 				new(-2226f, 1018f, 498f),
 				new(-2568f, 1138f, 498f),
 				new(-2353f, 1249f, 498f),
@@ -193,18 +211,34 @@ namespace CS2StratRoulette.Constants
 			new Vector[]
 			{
 				//Mid
-				new(-1808f, -51f, 11790f),
-				//CT Spawn
-				new(-818f, 764f, 11790f),
+				new(-1421f, 232f, 11790f),
+				//Mid
+				new(1791f, 175f, 11790f),
+				//Platform
+				new(-1491f, 604f, 11888f),
+				//CT
+				new(-925f, 907f, 11790f),
+				//CT
+				new(-1227f, 938f, 11790f),
 				//Tunnels
-				new(1540f, -661f, 11502f),
-				//Backdoor
-				new(-678f, 432f, 11790f),
-				//Connector
-				new(-1709f, -485f, 11566f),
+				new(-1532f, -474f, 11502f),
+				//Tunnels
+				new(-1590f, -721f, 11502f),
+				//Ladder bottom
+				new(-1289f, -772f, 11502f),
+				//CT
+				new(-1052f, 499f, 11790f),
+				//Bridge
+				new(-1608f, 82f, 11502f),
 			},
 			new Vector[]
 			{
+				//elevator
+				new(-855f, -330f, 11790f),
+				//A
+				new(-187f, -255f, 11790f),
+				//T spawn
+				new(-2246f, -765f, 11502f),
 				// A window -> CT
 				new(-710f, 315f, 11790f),
 				// elevator
@@ -222,6 +256,11 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(-308f, -431f, 11790f),
+				new(-100f, -1013f, 11790f),
+				new(-1119f, -926f, 11790f),
+				new(-291f, -100f, 11790f),
+				new(-561f, -558f, 11790f),
 				new(-119f, -1431f, 11790f),
 				new(-1101f, -736f, 11790f),
 				new(-63f, -781f, 11790f),
@@ -230,6 +269,9 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(-2585f, 1027f, 11761f),
+				new(-2246f, 683f, 11758f),
+				new(-2589f, 248f, 11761f),
 				new(-2160f, 415f, 11790f),
 				new(-2525f, 388f, 11758f),
 				new(-2594f, 472f, 11762f),
@@ -258,6 +300,16 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//main hall
+				new(-1885f, -661f, 86f),
+				//main hall
+				new(-2144f, -382f, 86f),
+				//mid
+				new(-893f, -171f, 96f),
+				//house
+				new(-621f, 821f, 118f),
+				//Alley
+				new(58f, 659f, 88f),
 				//Main Hall
 				new(-1814f, -624f, 86f),
 				//Outside
@@ -271,6 +323,16 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//side entrance
+				new(460f, -510f, 196f),
+				//ct
+				new(-603f, 1050f, 76f),
+				//house
+				new(-543f, 391f, 174f),
+				//t side upper (idk this stupid map)
+				new(165f, -813f, 167f),
+				//ruins
+				new(1042f, -1130f, 15f),
 				// short
 				new(-140f, -750f, 167f),
 				// mid
@@ -284,6 +346,11 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(-1096f, 622f, 130f),
+				new(-2119f, 1219f, 132f),
+				new(-1880f, 1191f, 67f),
+				new(1466f, 925f, 68f),
+				new(-2110f, 746f, 66f),
 				new(-2087f, 1116f, 130f),
 				new(-1763f, 992f, 66f),
 				new(-1149f, 569f, 87f),
@@ -292,6 +359,11 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(1033f, 20f, 144f),
+				new(1270f, 255f, 143f),
+				new(737f, -263f, 149f),
+				new(1290f, -158f, 134f),
+				new(877f, 343f, 139f),
 				new(698f, -251f, 150f),
 				new(800f, -18f, 144f),
 				new(340f, 275f, 170f),
@@ -318,6 +390,14 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//2nd mid
+				new(587f, -91f, 86f),
+				//aps
+				new(1223f, 16f, 270f),
+				//ct
+				new(2213f, 1874f, 150f),
+				//long
+				new(752f, 564f, 109f),
 				//CT Spawn
 				new(1979f, 1736f, 174f),
 				//Arch
@@ -331,6 +411,14 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//ct
+				new(2051f, 1669f, 174f),
+				//church
+				new(1260f, 2933f, 142f),
+				//ct
+				new(1621f, 1840f, 174f),
+				//banana
+				new(188f, 644f, 95f),
 				// ct
 				new(2377f, 2078f, 146f),
 				// ct
@@ -346,6 +434,11 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(2145f, 694f, 174f),
+				new(2574f, 531f, 230f),
+				new(2051f, 335f, 174f),
+				new(2095f, -352f, 110f),
+				new(2613f, -280f, 111f),
 				new(1848f, 680f, 174f),
 				new(1830f, 451f, 224f),
 				new(2120f, 317f, 174f),
@@ -354,6 +447,8 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(303f, 3128f, 183f),
+				new(79f, 2857f, 175f),
 				new(33f, 2629f, 175f),
 				new(314f, 2451f, 181f),
 				new(39f, 3205f, 174f),
@@ -383,6 +478,16 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//ct
+				new(1737f, -470f, -338f),
+				//outside
+				new(629f, -1881f, -399f),
+				//trophy
+				new(125f, -562f, -402f),
+				//vending
+				new(-113f, -448f, -402f),
+				//t -> outside
+				new(-594f, -769f, -402f),
 				//Garage
 				new(1608f, -1859f, -402),
 				//Outside
@@ -396,6 +501,16 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//ramp
+				new(679f, -119f, -402f),
+				//ramp
+				new(893f, -182f, -402f),
+				//A
+				new(433f, -1330f, -402f),
+				//secret -> tunnels
+				new(1128f, -1950f, -626f),
+				//ramp
+				new(-1064f, 83f, -402f),
 				// ramp
 				new(436f, 41f, -401f),
 				// ramp
@@ -409,6 +524,11 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(796f, -813f, -386),
+				new(443f, -502f, -402),
+				new(359f, -656f, -402f),
+				new(583f, -1028f, -402f),
+				new(797f, -388f, -402f),
 				new(442f, -345f, -402f),
 				new(720f, -567f, -387f),
 				new(394f, -783f, -378f),
@@ -417,6 +537,8 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(416f, -672f, -754f),
+				new(896f, 1117f, -754f),
 				new(916f, -1316f, -753f),
 				new(830f, -368f, -753f),
 				new(386f, -591f, -753f),
@@ -446,6 +568,16 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//bridge
+				new(-22f, 445f, 14f),
+				//ct
+				new(170f, 2686f, -136f),
+				//ct
+				new(-300f, 2181f, 40f),
+				//canal
+				new(284f, 328f, -138f),
+				//street
+				new(992f, -333f, -18f),
 				//Canal
 				new(1145f, 370f, -138f),
 				//Canal
@@ -459,6 +591,10 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//canal
+				new(704f, 85f, -138f),
+				//ruins
+				new(-1035f, -750f, 78f),
 				// temple
 				new(-212f, 1564f, 41f),
 				// temple
@@ -478,6 +614,10 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(983f, 2295f, -26f),
+				new(934f, 1963f, -138f),
+				new(1370f, 1739f, -137f),
+				new(1185f, 1890f, -88f),
 				new(953f, 2339f, -26f),
 				new(887f, 1620f, -60f),
 				new(1204f, 2039f, -178f),
@@ -487,6 +627,10 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(-1040f, 312f, -9f),
+				new(-1296f, 313f, 8f),
+				new(-1407f, 775f, 52f),
+				new(-953f, 1147f, 49f),
 				new(-1126f, 284f, -9f),
 				new(-1546f, 716f, 52f),
 				new(-643f, 540f, 52f),
@@ -514,6 +658,16 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				//long
+				new(744f, 907f, 14f),
+				//long
+				new(586f, 1052f, 15f),
+				//mid
+				new(-471f, 1790f, -111f),
+				//short
+				new(337f, 1398f, 14f),
+				//long
+				new(1709f, 918f, 6f),
 				//Short
 				new(-137f, 1407f, 1f),
 				//Long		
@@ -522,11 +676,21 @@ namespace CS2StratRoulette.Constants
 				new(-1166f, 2652f, 86f),
 				//Lower Tunnel
 				new(-695f, 1414f, -99f),
-				//Suicide -> Mid
-				new(-395f, 1016, -50f),
+				//headshot -> Mid
+				new(-395f, 1016f, -50f),
 			},
 			new Vector[]
 			{
+				//outside tunnel
+				new(-1838f, 638f, 46f),
+				//upper
+				new(1721f, 1368f, 55f),
+				//upper
+				new(-2126f, 1097f, 51f),
+				//ct
+				new(-40f, 2023f, -109f),
+				//ct
+				new(185f, 2471f, -107f),
 				//CT Spawn
 				new(471f, 2485f, -105f),
 				//Lower Tunnel
@@ -540,6 +704,11 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(1146f, 2503f, 108f),
+				new(1189f, 2945f, 142f),
+				new(1141f, 2372f, 111f),
+				new(778f, 2746f, 111f),
+				new(350f, 2633f, 110f),
 				new(1064f, 3050f, 134f),
 				new(945f, 2667f, 98f),
 				new(1470f, 2994f, 124f),
@@ -548,6 +717,11 @@ namespace CS2StratRoulette.Constants
 			},
 			new Vector[]
 			{
+				new(-1481f, 2726f, 23f),
+				new(-1878f, 2576f, 46f),
+				new(-1749f, 1897f, 12f),
+				new(-1690f, 2676f, 22f),
+				new(-2070f, 2633f, 48f),
 				new(-2079f, 2964f, 36f),
 				new(-1805f, 2546f, 35f),
 				new(-2175f, 2276f, 16f),

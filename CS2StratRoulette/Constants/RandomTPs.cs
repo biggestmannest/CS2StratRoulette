@@ -25,7 +25,6 @@ namespace CS2StratRoulette.Constants
 			new(-2570f, 287f, -154f),
 			new(-557f, -1035f, -165f),
 			new(-1138f, -1387f, -153f),
-			//ladder room, a lot of room for error so X and Y have to be specific.
 			new(-1032f, -96f, -154f),
 			new(492f, 821f, -122f),
 			new(945f, -2262f, -26f),
@@ -89,7 +88,7 @@ namespace CS2StratRoulette.Constants
 			new(-416f, 312.45f, 5f),
 			new(-1427f, 362f, 23f),
 			new(-1849f, -1753.30f, 114f),
-			new(-3106.33f, 383.77f, 498f),
+			new(-3106f, 383f, 498f),
 		};
 
 		public static readonly Vector[] Dust2 =

@@ -109,7 +109,25 @@ namespace CS2StratRoulette.Constants
 			//Middle of market for no reason
 			new(548f, -404f, -96f),
 			//Long hall
-			new(758f, -469f, -96f)
+			new(758f, -469f, -96f),
+		};
+
+		public static readonly Vector[] Overpass =
+		{
+			//monster
+			new(-530f, -484f, 82f),
+			//heaven (cry awp players)
+			new(-1754f, 532f, 324),
+			//storage
+			new(-2224f, 1288f, 424f),
+			//toilet
+			new(-2658f, -99f, 500f),
+			//connector
+			new(-1715f, -850f, 164f),
+			//t -> tunnels
+			new(-1682f, -2383f, 403f),
+			//A
+			new(-1959f, 929f, 547f),
 		};
 	}
 }

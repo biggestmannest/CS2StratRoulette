@@ -18,6 +18,8 @@ namespace CS2StratRoulette.Strategies
 				{ "de_mirage", SmokeSpots.Mirage },
 				{ "de_nuke", SmokeSpots.Nuke },
 				{ "de_vertigo", SmokeSpots.Vertigo },
+				{ "de_inferno", SmokeSpots.Inferno },
+				{ "de_overpass", SmokeSpots.Overpass },
 				{ "cs_italy", SmokeSpots.Italy },
 			}.ToFrozenDictionary();
 
