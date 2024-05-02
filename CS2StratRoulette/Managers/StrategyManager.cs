@@ -12,6 +12,8 @@ namespace CS2StratRoulette.Managers
 {
 	public static class StrategyManager
 	{
+		private const string Prefix = "[CS2StratRoulette::StrategyManager]";
+
 		private static readonly List<System.Type> strategies = new(50);
 		private static readonly StringBuilder builder = new();
 
@@ -41,7 +43,7 @@ namespace CS2StratRoulette.Managers
 			StrategyManager.Shuffle();
 
 			System.Console.WriteLine(
-				$"[CS2StratRoulette::StrategyManager]: Loaded {StrategyManager.strategies.Count} strategies"
+				$"{StrategyManager.Prefix} Loaded {StrategyManager.strategies.Count} strategies"
 			);
 		}
 
@@ -59,14 +61,14 @@ namespace CS2StratRoulette.Managers
 				System.Random.Shared.Shuffle(StrategyManager.strategies);
 			}
 
-			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: Shuffled");
+			System.Console.WriteLine($"{StrategyManager.Prefix} Shuffled");
 		}
 
 		public static void Next()
 		{
 			if (StrategyManager.strategies.Count == 0)
 			{
-				System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: No strategies");
+				System.Console.WriteLine($"{StrategyManager.Prefix} No strategies");
 
 				return;
 			}
@@ -82,7 +84,7 @@ namespace CS2StratRoulette.Managers
 			if (StrategyManager.activeStrategy is not null && !StrategyManager.activeStrategy.CanRun())
 			{
 				System.Console.WriteLine(
-					$"[CS2StratRoulette::StrategyManager]: Can't run {StrategyManager.Name} in current round"
+					$"{StrategyManager.Prefix} Can't run {StrategyManager.Name} in current round"
 				);
 
 				StrategyManager.Next();
@@ -103,8 +105,8 @@ namespace CS2StratRoulette.Managers
 
 			System.Console.WriteLine(
 				result
-					? $"[CS2StratRoulette::StrategyManager]: Started {name}"
-					: $"[CS2StratRoulette::StrategyManager]: Failed starting {name}"
+					? $"{StrategyManager.Prefix} Started {name}"
+					: $"{StrategyManager.Prefix} Failed starting {name}"
 			);
 
 			return true;
@@ -124,8 +126,8 @@ namespace CS2StratRoulette.Managers
 
 			System.Console.WriteLine(
 				result
-					? $"[CS2StratRoulette::StrategyManager]: Stopped {name}"
-					: $"[CS2StratRoulette::StrategyManager]: Failed stopping {name}"
+					? $"{StrategyManager.Prefix} Stopped {name}"
+					: $"{StrategyManager.Prefix} Failed stopping {name}"
 			);
 
 			return result;
@@ -171,17 +173,14 @@ namespace CS2StratRoulette.Managers
 				// If it fails don't use a strategy for this round and pretend as if nothing happened :)
 				StrategyManager.activeStrategy = null;
 
-				System.Console.WriteLine(
-					"[CS2StratRoulette::StrategyManager]: Failed invoking {0} strategy",
-					type.Name
-				);
+				System.Console.WriteLine($"{StrategyManager.Prefix} Failed invoking {type.Name} strategy");
 
 				return false;
 			}
 
 			StrategyManager.activeStrategy = strategy;
 
-			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: Set {0}", StrategyManager.Name);
+			System.Console.WriteLine($"{StrategyManager.Prefix} Set {StrategyManager.Name}");
 
 			return true;
 		}
@@ -221,7 +220,7 @@ namespace CS2StratRoulette.Managers
 				System.Console.Write(e);
 			}
 
-			System.Console.WriteLine("[CS2StratRoulette::StrategyManager]: Failed invoking Strategy");
+			System.Console.WriteLine($"{StrategyManager.Prefix} Failed invoking Strategy");
 
 			return false;
 		}
@@ -242,10 +241,11 @@ namespace CS2StratRoulette.Managers
 			if (!StrategyManager.activeStrategy.Flags.HasFlag(StrategyFlags.AlwaysVisible) &&
 				System.Random.Shared.Next(10) < 3) // 40% to be hidden
 			{
-				const string hidden = "Hidden";
+				const string hiddenTitle = "Hidden.";
+				const string hiddenDescription = "Good luck :)";
 
-				name = hidden;
-				description = hidden;
+				name = hiddenTitle;
+				description = hiddenDescription;
 			}
 
 			const char newLine = '\u2029';

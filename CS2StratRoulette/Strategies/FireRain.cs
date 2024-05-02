@@ -31,7 +31,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			this.timer = new Timer(FireRain.Interval, FireRain.OnInterval, TimerFlags.REPEAT);
+			plugin.RegisterEventHandler<EventRoundAnnounceMatchStart>(this.OnRoundAnnounce);
 
 			return true;
 		}
@@ -43,21 +43,30 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			plugin.DeregisterEventHandler<EventRoundAnnounceMatchStart>(this.OnRoundAnnounce);
+
 			this.timer?.Kill();
 
 			return true;
 		}
 
+		private HookResult OnRoundAnnounce(EventRoundAnnounceMatchStart @event, GameEventInfo _)
+		{
+			this.timer = new Timer(FireRain.Interval, FireRain.OnInterval, TimerFlags.REPEAT);
+
+			return HookResult.Continue;
+		}
+
 		private static void OnInterval()
 		{
-			foreach (var controller in Utilities.GetPlayers())
+			for (var slot = 0; slot < Server.MaxPlayers; ++slot)
 			{
 				if (FireRain.Random.FiftyFifty())
 				{
 					continue;
 				}
 
-				FireRain.SpawnFire(controller);
+				FireRain.SpawnFire(Utilities.GetPlayerFromSlot(slot));
 			}
 		}
 

@@ -94,14 +94,8 @@ namespace CS2StratRoulette.Extensions
 		{
 			const string c4 = "weapon_c4";
 
-#if DEBUG
-			System.Console.WriteLine($"[PlayerExtensions::RemoveC4] --- {pawn.Globalname} ---");
-#endif
 			pawn.ForEachWeapon((weapon) =>
 			{
-#if DEBUG
-				System.Console.WriteLine($"[PlayerExtensions::RemoveC4] {weapon.DesignerName}");
-#endif
 				if (!string.Equals(weapon.DesignerName, c4, System.StringComparison.OrdinalIgnoreCase))
 				{
 					return;
@@ -114,6 +108,11 @@ namespace CS2StratRoulette.Extensions
 
 				var service = new CCSPlayer_ItemServices(pawn.ItemServices.Handle);
 
+				if (service.Handle == System.IntPtr.Zero)
+				{
+					return;
+				}
+
 				service.DropActivePlayerWeapon(weapon);
 
 				weapon.Remove();
@@ -121,10 +120,10 @@ namespace CS2StratRoulette.Extensions
 		}
 
 		/// <summary>
-		/// Remove all weapons from player pawn not included in types.
+		/// Remove all weapons from player pawn not included in <see cref="CSWeaponType"/>.
 		/// </summary>
 		/// <param name="pawn">The player pawn</param>
-		/// <param name="types">The weapon types to keep</param>
+		/// <param name="types">The <see cref="CSWeaponType"/> to keep</param>
 		public static void KeepWeaponsByType(this CCSPlayerPawn pawn, params CSWeaponType[] types)
 		{
 			pawn.ForEachWeapon((weapon) =>
@@ -156,10 +155,10 @@ namespace CS2StratRoulette.Extensions
 		}
 
 		/// <summary>
-		/// Remove weapons from player pawn by type.
+		/// Remove weapons from player pawn by <see cref="CSWeaponType"/>.
 		/// </summary>
 		/// <param name="pawn">The player pawn</param>
-		/// <param name="types">The weapon types to remove</param>
+		/// <param name="types">The <see cref="CSWeaponType"/> to remove</param>
 		public static void RemoveWeaponsByType(this CCSPlayerPawn pawn, params CSWeaponType[] types)
 		{
 			pawn.ForEachWeapon((weapon) =>
@@ -214,6 +213,7 @@ namespace CS2StratRoulette.Extensions
 				func(entity);
 			}
 		}
+
 		/// <summary>
 		/// Sets the clip and reserve ammo of a weapon.
 		/// </summary>
@@ -230,7 +230,7 @@ namespace CS2StratRoulette.Extensions
 			weapon.Clip1 = clip;
 			weapon.ReserveAmmo[0] = reserve;
 		}
-		
+
 		/// <summary>
 		/// Checks if a player pawn has a weapon.
 		/// </summary>
@@ -242,9 +242,9 @@ namespace CS2StratRoulette.Extensions
 			{
 				return false;
 			}
-			
+
 			var found = false;
-			
+
 			player.ForEachWeapon(weapon =>
 			{
 				if (weapon.DesignerName.Equals(weaponName, System.StringComparison.OrdinalIgnoreCase))
@@ -252,7 +252,7 @@ namespace CS2StratRoulette.Extensions
 					found = true;
 				}
 			});
-			
+
 			return found;
 		}
 	}

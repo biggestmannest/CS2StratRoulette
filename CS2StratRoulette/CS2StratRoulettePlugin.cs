@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 namespace CS2StratRoulette
 {
 	[UsedImplicitly(ImplicitUseTargetFlags.Members)]
-	[MinimumApiVersion(217)]
+	[MinimumApiVersion(228)]
 	// ReSharper disable once InconsistentNaming
 	public sealed partial class CS2StratRoulettePlugin : BasePlugin
 	{

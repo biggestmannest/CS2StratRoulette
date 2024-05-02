@@ -5,6 +5,9 @@ namespace CS2StratRoulette.Constants
 {
 	public static class ConsoleCommands
 	{
+		public const string EnableRadar = "sv_disable_radar 0";
+		public const string DisableRadar = "sv_disable_radar 1";
+
 		public const string CheatsEnable = "sv_cheats 1";
 		public const string CheatsDisable = "sv_cheats 0";
 
