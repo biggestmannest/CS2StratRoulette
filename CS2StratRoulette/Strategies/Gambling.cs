@@ -97,7 +97,7 @@ namespace CS2StratRoulette.Strategies
 			{
 				var controller = Utilities.GetPlayerFromSlot(index);
 
-				if (!controller.IsValid)
+				if (controller is null || !controller.IsValid)
 				{
 					continue;
 				}

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
@@ -6,7 +5,6 @@ using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Modules.Cvars;
 using CounterStrikeSharp.API.Modules.Memory;
 using CounterStrikeSharp.API.Modules.Timers;
 using CS2StratRoulette.Enums;
@@ -16,7 +14,7 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class PropHunt : Strategy
 	{
-		private const float FreezeTime = 30f;
+		private const float FreezeTime = 50f;
 
 		public override string Name =>
 			"Prop Hunt";
@@ -149,7 +147,7 @@ namespace CS2StratRoulette.Strategies
 			{
 				var controller = Utilities.GetPlayerFromSlot(i);
 
-				if (!controller.IsValid)
+				if (controller is null || !controller.IsValid)
 				{
 					continue;
 				}
