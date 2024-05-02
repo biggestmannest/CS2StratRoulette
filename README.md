@@ -17,7 +17,7 @@ Inspired by both the [CSGO chaos mod](https://github.com/b0ink/csgo-chaos-mod) a
 
 ## Requirements
 - [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)
-- [SourceMod 2.0+](https://www.sourcemm.net/downloads.php?branch=dev)
+- [SourceMod](https://www.sourcemm.net/downloads.php?branch=dev)
 
 ## Installation
 - Make a folder called `CS2StratRoulette` inside `csgo/addons/counterstrikesharp/plugins/`
