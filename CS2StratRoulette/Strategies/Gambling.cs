@@ -41,12 +41,11 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			this.number = (Gambling.Random.Next(10) + 1);
-			this.endTime = Server.CurrentTime + Gambling.GuessingDuration;
-
 			plugin.RegisterEventHandler<EventPlayerChat>(this.OnNumberPicked);
 
-			this.timer = new Timer(1f, this.OnInterval, 0);
+			this.number = (Gambling.Random.Next(10) + 1);
+			this.endTime = Server.CurrentTime + Gambling.GuessingDuration;
+			this.timer = new Timer(1f, this.OnInterval, TimerFlags.REPEAT);
 
 			return true;
 		}

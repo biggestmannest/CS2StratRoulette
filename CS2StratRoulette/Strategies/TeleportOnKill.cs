@@ -44,12 +44,12 @@ namespace CS2StratRoulette.Strategies
 
 			var playerKilled = @event.Userid;
 
-			if (!attacker.TryGetPlayerPawn(out var attackerPawn))
+			if (attacker is null || !attacker.TryGetPlayerPawn(out var attackerPawn))
 			{
 				return HookResult.Continue;
 			}
 
-			if (!playerKilled.TryGetPlayerPawn(out var victimPawn))
+			if (playerKilled is null || !playerKilled.TryGetPlayerPawn(out var victimPawn))
 			{
 				return HookResult.Continue;
 			}
