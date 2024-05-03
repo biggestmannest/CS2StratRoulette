@@ -191,7 +191,8 @@ namespace CS2StratRoulette.Strategies
 
 				if (!emitSound ||
 					controller.Team is not CsTeam.CounterTerrorist ||
-					!controller.TryGetPlayerPawn(out var pawn))
+					!controller.TryGetPlayerPawn(out var pawn) ||
+					!pawn.IsAlive())
 				{
 					continue;
 				}
