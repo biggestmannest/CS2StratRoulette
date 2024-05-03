@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API.Modules.Memory;
 using CounterStrikeSharp.API.Modules.Timers;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -36,6 +37,20 @@ namespace CS2StratRoulette.Strategies
 			if (!base.Start(ref plugin))
 			{
 				return false;
+			}
+
+			var rules = Game.Rules();
+
+			if (rules is not null)
+			{
+				rules.RoundTime += 200;
+			}
+
+			var rulesProxy = Game.RulesProxy();
+
+			if (rulesProxy is not null)
+			{
+				Utilities.SetStateChanged(rulesProxy, "CCSGameRulesProxy", "m_pGameRules");
 			}
 
 			Server.ExecuteCommand(ConsoleCommands.DisableRadar);
@@ -160,7 +175,10 @@ namespace CS2StratRoulette.Strategies
 				}
 				else if (emitSound && controller.TryGetPlayerPawn(out var pawn))
 				{
-					PropHunt.SpawnDecoy(pawn);
+					if (controller.Team is CsTeam.CounterTerrorist)
+					{
+						PropHunt.SpawnDecoy(pawn);
+					}
 				}
 			}
 		}
