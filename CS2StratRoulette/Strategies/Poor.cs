@@ -2,6 +2,7 @@
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -31,7 +32,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.IsValid)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
@@ -49,7 +50,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					moneyServices.Account = 0;
 
-					Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
+					Utilities.SetStateChanged(pawn, "CCSPlayerController", "m_pInGameMoneyServices");
 				});
 			}
 
@@ -65,7 +66,7 @@ namespace CS2StratRoulette.Strategies
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
-				if (!controller.IsValid)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
@@ -81,7 +82,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					moneyServices.Account += this.accounts[controller.Slot];
 
-					Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
+					Utilities.SetStateChanged(pawn, "CCSPlayerController", "m_pInGameMoneyServices");
 				});
 			}
 
