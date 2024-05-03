@@ -30,6 +30,11 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"You teleport to a random place when you reload.";
 
+		public override bool CanRun()
+		{
+			return TeleportReload.Maps.ContainsKey(Server.MapName);
+		}
+		
 		private static readonly System.Random Random = new();
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)

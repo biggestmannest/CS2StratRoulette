@@ -19,8 +19,9 @@ namespace CS2StratRoulette.Strategies
 				{ "de_overpass", RandomTPs.Overpass },
 				{ "de_nuke", RandomTPs.Nuke },
 				{ "de_dust2", RandomTPs.Dust2 },
-				{ "cs_italy", RandomTPs.Italy },
 				{ "de_vertigo", RandomTPs.Vertigo },
+				{ "de_inferno", RandomTPs.Inferno },
+				{ "cs_italy", RandomTPs.Italy },
 			}.ToFrozenDictionary();
 
 		public override string Name =>
@@ -28,6 +29,11 @@ namespace CS2StratRoulette.Strategies
 
 		public override string Description =>
 			"You teleport to a random place when you are shot.";
+
+		public override bool CanRun()
+		{
+			return DamageTeleport.Maps.ContainsKey(Server.MapName);
+		}
 
 		private static readonly System.Random Random = new();
 
