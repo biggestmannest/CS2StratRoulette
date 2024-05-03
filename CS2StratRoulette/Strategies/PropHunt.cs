@@ -15,7 +15,11 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class PropHunt : Strategy
 	{
+		private const float Interval = 1f;
 		private const float FreezeTime = 50f;
+
+		private const string TasersInfinite = "mp_taser_recharge_time 99999";
+		private const string TasersReset = "mp_taser_recharge_time 30";
 
 		public override string Name =>
 			"Prop Hunt";
@@ -39,24 +43,22 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			var rules = Game.Rules();
+			var rulesProxy = Game.RulesProxy();
+			var rules = rulesProxy?.GameRules;
 
-			if (rules is not null)
+			if (rulesProxy is not null && rules is not null)
 			{
 				rules.RoundTime += 200;
-			}
+				rules.FreezeTime = 0;
+				rules.FreezePeriod = false;
 
-			var rulesProxy = Game.RulesProxy();
-
-			if (rulesProxy is not null)
-			{
 				Utilities.SetStateChanged(rulesProxy, "CCSGameRulesProxy", "m_pGameRules");
 			}
 
+			Server.ExecuteCommand(PropHunt.TasersInfinite);
 			Server.ExecuteCommand(ConsoleCommands.DisableRadar);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesDisable);
-			Server.ExecuteCommand(ConsoleCommands.CheatsEnable);
 
 			foreach (var controller in Utilities.GetPlayers())
 			{
@@ -67,17 +69,20 @@ namespace CS2StratRoulette.Strategies
 
 				if (controller.Team is CsTeam.Terrorist)
 				{
-					controller.EquipKnife();
+					Server.NextFrame(() =>
+					{
+						controller.EquipKnife();
 
-					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
-					pawn.RemoveC4();
+						pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+						pawn.RemoveC4();
+					});
 
 					Server.NextFrame(() =>
 					{
 						controller.GiveNamedItem(CsItem.HEGrenade);
 						controller.GiveNamedItem(CsItem.Molotov);
+						PropHunt.FreezePlayer(pawn);
 					});
-					Server.NextFrame(() => PropHunt.FreezePlayer(pawn));
 
 					continue;
 				}
@@ -102,7 +107,7 @@ namespace CS2StratRoulette.Strategies
 			this.startTime = (Server.CurrentTime + PropHunt.FreezeTime);
 			this.emitSoundTime = this.startTime + 120f;
 
-			this.timer = new Timer(1f, this.OnInterval, TimerFlags.REPEAT);
+			this.timer = new Timer(PropHunt.Interval, this.OnInterval, TimerFlags.REPEAT);
 
 			plugin.RegisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
 
@@ -116,6 +121,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			Server.ExecuteCommand(PropHunt.TasersReset);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowAll);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesEnable);
 			Server.ExecuteCommand(ConsoleCommands.EnableRadar);
@@ -155,7 +161,9 @@ namespace CS2StratRoulette.Strategies
 		{
 			var time = Server.CurrentTime;
 			var freeze = time < this.startTime;
-			var emitSound = time < this.emitSoundTime && (int)(this.startTime - time) % 20 == 0;
+			var timeLeft = this.startTime - time;
+			var emitSound = time > this.emitSoundTime && (int)(this.startTime - time) % 30 == 0;
+
 			string? message = null;
 
 			for (var i = 0; i < Server.MaxPlayers; i++)
@@ -169,17 +177,26 @@ namespace CS2StratRoulette.Strategies
 
 				if (freeze)
 				{
-					message ??= $"Seekers will be released in: {(this.startTime - time).Str("F0")}";
+					message ??= $"Seekers will be released in: {timeLeft.Str("F0")}";
 
 					controller.PrintToCenter(message);
+
+					return;
 				}
-				else if (emitSound && controller.TryGetPlayerPawn(out var pawn))
+
+				if (timeLeft >= -1.0f)
 				{
-					if (controller.Team is CsTeam.CounterTerrorist)
-					{
-						PropHunt.SpawnDecoy(pawn);
-					}
+					controller.PrintToCenter("The seekers have been released");
 				}
+
+				if (!emitSound ||
+					controller.Team is not CsTeam.CounterTerrorist ||
+					!controller.TryGetPlayerPawn(out var pawn))
+				{
+					continue;
+				}
+
+				PropHunt.SpawnDecoy(pawn);
 			}
 		}
 
@@ -193,6 +210,7 @@ namespace CS2StratRoulette.Strategies
 		private static void SetMoveType(CCSPlayerPawn pawn, MoveType_t moveType)
 		{
 			pawn.MoveType = moveType;
+
 			Schema.SetSchemaValue(pawn.Handle, "CBaseEntity", "m_nActualMoveType", (int)moveType);
 			Utilities.SetStateChanged(pawn, "CBaseEntity", "m_MoveType");
 		}
