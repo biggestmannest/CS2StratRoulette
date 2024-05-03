@@ -36,11 +36,6 @@ namespace CS2StratRoulette.Strategies
 				{
 					continue;
 				}
-                
-				if (!controller.IsValid)
-				{
-					continue;
-				}
 
 				var moneyServices = controller.InGameMoneyServices;
 
@@ -72,11 +67,6 @@ namespace CS2StratRoulette.Strategies
 			foreach (var controller in Utilities.GetPlayers())
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
-				{
-					continue;
-				}
-                
-				if (!controller.IsValid)
 				{
 					continue;
 				}

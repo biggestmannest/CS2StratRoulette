@@ -56,14 +56,19 @@ namespace CS2StratRoulette.Strategies
 
 			var team = target.Team;
 
-			foreach (var player in Utilities.GetPlayers())
+			for (var slot = 0; slot < Server.MaxPlayers; slot++)
 			{
-				if (!player.IsValid || player.Team != team || player.UserId == target.UserId)
+				var controller = Utilities.GetPlayerFromSlot(slot);
+
+				if (controller is null ||
+					!controller.TryGetPlayerPawn(out var pawn) ||
+					controller.Team != team ||
+					controller.UserId == target.UserId)
 				{
 					continue;
 				}
 
-				var moneyServices = player.InGameMoneyServices;
+				var moneyServices = controller.InGameMoneyServices;
 
 				if (moneyServices is null)
 				{
@@ -72,7 +77,7 @@ namespace CS2StratRoulette.Strategies
 
 				moneyServices.Account -= 500;
 
-				Utilities.SetStateChanged(player, "CCSPlayerController", "m_pInGameMoneyServices");
+				Utilities.SetStateChanged(pawn, "CCSPlayerController", "m_pInGameMoneyServices");
 			}
 
 			return HookResult.Continue;
