@@ -16,8 +16,15 @@ Inspired by both the [CSGO chaos mod](https://github.com/b0ink/csgo-chaos-mod) a
 > Please keep in mind that this plugin will most likely not be supported/maintained for future versions.
 
 ## Requirements
-- [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)
-- [SourceMod](https://www.sourcemm.net/downloads.php?branch=dev)
+You can find an installation guide for the requirements on the [CounterStrikeSharp website](https://docs.cssharp.dev/docs/guides/getting-started.html).
+
+- [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) @ ≥228
+- [SourceMod](https://www.sourcemm.net/downloads.php?branch=dev) @ ≥2.X.X
+
+## Known issues
+During testing we are experiencing seemingly random crashes when a new round starts and a new strategy is selected and initialized. We will try to make an effort to eliminate this issue as it quite significant.
+
+There are also cases where persons may have their weapons removed except for the knife but won't get their knife automatically equipped. We suspect this related to networking and might be solved by the use of `Server.NextFrame`.
 
 ## Installation
 - Make a folder called `CS2StratRoulette` inside `csgo/addons/counterstrikesharp/plugins/`
