@@ -25,7 +25,6 @@ namespace CS2StratRoulette.Strategies
 				{ "de_dust2", RandomTPs.Dust2 },
 				{ "de_vertigo", RandomTPs.Vertigo },
 				{ "de_inferno", RandomTPs.Inferno },
-				{ "de_overpass", RandomTPs.Overpass },
 				{ "cs_italy", RandomTPs.Italy },
 			}.ToFrozenDictionary();
 

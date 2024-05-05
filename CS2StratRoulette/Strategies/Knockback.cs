@@ -1,6 +1,7 @@
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Extensions;
@@ -115,9 +116,7 @@ namespace CS2StratRoulette.Strategies
 
 			velocity += (Knockback.Velocity * weight).Multi(forward * -1f);
 
-			pawn.AbsVelocity.X = velocity.X;
-			pawn.AbsVelocity.Y = velocity.Y;
-			pawn.AbsVelocity.Z = velocity.Z;
+			pawn.Teleport(pawn.AbsOrigin, pawn.V_angle, velocity);
 
 			return HookResult.Continue;
 		}

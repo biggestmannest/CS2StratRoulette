@@ -41,7 +41,7 @@ namespace CS2StratRoulette.Strategies
 					return;
 				}
 
-				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() => controller.EquipKnife());
 				Server.NextFrame(() =>
 				{
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);

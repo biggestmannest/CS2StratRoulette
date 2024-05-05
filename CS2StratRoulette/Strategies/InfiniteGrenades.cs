@@ -35,12 +35,12 @@ namespace CS2StratRoulette.Strategies
 
 			Player.ForEach((controller) =>
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn) || !pawn.IsAlive())
 				{
 					return;
 				}
 
-				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() => controller.EquipKnife());
 				Server.NextFrame(() =>
 				{
 					pawn.KeepWeaponsByType(
@@ -78,11 +78,6 @@ namespace CS2StratRoulette.Strategies
 
 		private HookResult OnWeaponFire(EventWeaponFire @event, GameEventInfo _)
 		{
-			if (!this.Running)
-			{
-				return HookResult.Continue;
-			}
-
 			var controller = @event.Userid;
 
 			if (controller is null)
@@ -90,13 +85,9 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			var weapon = @event.Weapon.Substring(7 /*="weapon_".Length*/);
+			var weapon = @event.Weapon;
 
-			var isGrenade = weapon is "hegrenade" or
-									  "flashbang" or
-									  "smokegrenade" or
-									  "molotov" or
-									  "incgrenade";
+			var isGrenade = Weapon.IsGrenade(weapon);
 
 			if (!isGrenade)
 			{

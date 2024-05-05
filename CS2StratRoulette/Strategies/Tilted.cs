@@ -39,7 +39,7 @@ namespace CS2StratRoulette.Strategies
 					return;
 				}
 
-				if (pawn.AbsRotation is null || !pawn.IsAlive())
+				if (!pawn.IsAlive())
 				{
 					return;
 				}
@@ -51,7 +51,11 @@ namespace CS2StratRoulette.Strategies
 					rotation = -rotation;
 				}
 
-				pawn.AbsRotation.Z = float.Abs(pawn.AbsRotation.Z - rotation);
+				var angle = pawn.V_angle;
+
+				angle.Z = float.Abs(angle.Z - rotation);
+
+				pawn.Teleport(pawn.AbsOrigin, angle, Vector.Zero);
 			});
 
 			return true;
@@ -76,7 +80,11 @@ namespace CS2StratRoulette.Strategies
 					return;
 				}
 
-				pawn.AbsRotation.Z = 0f;
+				var angle = pawn.V_angle;
+
+				angle.Z = 0f;
+
+				pawn.Teleport(pawn.AbsOrigin, angle, Vector.Zero);
 			});
 
 			return true;

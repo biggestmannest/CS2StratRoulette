@@ -33,11 +33,6 @@ namespace CS2StratRoulette.Strategies
 
 			Player.ForEach((controller) =>
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn))
-				{
-					return;
-				}
-
 				var moneyServices = controller.InGameMoneyServices;
 
 				if (moneyServices is null)
@@ -51,7 +46,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					moneyServices.Account = 0;
 
-					Utilities.SetStateChanged(pawn, "CCSPlayerController", "m_pInGameMoneyServices");
+					Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
 				});
 			});
 
@@ -67,11 +62,6 @@ namespace CS2StratRoulette.Strategies
 
 			Player.ForEach((controller) =>
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn))
-				{
-					return;
-				}
-
 				var moneyServices = controller.InGameMoneyServices;
 
 				if (moneyServices is null)
@@ -83,7 +73,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					moneyServices.Account += this.accounts[controller.Slot];
 
-					Utilities.SetStateChanged(pawn, "CCSPlayerController", "m_pInGameMoneyServices");
+					Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
 				});
 			});
 

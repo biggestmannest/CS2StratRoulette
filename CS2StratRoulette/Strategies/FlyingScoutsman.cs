@@ -55,7 +55,7 @@ namespace CS2StratRoulette.Strategies
 					controller.GiveNamedItem(CsItem.SSG08);
 				});
 
-				Server.NextFrame(controller.EquipPrimary);
+				Server.NextFrame(() => controller.EquipPrimary());
 			});
 
 			Server.ExecuteCommand(FlyingScoutsman.EnableFs);

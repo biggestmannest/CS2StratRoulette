@@ -69,7 +69,7 @@ namespace CS2StratRoulette
 		}
 
 		[GameEventHandler]
-		public HookResult OnPlayerConnect(EventPlayerConnect @event, GameEventInfo _)
+		public HookResult OnPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo _)
 		{
 			if (@event.Userid is not null)
 			{

@@ -69,7 +69,7 @@ namespace CS2StratRoulette.Strategies
 
 				if (controller.Team is CsTeam.Terrorist)
 				{
-					Server.NextFrame(controller.EquipKnife);
+					Server.NextFrame(() => controller.EquipKnife());
 					Server.NextFrame(() =>
 					{
 						pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
@@ -228,7 +228,7 @@ namespace CS2StratRoulette.Strategies
 				collisionRulesChanged.Invoke(decoy.Handle);
 			});
 
-			Server.NextFrame(decoy.DispatchSpawn);
+			Server.NextFrame(() => decoy.DispatchSpawn());
 
 			position.Z += 30;
 

@@ -1,22 +1,17 @@
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
-using CounterStrikeSharp.API.Modules.Timers;
-using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Earrape : Strategy
 	{
-		private const float Interval = 3.0f;
-
 		private static readonly string StartCommands =
 			$"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; {ConsoleCommands.BuyAllowNone}; mp_buy_allow_grenades 0";
 
@@ -32,9 +27,6 @@ namespace CS2StratRoulette.Strategies
 		public override StrategyFlags Flags =>
 			StrategyFlags.AlwaysVisible;
 
-		private readonly System.Random random = new();
-		private Timer? timer;
-
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -44,6 +36,8 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Earrape.StartCommands);
 
+			plugin.RegisterEventHandler<EventWeaponFire>(this.OnWeaponFire);
+
 			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
@@ -51,19 +45,19 @@ namespace CS2StratRoulette.Strategies
 					return;
 				}
 
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
+				Server.NextFrame(() => controller.EquipKnife());
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(
+						CSWeaponType.WEAPONTYPE_KNIFE,
+						CSWeaponType.WEAPONTYPE_C4,
+						CSWeaponType.WEAPONTYPE_EQUIPMENT
+					);
 
-				controller.GiveNamedItem(CsItem.Negev);
-				controller.GiveNamedItem(CsItem.Decoy);
-
-				controller.EquipPrimary();
+					controller.GiveNamedItem(CsItem.Negev);
+					controller.GiveNamedItem(CsItem.Decoy);
+				});
 			});
-
-			this.timer = new Timer(Earrape.Interval, Earrape.OnInterval, TimerFlags.REPEAT);
 
 			return true;
 		}
@@ -75,9 +69,9 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			this.timer?.Kill();
-
 			Server.ExecuteCommand(Earrape.StopCommands);
+
+			plugin.DeregisterEventHandler<EventWeaponFire>(this.OnWeaponFire);
 
 			Player.ForEach((controller) =>
 			{
@@ -92,20 +86,26 @@ namespace CS2StratRoulette.Strategies
 			return true;
 		}
 
-		private static void OnInterval()
+		private HookResult OnWeaponFire(EventWeaponFire @event, GameEventInfo _)
 		{
-			Player.ForEach((controller) =>
-			{
-				if (!controller.TryGetPlayerPawn(out var pawn))
-				{
-					return;
-				}
+			var controller = @event.Userid;
 
-				if (!pawn.HasWeapon("weapon_decoy"))
-				{
-					controller.GiveNamedItem(CsItem.Decoy);
-				}
-			});
+			if (controller is null)
+			{
+				return HookResult.Continue;
+			}
+
+			var weapon = @event.Weapon;
+			var isGrenade = Weapon.IsGrenade(weapon);
+
+			if (!isGrenade)
+			{
+				return HookResult.Continue;
+			}
+
+			Server.NextFrame(() => { controller.GiveNamedItem(weapon); });
+
+			return HookResult.Continue;
 		}
 	}
 }

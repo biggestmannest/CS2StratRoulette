@@ -41,7 +41,7 @@ namespace CS2StratRoulette.Strategies
 
 				var item = Items.Weapons[this.random.Next(Items.Weapons.Length)];
 
-				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() => controller.EquipKnife());
 				Server.NextFrame(() =>
 				{
 					pawn.KeepWeaponsByType(

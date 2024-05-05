@@ -2,6 +2,7 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes;
 using CS2StratRoulette.Constants;
+using CS2StratRoulette.Helpers;
 using CS2StratRoulette.Managers;
 using JetBrains.Annotations;
 
@@ -55,6 +56,20 @@ namespace CS2StratRoulette
 				foreach (var model2 in Models.Props2)
 				{
 					Server.PrecacheModel(model2);
+				}
+
+				for (var slot = 0; slot < Server.MaxPlayers; ++slot)
+				{
+					var controller = Utilities.GetPlayerFromSlot(slot) ?? new CCSPlayerController(System.IntPtr.Zero);
+
+					if (controller.IsValid)
+					{
+						Player.Replace(controller);
+					}
+					else
+					{
+						Player.Replace(controller, slot);
+					}
 				}
 			}
 

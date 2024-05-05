@@ -66,8 +66,8 @@ namespace CS2StratRoulette.Strategies
 					return;
 				}
 
-				Server.NextFrame(controller.EquipKnife);
-				Server.NextFrame(controller.RemoveWeapons);
+				Server.NextFrame(() => controller.EquipKnife());
+				Server.NextFrame(() => controller.RemoveWeapons());
 
 				if (controller.Team is CsTeam.Terrorist)
 				{
@@ -230,7 +230,7 @@ namespace CS2StratRoulette.Strategies
 				controller.GiveNamedItem(CsItem.KnifeT);
 			});
 
-			Server.NextFrame(controller.EquipKnife);
+			Server.NextFrame(() => controller.EquipKnife());
 
 			return controller;
 		}

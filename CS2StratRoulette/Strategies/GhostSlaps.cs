@@ -70,9 +70,7 @@ namespace CS2StratRoulette.Strategies
 			velocity.X = (GhostSlaps.Random.FiftyFifty() ? -velocity.X : velocity.X);
 			velocity.Y = (GhostSlaps.Random.FiftyFifty() ? -velocity.Y : velocity.Y);
 
-			pawn.AbsVelocity.X = velocity.X;
-			pawn.AbsVelocity.Y = velocity.Y;
-			pawn.AbsVelocity.Z = velocity.Z;
+			pawn.Teleport(pawn.AbsOrigin, pawn.V_angle, pawn.AbsVelocity + velocity);
 		}
 	}
 }

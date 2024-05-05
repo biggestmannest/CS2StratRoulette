@@ -34,8 +34,8 @@ namespace CS2StratRoulette.Strategies
 					return;
 				}
 
-				Server.NextFrame(controller.RemoveWeapons);
-				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() => controller.RemoveWeapons());
+				Server.NextFrame(() => controller.EquipKnife());
 
 				controller.GiveNamedItem(CsItem.Decoy);
 

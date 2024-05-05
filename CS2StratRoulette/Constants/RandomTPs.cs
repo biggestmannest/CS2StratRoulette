@@ -181,7 +181,7 @@ namespace CS2StratRoulette.Constants
 		public static readonly Vector[] Inferno =
 		{
 			new(920f, 633f, 116f),
-			new(931f, -696f, 5f),
+			new(890f, -700f, 103f),
 			new(-298f, -444f, 206f),
 			new(-558f, 447f, 55f),
 			new(-181f, 287f, 206f),
@@ -202,7 +202,7 @@ namespace CS2StratRoulette.Constants
 			new(2446f, 1400f, 172f),
 			new(2546f, 1141f, 172f),
 			new(456f, 3536f, 179f),
-			new(283f, 305f, 6f),
+			new(283f, 330f, -5f),
 			new(-382f, -104f, 206f),
 			new(185f, 40f, 222f),
 		};

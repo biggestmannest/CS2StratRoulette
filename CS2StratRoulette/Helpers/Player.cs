@@ -12,7 +12,14 @@ namespace CS2StratRoulette.Helpers
 
 		static Player()
 		{
-			Player.Slots = new CCSPlayerController[Server.MaxPlayers];
+			var slots = new CCSPlayerController[Server.MaxPlayers];
+
+			for (var slot = 0; slot < slots.Length; ++slot)
+			{
+				slots[slot] = new CCSPlayerController(System.IntPtr.Zero);
+			}
+
+			Player.Slots = slots;
 		}
 
 		public static CCSPlayerController Get(int slot)
@@ -33,6 +40,16 @@ namespace CS2StratRoulette.Helpers
 			}
 
 			Player.Slots[controller.Slot] = controller;
+		}
+
+		public static void Replace(CCSPlayerController controller, int slot)
+		{
+			if (slot < 0 || slot > Player.Slots.Length)
+			{
+				throw new System.Exception("Slot is out of bounds");
+			}
+
+			Player.Slots[slot] = controller;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
