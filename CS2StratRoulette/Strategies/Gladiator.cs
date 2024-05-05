@@ -8,6 +8,7 @@ using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -31,6 +32,9 @@ namespace CS2StratRoulette.Strategies
 		private CCSPlayerController? ct;
 		private CCSPlayerController? t;
 
+		public override bool CanRun() =>
+			GladiatorBounds.Maps.ContainsKey(Server.MapName);
+
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -50,30 +54,28 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesDisable);
 
-			foreach (var (pos, angle) in this.bounds.Fences)
+			foreach (var (position, angle) in this.bounds.Fences)
 			{
-				Gladiator.CreateFence(pos, angle);
+				Gladiator.CreateFence(position, angle);
 			}
 
-			var players = Utilities.GetPlayers();
-
-			foreach (var controller in players)
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				controller.EquipKnife();
-				controller.RemoveWeapons();
+				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(controller.RemoveWeapons);
 
 				if (controller.Team is CsTeam.Terrorist)
 				{
 					pawn.RemoveC4();
 				}
-			}
+			});
 
-			this.TeleportSpectators(players, this.bounds.Spectators.min, this.bounds.Spectators.max);
+			this.TeleportSpectators(this.bounds.Spectators.min, this.bounds.Spectators.max);
 			this.PickGladiators();
 
 			plugin.RegisterEventHandler<EventPlayerDeath>(this.OnPlayerDeath);
@@ -150,11 +152,11 @@ namespace CS2StratRoulette.Strategies
 			}
 		}
 
-		private void TeleportSpectators(List<CCSPlayerController> players, Vector min, Vector max)
+		private void TeleportSpectators(Vector min, Vector max)
 		{
 			const float playerWidth = 32f;
 
-			var i = 0;
+			var slot = 0;
 
 			var playersX = (int)float.Abs(float.Floor((max.X - min.X) / playerWidth));
 			var playersY = (int)float.Abs(float.Floor((max.Y - min.Y) / playerWidth));
@@ -167,12 +169,12 @@ namespace CS2StratRoulette.Strategies
 			{
 				for (var x = 0; x < playersX; x++)
 				{
-					if (i >= players.Count)
+					if (slot >= Player.Count)
 					{
 						return;
 					}
 
-					var player = players[i++];
+					var player = Player.Get(slot++);
 
 					if (player.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist) ||
 						!player.TryGetPlayerPawn(out var pawn))
@@ -210,20 +212,25 @@ namespace CS2StratRoulette.Strategies
 
 			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
 			{
+#if DEBUG
 				System.Console.WriteLine("[Gladiator::PickGladiator]: controller null or invalid");
+#endif
 
 				return null;
 			}
 
+#if DEBUG
 			System.Console.WriteLine($"[Gladiator::PickGladiator]: picked {controller.PlayerName}");
+#endif
 
 			Server.NextFrame(() =>
 			{
 				pawn.Teleport(position, pawn.V_angle, Vector.Zero);
 
 				controller.GiveNamedItem(CsItem.KnifeT);
-				controller.EquipKnife();
 			});
+
+			Server.NextFrame(controller.EquipKnife);
 
 			return controller;
 		}

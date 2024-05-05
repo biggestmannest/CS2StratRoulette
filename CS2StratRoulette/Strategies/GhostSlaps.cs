@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -31,13 +32,13 @@ namespace CS2StratRoulette.Strategies
 
 			this.timer = new Timer(GhostSlaps.Interval, static () =>
 			{
-				foreach (var players in Utilities.GetPlayers())
+				Player.ForEach((controller) =>
 				{
 					if (GhostSlaps.Random.Next(10) < 4)
 					{
-						GhostSlaps.DoSlap(players);
+						GhostSlaps.DoSlap(controller);
 					}
-				}
+				});
 			}, TimerFlags.REPEAT);
 
 			return true;
@@ -57,13 +58,10 @@ namespace CS2StratRoulette.Strategies
 
 		private static void DoSlap(CCSPlayerController controller)
 		{
-			if (!controller.TryGetPlayerPawn(out var pawn) || pawn.AbsOrigin is null)
+			if (!controller.TryGetPlayerPawn(out var pawn))
 			{
 				return;
 			}
-
-			var position = pawn.AbsOrigin;
-			var angle = pawn.V_angle;
 
 			var velocity = new Vector(GhostSlaps.Random.Next(150, 350),
 									  GhostSlaps.Random.Next(150, 350),
@@ -72,11 +70,9 @@ namespace CS2StratRoulette.Strategies
 			velocity.X = (GhostSlaps.Random.FiftyFifty() ? -velocity.X : velocity.X);
 			velocity.Y = (GhostSlaps.Random.FiftyFifty() ? -velocity.Y : velocity.Y);
 
-			pawn.Teleport(
-				position,
-				angle,
-				pawn.AbsVelocity + velocity
-			);
+			pawn.AbsVelocity.X = velocity.X;
+			pawn.AbsVelocity.Y = velocity.Y;
+			pawn.AbsVelocity.Z = velocity.Z;
 		}
 	}
 }

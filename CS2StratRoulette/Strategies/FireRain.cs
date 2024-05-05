@@ -6,6 +6,7 @@ using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -59,31 +60,19 @@ namespace CS2StratRoulette.Strategies
 
 		private static void OnInterval()
 		{
-			for (var slot = 0; slot < Server.MaxPlayers; ++slot)
+			Player.ForEach((controller) =>
 			{
-				if (FireRain.Random.FiftyFifty())
+				if (FireRain.Random.FiftyFifty() || !controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				var controller = Utilities.GetPlayerFromSlot(slot);
-
-				if (controller is null)
-				{
-					continue;
-				}
-
-				FireRain.SpawnFire(controller);
-			}
+				FireRain.SpawnFire(pawn);
+			});
 		}
 
-		private static void SpawnFire(CCSPlayerController controller)
+		private static void SpawnFire(CCSPlayerPawn pawn)
 		{
-			if (!controller.TryGetPlayerPawn(out var pawn))
-			{
-				return;
-			}
-
 			var entity = Utilities.CreateEntityByName<CMolotovProjectile>("molotov_projectile");
 
 			if (entity is null || !entity.IsValid)

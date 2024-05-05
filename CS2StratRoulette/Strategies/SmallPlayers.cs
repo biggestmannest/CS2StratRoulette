@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -21,16 +22,16 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var player in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (!player.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				if (pawn.CBodyComponent is null || pawn.CBodyComponent.SceneNode is null)
+				if (pawn.CBodyComponent?.SceneNode is null)
 				{
-					return false;
+					return;
 				}
 
 				pawn.CBodyComponent.SceneNode.GetSkeletonInstance().Scale = 0.6f;
@@ -40,7 +41,7 @@ namespace CS2StratRoulette.Strategies
 
 				Utilities.SetStateChanged(pawn, "CGameSceneNode", "m_flScale");
 				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_CBodyComponent");
-			}
+			});
 
 			plugin.RegisterEventHandler<EventPlayerHurt>(this.OnPlayerHurt);
 
@@ -54,16 +55,16 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var player in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (!player.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				if (pawn.CBodyComponent is null || pawn.CBodyComponent.SceneNode is null)
+				if (pawn.CBodyComponent?.SceneNode is null)
 				{
-					return false;
+					return;
 				}
 
 				pawn.CBodyComponent.SceneNode.GetSkeletonInstance().Scale = 1f;
@@ -73,7 +74,7 @@ namespace CS2StratRoulette.Strategies
 
 				Utilities.SetStateChanged(pawn, "CGameSceneNode", "m_flScale");
 				Utilities.SetStateChanged(pawn, "CBaseEntity", "m_CBodyComponent");
-			}
+			});
 
 			plugin.DeregisterEventHandler<EventPlayerHurt>(this.OnPlayerHurt);
 
@@ -82,9 +83,9 @@ namespace CS2StratRoulette.Strategies
 
 		private HookResult OnPlayerHurt(EventPlayerHurt @event, GameEventInfo _)
 		{
-			var player = @event.Userid;
+			var controller = @event.Userid;
 
-			if (player is null || !player.TryGetPlayerPawn(out var pawn))
+			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
 			{
 				return HookResult.Continue;
 			}

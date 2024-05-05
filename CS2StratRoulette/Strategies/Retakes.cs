@@ -50,17 +50,19 @@ namespace CS2StratRoulette.Strategies
 
 			this.mapName = Server.MapName;
 
-			foreach (var player in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (player.Team is CsTeam.Terrorist)
+				// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+				switch (controller.Team)
 				{
-					this.ts.Add(player);
+					case CsTeam.Terrorist:
+						this.ts.Add(controller);
+						break;
+					case CsTeam.CounterTerrorist:
+						this.cts.Add(controller);
+						break;
 				}
-				else if (player.Team is CsTeam.CounterTerrorist)
-				{
-					this.cts.Add(player);
-				}
-			}
+			});
 
 			var randomT = this.ts[Retakes.Random.Next(this.ts.Count)];
 
@@ -70,30 +72,30 @@ namespace CS2StratRoulette.Strategies
 
 			var siteAnnouncement = this.bombsite switch
 			{
-				BombSite.A => $"Bomb has been planted on bombsite A.",
-				BombSite.B => $"Bomb has been planted on bombsite B",
-				_ => string.Empty,
+				BombSite.A => "Bomb has been planted on bombsite A",
+				BombSite.B => "Bomb has been planted on bombsite B",
+				_          => string.Empty,
 			};
 
-			foreach (var player in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (!player.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				player.PrintToCenter(siteAnnouncement);
+				controller.PrintToCenter(siteAnnouncement);
 
-				// if (player.Team is CsTeam.CounterTerrorist)
+				// if (controller.Team is CsTeam.CounterTerrorist)
 				// {
-				// 	player.GiveNamedItem("item_defuser");
+				// 	controller.GiveNamedItem("item_defuser");
 				// }
 
-				if (player.Team is CsTeam.Terrorist)
+				if (controller.Team is CsTeam.Terrorist)
 				{
 					pawn.RemoveC4();
 				}
-			}
+			});
 
 			return true;
 		}
@@ -112,17 +114,17 @@ namespace CS2StratRoulette.Strategies
 
 		private static void SendBombPlantedEvent(CCSPlayerController bombCarrier, BombSite bombSite)
 		{
-			if (!bombCarrier.IsValid || bombCarrier.PlayerPawn.Value == null)
+			if (!bombCarrier.IsValid)
 			{
 				return;
 			}
 
-			var eventPtr = NativeAPI.CreateEvent("bomb_planted", true);
-			NativeAPI.SetEventPlayerController(eventPtr, "userid", bombCarrier.Handle);
-			NativeAPI.SetEventInt(eventPtr, "userid", (int)bombCarrier.PlayerPawn.Value.Index);
-			NativeAPI.SetEventInt(eventPtr, "site", (int)bombSite);
+			var pEvent = NativeAPI.CreateEvent("bomb_planted", true);
 
-			NativeAPI.FireEvent(eventPtr, false);
+			NativeAPI.SetEventPlayerController(pEvent, "userid", bombCarrier.Handle);
+			NativeAPI.SetEventInt(pEvent, "userid", (int)bombCarrier.Index);
+			NativeAPI.SetEventInt(pEvent, "site", (int)bombSite);
+			NativeAPI.FireEvent(pEvent, false);
 		}
 
 		private void PlantTheBomb(CCSPlayerController player)
@@ -154,7 +156,6 @@ namespace CS2StratRoulette.Strategies
 			bombEntity.AbsOrigin.Y = player.AbsOrigin.Y;
 			bombEntity.AbsOrigin.Z = player.AbsOrigin.Z;
 			bombEntity.HasExploded = false;
-
 
 			bombEntity.BombSite = (int)this.bombsite;
 
@@ -190,23 +191,22 @@ namespace CS2StratRoulette.Strategies
 			Retakes.TeleportTeam(this.ts, tTeleportSpots, CsTeam.Terrorist);
 		}
 
-		private static void TeleportTeam(List<CCSPlayerController> teams, Vector[] positions, CsTeam team)
+		private static void TeleportTeam(List<CCSPlayerController> controllers, Vector[] positions, CsTeam team)
 		{
 			System.Random.Shared.Shuffle(positions);
+
 			var n = 0;
-
-			var theTeam = team is CsTeam.CounterTerrorist ? RetakeBuys.CT : RetakeBuys.T;
-
+			var retakeWeapons = team is CsTeam.CounterTerrorist ? RetakeBuys.CT : RetakeBuys.T;
 			var weapons = Retakes.Random.Next(3) switch
 			{
-				0 => theTeam.Eco,
-				1 => theTeam.Force,
-				_ => theTeam.Full,
+				0 => retakeWeapons.Eco,
+				1 => retakeWeapons.Force,
+				_ => retakeWeapons.Full,
 			};
 
-			foreach (var player in teams)
+			foreach (var controller in controllers)
 			{
-				if (!player.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
 					continue;
 				}
@@ -214,24 +214,17 @@ namespace CS2StratRoulette.Strategies
 				Server.NextFrame(() =>
 				{
 					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
-					if (player.Team is CsTeam.Terrorist)
-					{
-						pawn.ForEachWeapon((weapon) =>
-						{
-							if (!string.Equals(weapon.DesignerName, "weapon_c4",
-								    System.StringComparison.OrdinalIgnoreCase))
-							{
-								return;
-							}
 
-							player.RemoveItemByDesignerName("weapon_c4");
-						});
+					if (controller.Team is CsTeam.Terrorist)
+					{
+						pawn.RemoveC4();
 					}
 				});
 
-				Server.NextFrame(() => player.GiveNamedItem(weapons[Retakes.Random.Next(weapons.Length)]));
+				Server.NextFrame(() => controller.GiveNamedItem(weapons[Retakes.Random.Next(weapons.Length)]));
 
 				pawn.Teleport(positions[n++], QAngle.Zero, Vector.Zero);
+
 				if (n >= positions.Length)
 				{
 					n = 0;

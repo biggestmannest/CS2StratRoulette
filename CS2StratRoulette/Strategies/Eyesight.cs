@@ -3,6 +3,7 @@ using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -25,17 +26,17 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				pawn.Render = Color.FromArgb(byte.MaxValue / 2, pawn.Render);
 
 				Utilities.SetStateChanged(pawn, "CBaseModelEntity", "m_clrRender");
-			}
+			});
 
 			return true;
 		}
@@ -47,17 +48,17 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				pawn.Render = Color.FromArgb(byte.MaxValue, pawn.Render);
 
 				Utilities.SetStateChanged(pawn, "CBaseModelEntity", "m_clrRender");
-			}
+			});
 
 			return true;
 		}

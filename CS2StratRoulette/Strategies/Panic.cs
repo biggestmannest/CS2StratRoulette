@@ -44,11 +44,13 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			if (@event.Userid.TryGetPlayerController(out var controller))
+			if (!@event.Userid.TryGetPlayerController(out var controller))
 			{
-				controller.EquipKnife();
-				controller.ExecuteClientCommandFromServer("say \"OUCH!!!!!!!!!!!!!!!!\"");
+				return HookResult.Continue;
 			}
+
+			controller.EquipKnife();
+			controller.ExecuteClientCommandFromServer("say \"OUCH!!!!!!!!!!!!!!!!\"");
 
 			return HookResult.Continue;
 		}

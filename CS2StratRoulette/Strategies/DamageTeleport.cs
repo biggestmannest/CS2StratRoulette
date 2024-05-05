@@ -12,6 +12,8 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class DamageTeleport : Strategy
 	{
+		private static readonly System.Random Random = new();
+
 		private static readonly FrozenDictionary<string, Vector[]> Maps =
 			new Dictionary<string, Vector[]>(System.StringComparer.OrdinalIgnoreCase)
 			{
@@ -30,12 +32,13 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"You teleport to a random place when you are shot.";
 
+		private Vector[]? positions;
+		private uint index;
+
 		public override bool CanRun()
 		{
 			return DamageTeleport.Maps.ContainsKey(Server.MapName);
 		}
-
-		private static readonly System.Random Random = new();
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -43,6 +46,15 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
+
+			var serverMap = Server.MapName;
+
+			if (!DamageTeleport.Maps.TryGetValue(serverMap, out this.positions))
+			{
+				return false;
+			}
+
+			DamageTeleport.Random.Shuffle(this.positions);
 
 			plugin.RegisterEventHandler<EventPlayerHurt>(this.OnHurt);
 
@@ -63,37 +75,25 @@ namespace CS2StratRoulette.Strategies
 
 		private HookResult OnHurt(EventPlayerHurt @event, GameEventInfo _)
 		{
-			var serverMap = Server.MapName;
+			var controller = @event.Userid;
 
-			if (!DamageTeleport.Maps.TryGetValue(serverMap, out var spots))
+			if (controller is null || !controller.TryGetPlayerPawn(out var pawn) || this.positions is null)
 			{
 				return HookResult.Continue;
 			}
 
-			DamageTeleport.Random.Shuffle(spots);
-
-			var player = @event.Userid;
-
-			var n = spots.Length;
-
-			if (player is null || !player.TryGetPlayerPawn(out var pawn))
+			if (this.index >= this.positions.Length)
 			{
-				return HookResult.Continue;
+				this.index = 0;
 			}
 
-			if (n <= 0)
-			{
-				n = spots.Length;
-			}
-
-			var position = spots[--n];
-			var angle = pawn.V_angle;
+			var position = this.positions[this.index++];
 
 			Server.NextFrame(() =>
 			{
 				pawn.Teleport(
 					position,
-					angle,
+					pawn.V_angle,
 					Vector.Zero
 				);
 			});

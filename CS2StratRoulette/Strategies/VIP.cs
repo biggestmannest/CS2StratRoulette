@@ -7,6 +7,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -41,23 +42,24 @@ namespace CS2StratRoulette.Strategies
 			var cts = new List<CCSPlayerController>(Server.MaxPlayers / 2);
 			var ts = new List<CCSPlayerController>(Server.MaxPlayers / 2);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.IsValid || controller.IsBot)
 				{
-					continue;
+					return;
 				}
 
-				// ReSharper disable once ConvertIfStatementToSwitchStatement
-				if (controller.Team is CsTeam.CounterTerrorist)
+				// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+				switch (controller.Team)
 				{
-					cts.Add(controller);
+					case CsTeam.CounterTerrorist:
+						cts.Add(controller);
+						break;
+					case CsTeam.Terrorist:
+						ts.Add(controller);
+						break;
 				}
-				else if (controller.Team is CsTeam.Terrorist)
-				{
-					ts.Add(controller);
-				}
-			}
+			});
 
 			if (cts.Count > 0)
 			{
@@ -101,21 +103,21 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			if ((this.ctVip is null || controller.SteamID != this.ctVip.SteamID) &&
-				(this.tVip is null || controller.SteamID != this.tVip.SteamID))
+			if ((this.ctVip is null || controller.Slot != this.ctVip.Slot) &&
+				(this.tVip is null || controller.Slot != this.tVip.Slot))
 			{
 				return HookResult.Continue;
 			}
 
 			var team = controller.Team;
 
-			foreach (var c in Utilities.GetPlayers())
+			Player.ForEach((c) =>
 			{
-				if (c.Team == team && c.IsValid)
+				if (c.Team == team)
 				{
 					c.CommitSuicide(false, true);
 				}
-			}
+			});
 
 			return HookResult.Continue;
 		}

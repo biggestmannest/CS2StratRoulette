@@ -41,20 +41,19 @@ namespace CS2StratRoulette.Strategies
 		private HookResult OnDeath(EventPlayerDeath @event, GameEventInfo _)
 		{
 			var attacker = @event.Attacker;
-
-			var playerKilled = @event.Userid;
+			var victim = @event.Userid;
 
 			if (attacker is null || !attacker.TryGetPlayerPawn(out var attackerPawn))
 			{
 				return HookResult.Continue;
 			}
 
-			if (playerKilled is null || !playerKilled.TryGetPlayerPawn(out var victimPawn))
+			if (victim is null || !victim.TryGetPlayerPawn(out var victimPawn))
 			{
 				return HookResult.Continue;
 			}
 
-			var position = victimPawn.AbsOrigin;
+			var position = victimPawn.AbsOrigin ?? Vector.Zero;
 			var angle = attackerPawn.V_angle;
 
 			attackerPawn.Teleport(position, angle, Vector.Zero);

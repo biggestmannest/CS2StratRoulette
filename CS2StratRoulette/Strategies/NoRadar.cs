@@ -7,6 +7,9 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class NoRadar : Strategy
 	{
+		private const string Enable = "sv_disable_radar 1";
+		private const string Disable = "sv_disable_radar 0";
+
 		public override string Name =>
 			"Where the hell are they???";
 
@@ -15,9 +18,6 @@ namespace CS2StratRoulette.Strategies
 
 		public override StrategyFlags Flags =>
 			StrategyFlags.AlwaysVisible;
-
-		private const string Enable = "sv_disable_radar 1";
-		private const string Disable = "sv_disable_radar 0";
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{

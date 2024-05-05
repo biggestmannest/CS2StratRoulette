@@ -2,6 +2,8 @@ using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -50,16 +52,14 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			var players = Utilities.GetPlayers();
-
 			this.timer = new Timer(FakeCheats.Interval, () =>
 			{
-				if (this.random.Next(2) == 0)
+				if (this.random.FiftyFifty())
 				{
 					return;
 				}
 
-				var player = players[this.random.Next(players.Count)];
+				var player = Player.Get(this.random.Next(Player.Count));
 
 				if (!player.IsValid)
 				{

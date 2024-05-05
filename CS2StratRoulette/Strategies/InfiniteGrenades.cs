@@ -1,11 +1,10 @@
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
-using CS2StratRoulette.Interfaces;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
-using CS2StratRoulette.Constants;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -34,27 +33,29 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand("ammo_grenade_limit_total 10");
 			Server.ExecuteCommand("ammo_grenade_limit_default 2");
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				Server.NextFrame(() => { controller.EquipKnife(); });
-
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT,
-					CSWeaponType.WEAPONTYPE_GRENADE
-				);
+				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(
+						CSWeaponType.WEAPONTYPE_KNIFE,
+						CSWeaponType.WEAPONTYPE_C4,
+						CSWeaponType.WEAPONTYPE_EQUIPMENT,
+						CSWeaponType.WEAPONTYPE_GRENADE
+					);
+				});
 
 				controller.GiveNamedItem(CsItem.HEGrenade);
 				controller.GiveNamedItem(CsItem.IncendiaryGrenade);
 				controller.GiveNamedItem(CsItem.SmokeGrenade);
 				controller.GiveNamedItem(CsItem.Flashbang);
-			}
+			});
 
 			return true;
 		}
@@ -84,33 +85,25 @@ namespace CS2StratRoulette.Strategies
 
 			var controller = @event.Userid;
 
-			if (controller is null || !controller.TryGetPlayerPawn(out var pawn))
+			if (controller is null)
 			{
 				return HookResult.Continue;
 			}
 
-			var weapon = @event.Weapon;
+			var weapon = @event.Weapon.Substring(7 /*="weapon_".Length*/);
 
-			if (weapon is null)
-			{
-				return HookResult.Continue;
-			}
-
-			var isGrenade = weapon == "weapon_hegrenade" ||
-				weapon == "weapon_flashbang" ||
-				weapon == "weapon_smokegrenade" ||
-				weapon == "weapon_molotov" ||
-				weapon == "weapon_incgrenade";
+			var isGrenade = weapon is "hegrenade" or
+									  "flashbang" or
+									  "smokegrenade" or
+									  "molotov" or
+									  "incgrenade";
 
 			if (!isGrenade)
 			{
 				return HookResult.Continue;
 			}
 
-			Server.NextFrame(() =>
-			{
-				controller.GiveNamedItem(weapon);
-			});
+			Server.NextFrame(() => { controller.GiveNamedItem(weapon); });
 
 			return HookResult.Continue;
 		}

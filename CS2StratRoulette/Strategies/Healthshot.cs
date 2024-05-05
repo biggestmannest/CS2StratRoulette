@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
+﻿using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
-using CS2StratRoulette.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -24,20 +24,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var players in Utilities.GetPlayers())
-			{
-				players.GiveNamedItem(CsItem.Healthshot);
-			}
-
-			return true;
-		}
-
-		public override bool Stop(ref CS2StratRoulettePlugin plugin)
-		{
-			if (!base.Stop(ref plugin))
-			{
-				return false;
-			}
+			Player.ForEach((controller) => { controller.GiveNamedItem(CsItem.Healthshot); });
 
 			return true;
 		}

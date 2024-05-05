@@ -1,5 +1,6 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 
@@ -55,13 +56,15 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			controller.EquipKnife();
-
-			pawn.KeepWeaponsByType(
-				CSWeaponType.WEAPONTYPE_PISTOL,
-				CSWeaponType.WEAPONTYPE_KNIFE,
-				CSWeaponType.WEAPONTYPE_C4
-			);
+			Server.NextFrame(controller.EquipKnife);
+			Server.NextFrame(() =>
+			{
+				pawn.KeepWeaponsByType(
+					CSWeaponType.WEAPONTYPE_PISTOL,
+					CSWeaponType.WEAPONTYPE_KNIFE,
+					CSWeaponType.WEAPONTYPE_C4
+				);
+			});
 
 			return HookResult.Continue;
 		}

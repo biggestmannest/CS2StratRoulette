@@ -2,6 +2,7 @@
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -51,21 +52,21 @@ namespace CS2StratRoulette.Strategies
 				return;
 			}
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (Clumsy.Random.Next(10) < 6)
 				{
-					continue;
+					return;
 				}
 
 				if (!controller.TryGetPlayerPawn(out var pawn) || pawn.WeaponServices is null)
 				{
-					continue;
+					return;
 				}
 
 				if (!pawn.WeaponServices.ActiveWeapon.TryGetValue(out var weapon) || !weapon.TryGetData(out var data))
 				{
-					continue;
+					return;
 				}
 
 				// @todo
@@ -73,7 +74,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					controller.DropActiveWeapon();
 				}
-			}
+			});
 		}
 	}
 }

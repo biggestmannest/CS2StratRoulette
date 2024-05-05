@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -37,23 +38,24 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(TasersOnly.InfiniteTasersEnable);
 			Server.ExecuteCommand(TasersOnly.PartyModeEnable);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				Server.NextFrame(() => { controller.EquipKnife(); });
-
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
-
-				controller.GiveNamedItem(CsItem.Taser);
-			}
+				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(
+						CSWeaponType.WEAPONTYPE_KNIFE,
+						CSWeaponType.WEAPONTYPE_C4,
+						CSWeaponType.WEAPONTYPE_EQUIPMENT
+					);
+					controller.GiveNamedItem(CsItem.Taser);
+				});
+			});
 
 			return true;
 		}

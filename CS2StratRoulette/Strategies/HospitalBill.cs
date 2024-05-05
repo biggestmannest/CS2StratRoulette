@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -56,29 +57,25 @@ namespace CS2StratRoulette.Strategies
 
 			var team = target.Team;
 
-			for (var slot = 0; slot < Server.MaxPlayers; slot++)
+			Player.ForEach((controller) =>
 			{
-				var controller = Utilities.GetPlayerFromSlot(slot);
-
-				if (controller is null ||
-					!controller.TryGetPlayerPawn(out var pawn) ||
-					controller.Team != team ||
+				if (controller.Team != team ||
 					controller.UserId == target.UserId)
 				{
-					continue;
+					return;
 				}
 
 				var moneyServices = controller.InGameMoneyServices;
 
 				if (moneyServices is null)
 				{
-					continue;
+					return;
 				}
 
 				moneyServices.Account -= 500;
 
-				Utilities.SetStateChanged(pawn, "CCSPlayerController", "m_pInGameMoneyServices");
-			}
+				Utilities.SetStateChanged(controller, "CCSPlayerController", "m_pInGameMoneyServices");
+			});
 
 			return HookResult.Continue;
 		}

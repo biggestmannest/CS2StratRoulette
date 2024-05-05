@@ -3,6 +3,7 @@ using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -27,15 +28,15 @@ namespace CS2StratRoulette.Strategies
 
 			Server.PrecacheModel(Models.Chicken);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				pawn.SetModel(Models.Chicken);
-			}
+			});
 
 			return true;
 		}

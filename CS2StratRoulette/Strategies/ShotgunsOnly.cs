@@ -43,21 +43,23 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(ShotgunsOnly.Enable);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				controller.EquipKnife();
-
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
-			}
+				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(
+						CSWeaponType.WEAPONTYPE_KNIFE,
+						CSWeaponType.WEAPONTYPE_C4,
+						CSWeaponType.WEAPONTYPE_EQUIPMENT
+					);
+				});
+			});
 
 			return true;
 		}

@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -33,19 +34,21 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
 			Server.ExecuteCommand(JuanDeag.Enable);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 
-				controller.GiveNamedItem(CsItem.Deagle);
-
-				controller.EquipSecondary();
-			}
+					controller.GiveNamedItem(CsItem.Deagle);
+				});
+			});
 
 			return true;
 		}
@@ -58,7 +61,6 @@ namespace CS2StratRoulette.Strategies
 			}
 
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowAll);
-
 			Server.ExecuteCommand(JuanDeag.Disable);
 
 			return true;

@@ -55,11 +55,6 @@ namespace CS2StratRoulette
 		[GameEventHandler]
 		public HookResult OnGameEnd(EventGameEnd _, GameEventInfo __)
 		{
-			if (!this.Active)
-			{
-				return HookResult.Continue;
-			}
-
 			StrategyManager.Kill();
 
 			return HookResult.Continue;
@@ -68,12 +63,29 @@ namespace CS2StratRoulette
 		[GameEventHandler]
 		public HookResult OnMapTransition(EventMapTransition _, GameEventInfo __)
 		{
-			if (!this.Active)
+			StrategyManager.Kill();
+
+			return HookResult.Continue;
+		}
+
+		[GameEventHandler]
+		public HookResult OnPlayerConnect(EventPlayerConnect @event, GameEventInfo _)
+		{
+			if (@event.Userid is not null)
 			{
-				return HookResult.Continue;
+				Player.Replace(@event.Userid);
 			}
 
-			StrategyManager.Kill();
+			return HookResult.Continue;
+		}
+
+		[GameEventHandler]
+		public HookResult OnPlayerDisconnect(EventPlayerDisconnect @event, GameEventInfo _)
+		{
+			if (@event.Userid is not null)
+			{
+				Player.Remove(@event.Userid);
+			}
 
 			return HookResult.Continue;
 		}

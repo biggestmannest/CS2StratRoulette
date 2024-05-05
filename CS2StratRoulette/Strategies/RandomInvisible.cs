@@ -1,8 +1,8 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using CS2StratRoulette.Extensions;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using CounterStrikeSharp.API;
-using CS2StratRoulette.Extensions;
 using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
@@ -27,9 +27,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			var getPlayers = Utilities.GetPlayers();
-
-			this.randomPlayer = getPlayers[this.random.Next(getPlayers.Count)];
+			this.randomPlayer = Player.Get(this.random.Next(Player.Count));
 
 			if (!this.randomPlayer.TryGetPlayerPawn(out var pawn))
 			{

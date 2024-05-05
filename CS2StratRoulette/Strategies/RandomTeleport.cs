@@ -6,20 +6,15 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class RandomTeleport : Strategy
 	{
-		public override string Name =>
-			"Where the fuck am I????????";
-
-		public override string Description =>
-			"Hope you like your new position :)";
-
-		public override StrategyFlags Flags =>
-			StrategyFlags.AlwaysVisible;
+		private const string BuyAnywhereEnable = "mp_buy_anywhere 1";
+		private const string BuyAnywhereDisable = "mp_buy_anywhere 0";
 
 		private static readonly FrozenDictionary<string, Vector[]> Maps =
 			new Dictionary<string, Vector[]>(System.StringComparer.OrdinalIgnoreCase)
@@ -34,10 +29,16 @@ namespace CS2StratRoulette.Strategies
 				{ "cs_italy", RandomTPs.Italy },
 			}.ToFrozenDictionary();
 
-		private const string BuyAnywhereEnable = "mp_buy_anywhere 1";
-		private const string BuyAnywhereDisable = "mp_buy_anywhere 0";
-
 		private static readonly System.Random Random = new();
+
+		public override string Name =>
+			"Where the fuck am I????????";
+
+		public override string Description =>
+			"Hope you like your new position :)";
+
+		public override StrategyFlags Flags =>
+			StrategyFlags.AlwaysVisible;
 
 		public override bool CanRun()
 		{
@@ -64,11 +65,11 @@ namespace CS2StratRoulette.Strategies
 
 			var n = randomSpots.Length;
 
-			foreach (var player in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (!player.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null)
+				if (!controller.TryGetPlayerPawn(out var pawn) || pawn.AbsRotation is null)
 				{
-					continue;
+					return;
 				}
 
 				if (n <= 0)
@@ -86,7 +87,7 @@ namespace CS2StratRoulette.Strategies
 						Vector.Zero
 					);
 				});
-			}
+			});
 
 			return true;
 		}

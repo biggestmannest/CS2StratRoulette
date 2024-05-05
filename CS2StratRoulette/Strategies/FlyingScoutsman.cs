@@ -6,6 +6,7 @@ using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Constants;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -36,22 +37,26 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(
+						CSWeaponType.WEAPONTYPE_KNIFE,
+						CSWeaponType.WEAPONTYPE_C4,
+						CSWeaponType.WEAPONTYPE_EQUIPMENT
+					);
 
-				controller.GiveNamedItem(CsItem.SSG08);
-				controller.EquipPrimary();
-			}
+					controller.GiveNamedItem(CsItem.SSG08);
+				});
+
+				Server.NextFrame(controller.EquipPrimary);
+			});
 
 			Server.ExecuteCommand(FlyingScoutsman.EnableFs);
 
@@ -72,16 +77,19 @@ namespace CS2StratRoulette.Strategies
 
 		public void PostStop()
 		{
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				controller.EquipKnife();
-				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
-			}
+				Server.NextFrame(() =>
+				{
+					controller.EquipKnife();
+					pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_SNIPER_RIFLE);
+				});
+			});
 
 			Server.ExecuteCommand(FlyingScoutsman.DisableFs);
 		}

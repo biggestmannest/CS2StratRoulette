@@ -3,6 +3,7 @@ using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Timers;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -26,21 +27,17 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var player in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (!player.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				Server.NextFrame(() =>
-				{
-					player.RemoveWeapons();
-				});
+				Server.NextFrame(controller.RemoveWeapons);
+				Server.NextFrame(controller.EquipKnife);
 
-				Server.NextFrame(() => { player.EquipKnife(); });
-
-				player.GiveNamedItem(CsItem.Decoy);
+				controller.GiveNamedItem(CsItem.Decoy);
 
 				Server.NextFrame(() =>
 				{
@@ -55,7 +52,7 @@ namespace CS2StratRoulette.Strategies
 					Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iHealth");
 					Utilities.SetStateChanged(pawn, "CCSPlayerPawnBase", "m_ArmorValue");
 				});
-			}
+			});
 
 			this.timer = new Timer(DecoyDodgeball.Interval, DecoyDodgeball.OnInterval, TimerFlags.REPEAT);
 
@@ -76,18 +73,18 @@ namespace CS2StratRoulette.Strategies
 
 		private static void OnInterval()
 		{
-			foreach (var player in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (!player.TryGetPlayerPawn(out var pawn))
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				if (!pawn.HasWeapon("weapon_decoy"))
 				{
-					player.GiveNamedItem(CsItem.Decoy);
+					controller.GiveNamedItem(CsItem.Decoy);
 				}
-			}
+			});
 		}
 	}
 }

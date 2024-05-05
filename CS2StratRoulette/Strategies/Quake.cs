@@ -7,6 +7,7 @@ using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -40,35 +41,40 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			var noSpread = ConVar.Find(Quake.WeaponAccuracyNoSpread);
-
-			noSpread?.SetValue(true);
+			ConVar.Find(Quake.WeaponAccuracyNoSpread)?.SetValue(true);
 
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesDisable);
 			Server.ExecuteCommand(Quake.Enable);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn) || controller.IsBot)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
+				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE, CSWeaponType.WEAPONTYPE_C4);
+					controller.GiveNamedItem(CsItem.PPBizon);
+				});
 
 				if (controller.Team is CsTeam.Terrorist)
 				{
 					pawn.RemoveC4();
 				}
 
-				controller.GiveNamedItem(CsItem.PPBizon);
-				controller.EquipPrimary();
+				if (controller.IsBot)
+				{
+					return;
+				}
 
 				controller.DesiredFOV = Quake.QuakeFov;
 
 				Utilities.SetStateChanged(controller, "CBasePlayerController", "m_iDesiredFOV");
-			}
+			});
 
 			return true;
 		}
@@ -88,25 +94,32 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesEnable);
 			Server.ExecuteCommand(Quake.Disabled);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
-				if (!controller.TryGetPlayerPawn(out var pawn) || controller.IsBot)
+				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
-				controller.EquipKnife();
+				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(
+						CSWeaponType.WEAPONTYPE_KNIFE,
+						CSWeaponType.WEAPONTYPE_C4,
+						CSWeaponType.WEAPONTYPE_EQUIPMENT
+					);
+				});
 
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
+				if (controller.IsBot)
+				{
+					return;
+				}
 
 				controller.DesiredFOV = Quake.DefaultFov;
 
 				Utilities.SetStateChanged(controller, "CBasePlayerController", "m_iDesiredFOV");
-			}
+			});
 
 			return true;
 		}

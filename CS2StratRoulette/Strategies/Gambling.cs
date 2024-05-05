@@ -6,6 +6,7 @@ using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -123,16 +124,9 @@ namespace CS2StratRoulette.Strategies
 			var correct = $"You got it! The correct number was {n}. Enjoy the 200HP.";
 			var wrong = $"You got it wrong. The correct number was {n}. L (-40 HP)";
 
-			for (var slot = 0; slot < Server.MaxPlayers; slot++)
+			Player.ForEach((controller) =>
 			{
-				var controller = Utilities.GetPlayerFromSlot(slot);
-
-				if (controller is null || !controller.IsValid)
-				{
-					continue;
-				}
-
-				var guess = this.players[slot];
+				var guess = this.players[controller.Slot];
 				var won = (guess == this.number);
 				var msg = wrong;
 
@@ -148,7 +142,7 @@ namespace CS2StratRoulette.Strategies
 				}
 
 				controller.PrintToCenter(msg);
-			}
+			});
 		}
 
 		private static void GiveUpgrade(CCSPlayerController controller)

@@ -100,16 +100,15 @@ namespace CS2StratRoulette.Strategies
 				return HookResult.Continue;
 			}
 
-			var weapon = @event.Weapon;
+			var weapon = @event.Weapon.Substring(7 /*="weapon_".Length*/);
 
-			if (weapon is null || !Knockback.Weights.TryGetValue(weapon, out var weight))
+			if (!Knockback.Weights.TryGetValue(weapon, out var weight))
 			{
 				weight = 0f;
 			}
 
 			var vAngle = pawn.V_angle;
 			var velocity = pawn.AbsVelocity;
-
 			var forward = new Vector(0f, 0f, 0f);
 
 			NativeAPI.AngleVectors(vAngle.Handle, forward.Handle, System.IntPtr.Zero, System.IntPtr.Zero);

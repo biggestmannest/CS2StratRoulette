@@ -11,6 +11,8 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class SmokeStrat : Strategy
 	{
+		private const float Interval = 20f;
+
 		private static readonly FrozenDictionary<string, Vector[]> Maps =
 			new Dictionary<string, Vector[]>(System.StringComparer.OrdinalIgnoreCase)
 			{
@@ -30,8 +32,6 @@ namespace CS2StratRoulette.Strategies
 			"was it a jump throw or a run throw?? or a normal throw... whats the lineup again???";
 
 		private Timer? timer;
-
-		private const float Interval = 21f;
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -68,8 +68,6 @@ namespace CS2StratRoulette.Strategies
 
 		private static void OnInterval(Vector[] positions)
 		{
-			var serverMap = Server.MapName;
-
 			var velocity = Vector.Zero;
 			var angle = QAngle.Zero;
 

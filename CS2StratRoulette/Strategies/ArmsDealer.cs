@@ -7,6 +7,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -35,7 +36,7 @@ namespace CS2StratRoulette.Strategies
 			CCSPlayerController? ct = null;
 			CCSPlayerController? t = null;
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (controller.TryGetPlayerPawn(out var pawn))
 				{
@@ -45,7 +46,7 @@ namespace CS2StratRoulette.Strategies
 
 					if (controller.IsBot)
 					{
-						continue;
+						return;
 					}
 
 					// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
@@ -59,7 +60,7 @@ namespace CS2StratRoulette.Strategies
 							break;
 					}
 				}
-			}
+			});
 
 			if (ct is not null)
 			{
@@ -115,11 +116,11 @@ namespace CS2StratRoulette.Strategies
 
 			var option = (ChatMenuOption2)baseOption;
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (controller.Team != team || !controller.IsValid)
 				{
-					continue;
+					return;
 				}
 
 				controller.GiveNamedItem(option.Gun);
@@ -128,7 +129,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					controller.GiveNamedItem(CsItem.KevlarHelmet);
 				}
-			}
+			});
 		}
 	}
 

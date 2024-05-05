@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -31,24 +32,27 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesDisable);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
-
-				pawn.KeepWeaponsByType(
-					CSWeaponType.WEAPONTYPE_KNIFE,
-					CSWeaponType.WEAPONTYPE_C4,
-					CSWeaponType.WEAPONTYPE_EQUIPMENT
-				);
 
 				var item = Items.Weapons[this.random.Next(Items.Weapons.Length)];
 
+				Server.NextFrame(controller.EquipKnife);
+				Server.NextFrame(() =>
+				{
+					pawn.KeepWeaponsByType(
+						CSWeaponType.WEAPONTYPE_KNIFE,
+						CSWeaponType.WEAPONTYPE_C4,
+						CSWeaponType.WEAPONTYPE_EQUIPMENT
+					);
+				});
+
 				controller.GiveNamedItem(item);
-				controller.EquipPrimary();
-			}
+			});
 
 			return true;
 		}

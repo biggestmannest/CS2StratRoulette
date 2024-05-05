@@ -7,6 +7,7 @@ using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CS2StratRoulette.Enums;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -37,12 +38,11 @@ namespace CS2StratRoulette.Strategies
 			var cts = new List<CCSPlayerController>(10);
 			var ts = new List<CCSPlayerController>(10);
 
-			// ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.IsValid)
 				{
-					continue;
+					return;
 				}
 
 				// ReSharper disable once ConvertIfStatementToSwitchStatement
@@ -54,7 +54,7 @@ namespace CS2StratRoulette.Strategies
 				{
 					ts.Add(controller);
 				}
-			}
+			});
 
 			if (cts.Count > 0)
 			{
@@ -77,11 +77,11 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				Server.NextFrame(() =>
@@ -97,7 +97,7 @@ namespace CS2StratRoulette.Strategies
 					Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
 					Utilities.SetStateChanged(controller, "CCSPlayerPawn", "m_ArmorValue");
 				});
-			}
+			});
 
 			return true;
 		}

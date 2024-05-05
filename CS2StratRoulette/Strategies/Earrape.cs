@@ -1,3 +1,4 @@
+using CS2StratRoulette.Constants;
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Core;
@@ -7,21 +8,20 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using CS2StratRoulette.Constants;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class Earrape : Strategy
 	{
+		private const float Interval = 3.0f;
+
 		private static readonly string StartCommands =
 			$"sv_cheats 1; sv_infinite_ammo 2; sv_cheats 0; {ConsoleCommands.BuyAllowNone}; mp_buy_allow_grenades 0";
 
 		private static readonly string StopCommands =
 			$"sv_cheats 1; sv_infinite_ammo 0; sv_cheats 0; {ConsoleCommands.BuyAllowAll}; mp_buy_allow_grenades 1";
-
-		private const float Interval = 3.0f;
 
 		public override string Name =>
 			"Earrape";
@@ -44,14 +44,11 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Earrape.StartCommands);
 
-			var players = Utilities.GetPlayers();
-			var ts = new List<CCSPlayerController>(10);
-
-			foreach (var controller in players)
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				pawn.KeepWeaponsByType(
@@ -64,19 +61,7 @@ namespace CS2StratRoulette.Strategies
 				controller.GiveNamedItem(CsItem.Decoy);
 
 				controller.EquipPrimary();
-
-				if (controller.Team is CsTeam.Terrorist)
-				{
-					ts.Add(controller);
-				}
-			}
-
-			var giveC4 = ts[this.random.Next(ts.Count)];
-
-			if (giveC4.IsValid)
-			{
-				giveC4.GiveNamedItem(CsItem.C4);
-			}
+			});
 
 			this.timer = new Timer(Earrape.Interval, Earrape.OnInterval, TimerFlags.REPEAT);
 
@@ -94,32 +79,33 @@ namespace CS2StratRoulette.Strategies
 
 			Server.ExecuteCommand(Earrape.StopCommands);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				pawn.RemoveWeaponsByType(CSWeaponType.WEAPONTYPE_MACHINEGUN);
-			}
+			});
 
 			return true;
 		}
+
 		private static void OnInterval()
 		{
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				if (!pawn.HasWeapon("weapon_decoy"))
 				{
 					controller.GiveNamedItem(CsItem.Decoy);
 				}
-			}
+			});
 		}
 	}
 }

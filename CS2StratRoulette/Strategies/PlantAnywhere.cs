@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using CounterStrikeSharp.API;
 using CS2StratRoulette.Enums;
 
 namespace CS2StratRoulette.Strategies
@@ -25,7 +26,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(PlantAnywhere.Enable);
+			Server.ExecuteCommand(PlantAnywhere.Enable);
 
 			return true;
 		}
@@ -37,7 +38,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			CounterStrikeSharp.API.Server.ExecuteCommand(PlantAnywhere.Disable);
+			Server.ExecuteCommand(PlantAnywhere.Disable);
 
 			return true;
 		}

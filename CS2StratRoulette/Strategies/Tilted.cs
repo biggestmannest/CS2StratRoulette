@@ -1,8 +1,8 @@
 using CS2StratRoulette.Enums;
 using CS2StratRoulette.Extensions;
 using CounterStrikeSharp.API.Modules.Utils;
-using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -27,34 +27,32 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				if (controller.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist))
 				{
-					continue;
+					return;
 				}
 
-				if (pawn.AbsOrigin is null || pawn.AbsRotation is null || !pawn.IsAlive())
+				if (pawn.AbsRotation is null || !pawn.IsAlive())
 				{
-					continue;
+					return;
 				}
 
-				var rotation = this.random.Next(20, 51);
+				var rotation = this.random.Next(35, 51);
 
-				if ((rotation & 1) == 0)
+				if ((rotation & 1) != 0)
 				{
 					rotation = -rotation;
 				}
 
 				pawn.AbsRotation.Z = float.Abs(pawn.AbsRotation.Z - rotation);
-
-				pawn.Teleport(pawn.AbsOrigin, pawn.AbsRotation, pawn.AbsVelocity);
-			}
+			});
 
 			return true;
 		}
@@ -66,22 +64,20 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				if (pawn.AbsRotation is null || !pawn.IsAlive())
 				{
-					continue;
+					return;
 				}
 
 				pawn.AbsRotation.Z = 0f;
-
-				pawn.Teleport(pawn.AbsOrigin, pawn.AbsRotation, pawn.AbsVelocity);
-			}
+			});
 
 			return true;
 		}

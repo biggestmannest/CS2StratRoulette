@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API;
 using System.Diagnostics.CodeAnalysis;
+using CS2StratRoulette.Helpers;
 
 namespace CS2StratRoulette.Strategies
 {
@@ -30,11 +31,11 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesDisable);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				if (controller.Team is CsTeam.CounterTerrorist)
@@ -43,11 +44,14 @@ namespace CS2StratRoulette.Strategies
 				}
 				else if (controller.Team is CsTeam.Terrorist)
 				{
-					controller.EquipKnife();
-					pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
-					pawn.RemoveC4();
+					Server.NextFrame(controller.EquipKnife);
+					Server.NextFrame(() =>
+					{
+						pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
+						pawn.RemoveC4();
+					});
 				}
-			}
+			});
 
 			return true;
 		}

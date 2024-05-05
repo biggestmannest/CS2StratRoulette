@@ -24,18 +24,21 @@ namespace CS2StratRoulette.Strategies
 				{ "cs_italy", RandomTPs.Italy },
 			}.ToFrozenDictionary();
 
+		private static readonly System.Random Random = new();
+
 		public override string Name =>
 			"Hold on, gotta reload";
 
 		public override string Description =>
 			"You teleport to a random place when you reload.";
 
+		private Vector[]? positions;
+		private uint index;
+
 		public override bool CanRun()
 		{
 			return TeleportReload.Maps.ContainsKey(Server.MapName);
 		}
-		
-		private static readonly System.Random Random = new();
 
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
@@ -43,6 +46,15 @@ namespace CS2StratRoulette.Strategies
 			{
 				return false;
 			}
+
+			var serverMap = Server.MapName;
+
+			if (!TeleportReload.Maps.TryGetValue(serverMap, out this.positions))
+			{
+				return false;
+			}
+
+			TeleportReload.Random.Shuffle(this.positions);
 
 			plugin.RegisterEventHandler<EventWeaponReload>(this.OnReload);
 
@@ -63,30 +75,25 @@ namespace CS2StratRoulette.Strategies
 
 		private HookResult OnReload(EventWeaponReload @event, GameEventInfo _)
 		{
-			var serverMap = Server.MapName;
-
-			if (!TeleportReload.Maps.TryGetValue(serverMap, out var spots))
+			if (this.positions is null)
 			{
 				return HookResult.Continue;
 			}
 
-			TeleportReload.Random.Shuffle(spots);
-
 			var player = @event.Userid;
-
-			var n = spots.Length;
 
 			if (player is null || !player.TryGetPlayerPawn(out var pawn))
 			{
 				return HookResult.Continue;
 			}
 
-			if (n <= 0)
+			if (this.index >= this.positions.Length)
 			{
-				n = spots.Length;
+				TeleportReload.Random.Shuffle(this.positions);
+				this.index = 0;
 			}
 
-			var position = spots[--n];
+			var position = this.positions[this.index++];
 			var angle = pawn.V_angle;
 
 			Server.NextFrame(() =>

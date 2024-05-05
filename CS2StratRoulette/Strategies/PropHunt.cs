@@ -60,19 +60,18 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowNone);
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesDisable);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.TryGetPlayerPawn(out var pawn))
 				{
-					continue;
+					return;
 				}
 
 				if (controller.Team is CsTeam.Terrorist)
 				{
+					Server.NextFrame(controller.EquipKnife);
 					Server.NextFrame(() =>
 					{
-						controller.EquipKnife();
-
 						pawn.KeepWeaponsByType(CSWeaponType.WEAPONTYPE_KNIFE);
 						pawn.RemoveC4();
 					});
@@ -84,25 +83,24 @@ namespace CS2StratRoulette.Strategies
 						PropHunt.FreezePlayer(pawn);
 					});
 
-					continue;
+					return;
 				}
 
 				if (controller.Team is not CsTeam.CounterTerrorist)
 				{
-					continue;
+					return;
 				}
 
 				controller.RemoveWeapons();
 
-				pawn.Health = 1;
-
 				Server.NextFrame(() =>
 				{
+					pawn.Health = 1;
 					pawn.SetModel(Models.Props[this.random.Next(Models.Props.Length)]);
 
 					Utilities.SetStateChanged(controller, "CBaseEntity", "m_iHealth");
 				});
-			}
+			});
 
 			this.startTime = (Server.CurrentTime + PropHunt.FreezeTime);
 			this.emitSoundTime = this.startTime + 120f;
@@ -126,15 +124,15 @@ namespace CS2StratRoulette.Strategies
 			Server.ExecuteCommand(ConsoleCommands.BuyAllowGrenadesEnable);
 			Server.ExecuteCommand(ConsoleCommands.EnableRadar);
 
-			foreach (var controller in Utilities.GetPlayers())
+			Player.ForEach((controller) =>
 			{
 				if (!controller.IsValid)
 				{
-					continue;
+					return;
 				}
 
 				controller.RemoveWeapons();
-			}
+			});
 
 			this.timer?.Kill();
 
@@ -166,15 +164,8 @@ namespace CS2StratRoulette.Strategies
 
 			string? message = null;
 
-			for (var i = 0; i < Server.MaxPlayers; i++)
+			Player.ForEach((controller) =>
 			{
-				var controller = Utilities.GetPlayerFromSlot(i);
-
-				if (controller is null || !controller.IsValid)
-				{
-					continue;
-				}
-
 				if (freeze)
 				{
 					message ??= $"Seekers will be released in: {timeLeft.Str("F0")}";
@@ -194,11 +185,11 @@ namespace CS2StratRoulette.Strategies
 					!controller.TryGetPlayerPawn(out var pawn) ||
 					!pawn.IsAlive())
 				{
-					continue;
+					return;
 				}
 
 				PropHunt.SpawnDecoy(pawn);
-			}
+			});
 		}
 
 		private static void FreezePlayer(CCSPlayerPawn pawn)
