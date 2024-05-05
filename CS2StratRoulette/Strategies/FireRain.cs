@@ -13,7 +13,7 @@ namespace CS2StratRoulette.Strategies
 	[SuppressMessage("ReSharper", "UnusedType.Global")]
 	public sealed class FireRain : Strategy
 	{
-		private const float Interval = 5f;
+		private const float Interval = 4f;
 
 		private static readonly System.Random Random = new();
 
@@ -32,7 +32,7 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			plugin.RegisterEventHandler<EventRoundAnnounceMatchStart>(this.OnRoundAnnounce);
+			plugin.RegisterEventHandler<EventRoundFreezeEnd>(this.OnFreezeEnd);
 
 			return true;
 		}
@@ -44,14 +44,14 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			plugin.DeregisterEventHandler<EventRoundAnnounceMatchStart>(this.OnRoundAnnounce);
+			plugin.DeregisterEventHandler<EventRoundFreezeEnd>(this.OnFreezeEnd);
 
 			this.timer?.Kill();
 
 			return true;
 		}
 
-		private HookResult OnRoundAnnounce(EventRoundAnnounceMatchStart @event, GameEventInfo _)
+		private HookResult OnFreezeEnd(EventRoundFreezeEnd @event, GameEventInfo _)
 		{
 			this.timer = new Timer(FireRain.Interval, FireRain.OnInterval, TimerFlags.REPEAT);
 

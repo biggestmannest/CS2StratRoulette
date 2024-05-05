@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CounterStrikeSharp.API.Modules.Timers;
 using CS2StratRoulette.Extensions;
@@ -16,10 +17,6 @@ namespace CS2StratRoulette.Strategies
 		public override string Description =>
 			"1 HP + Infinite Decoys";
 
-		private Timer? timer;
-
-		private const float Interval = 3f;
-
 		public override bool Start(ref CS2StratRoulettePlugin plugin)
 		{
 			if (!base.Start(ref plugin))
@@ -34,8 +31,8 @@ namespace CS2StratRoulette.Strategies
 					return;
 				}
 
-				Server.NextFrame(() => controller.RemoveWeapons());
 				Server.NextFrame(() => controller.EquipKnife());
+				Server.NextFrame(() => controller.RemoveWeapons());
 
 				controller.GiveNamedItem(CsItem.Decoy);
 
@@ -49,12 +46,12 @@ namespace CS2StratRoulette.Strategies
 				Server.NextFrame(() =>
 				{
 					Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iMaxHealth");
-					Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iHealth");
-					Utilities.SetStateChanged(pawn, "CCSPlayerPawnBase", "m_ArmorValue");
+					Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iMaxHealth");
+					Utilities.SetStateChanged(pawn, "CCSPlayerPawn", "m_ArmorValue");
 				});
 			});
 
-			this.timer = new Timer(DecoyDodgeball.Interval, DecoyDodgeball.OnInterval, TimerFlags.REPEAT);
+			plugin.RegisterEventHandler<EventWeaponFire>(this.OnWeaponFire);
 
 			return true;
 		}
@@ -66,25 +63,31 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
-			this.timer?.Kill();
+			plugin.DeregisterEventHandler<EventWeaponFire>(this.OnWeaponFire);
 
 			return true;
 		}
 
-		private static void OnInterval()
+		private HookResult OnWeaponFire(EventWeaponFire @event, GameEventInfo _)
 		{
-			Player.ForEach((controller) =>
-			{
-				if (!controller.TryGetPlayerPawn(out var pawn))
-				{
-					return;
-				}
+			var controller = @event.Userid;
 
-				if (!pawn.HasWeapon("weapon_decoy"))
-				{
-					controller.GiveNamedItem(CsItem.Decoy);
-				}
-			});
+			if (controller is null)
+			{
+				return HookResult.Continue;
+			}
+
+			var weapon = @event.Weapon;
+			var isGrenade = Weapon.IsGrenade(weapon);
+
+			if (!isGrenade)
+			{
+				return HookResult.Continue;
+			}
+
+			Server.NextFrame(() => { controller.GiveNamedItem(weapon); });
+
+			return HookResult.Continue;
 		}
 	}
 }
