@@ -46,6 +46,24 @@ namespace CS2StratRoulette.Strategies
 				return false;
 			}
 
+			var rules = Game.Rules();
+			
+			if (rules is null)
+			{
+				return false;
+			}
+			
+			rules.FreezeTime = 1;
+			
+			var rulesProxy = Game.RulesProxy();
+			
+			if (rulesProxy is null)
+			{
+				return false;
+			}
+			         
+			Utilities.SetStateChanged(rulesProxy, "CCSGameRulesProxy", "m_pGameRules");
+			
 			Server.ExecuteCommand(Retakes.ExtendC4Timer);
 
 			this.mapName = Server.MapName;
