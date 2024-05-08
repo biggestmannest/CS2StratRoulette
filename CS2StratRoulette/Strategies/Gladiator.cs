@@ -169,6 +169,7 @@ namespace CS2StratRoulette.Strategies
 			{
 				for (var x = 0; x < playersX; x++)
 				{
+				GetPlayer:
 					if (slot >= Player.Count)
 					{
 						return;
@@ -176,10 +177,11 @@ namespace CS2StratRoulette.Strategies
 
 					var player = Player.Get(slot++);
 
-					if (player.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist) ||
+					if (!player.IsValid ||
+						player.Team is not (CsTeam.Terrorist or CsTeam.CounterTerrorist) ||
 						!player.TryGetPlayerPawn(out var pawn))
 					{
-						continue;
+						goto GetPlayer;
 					}
 
 					if (player.Team is CsTeam.Terrorist)

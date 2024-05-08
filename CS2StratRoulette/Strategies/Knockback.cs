@@ -1,7 +1,6 @@
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2StratRoulette.Extensions;
@@ -16,45 +15,45 @@ namespace CS2StratRoulette.Strategies
 		private static readonly FrozenDictionary<string, float> Weights =
 			new Dictionary<string, float>(System.StringComparer.OrdinalIgnoreCase)
 			{
-				{ "weapon_glock", .2f },
-				{ "weapon_hkp2000", .2f },
-				{ "weapon_usp_silencer", .1f },
-				{ "weapon_elite", .2f },
-				{ "weapon_p250", .2f },
-				{ "weapon_tec9", .25f },
-				{ "weapon_fiveseven", .25f },
-				{ "weapon_cz75a", .2f },
-				{ "weapon_deagle", .5f },
-				{ "weapon_revolver", .4f },
+				{ "glock", .2f },
+				{ "hkp2000", .2f },
+				{ "usp_silencer", .1f },
+				{ "elite", .2f },
+				{ "p250", .2f },
+				{ "tec9", .25f },
+				{ "fiveseven", .25f },
+				{ "cz75a", .2f },
+				{ "deagle", .5f },
+				{ "revolver", .4f },
 
-				{ "weapon_mp9", .3f },
-				{ "weapon_mac10", .3f },
-				{ "weapon_bizon", .3f },
-				{ "weapon_mp7", .3f },
-				{ "weapon_ump45", .3f },
-				{ "weapon_p90", .3f },
-				{ "weapon_mp5sd", .25f },
+				{ "mp9", .3f },
+				{ "mac10", .3f },
+				{ "bizon", .3f },
+				{ "mp7", .3f },
+				{ "ump45", .3f },
+				{ "p90", .3f },
+				{ "mp5sd", .25f },
 
-				{ "weapon_famas", .5f },
-				{ "weapon_galilar", .5f },
-				{ "weapon_m4a1", .6f },
-				{ "weapon_m4a1_silencer", .35f },
-				{ "weapon_ak47", .6f },
-				{ "weapon_aug", .65f },
-				{ "weapon_sg556", .65f },
-				{ "weapon_ssg08", .4f },
+				{ "famas", .5f },
+				{ "galilar", .5f },
+				{ "m4a1", .6f },
+				{ "m4a1_silencer", .35f },
+				{ "ak47", .6f },
+				{ "aug", .65f },
+				{ "sg556", .65f },
+				{ "ssg08", .4f },
 
-				{ "weapon_awp", 1f },
-				{ "weapon_scar20", .7f },
-				{ "weapon_g3sg1", .7f },
+				{ "awp", 1f },
+				{ "scar20", .7f },
+				{ "g3sg1", .7f },
 
-				{ "weapon_nova", 1f },
-				{ "weapon_xm1014", 1f },
-				{ "weapon_mag7", 1f },
-				{ "weapon_sawedoff", .9f },
+				{ "nova", 1f },
+				{ "xm1014", 1f },
+				{ "mag7", 1f },
+				{ "sawedoff", .9f },
 
-				{ "weapon_m249", .5f },
-				{ "weapon_negev", .5f },
+				{ "m249", .5f },
+				{ "negev", .5f },
 			}.ToFrozenDictionary();
 
 		public override string Name =>

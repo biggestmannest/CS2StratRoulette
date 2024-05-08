@@ -5,7 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageVersion Include="CounterStrikeSharp.API" Version="1.0.228"/>
+		<PackageVersion Include="CounterStrikeSharp.API" Version="1.0.232"/>
 
 		<PackageVersion Include="ErrorProne.NET.CoreAnalyzers" Version="0.6.1-beta.1"/>
 		<PackageVersion Include="Meziantou.Analyzer" Version="2.0.147"/>

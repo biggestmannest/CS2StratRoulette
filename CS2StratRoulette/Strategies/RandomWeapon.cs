@@ -39,8 +39,6 @@ namespace CS2StratRoulette.Strategies
 					return;
 				}
 
-				var item = Items.Weapons[this.random.Next(Items.Weapons.Length)];
-
 				Server.NextFrame(() => controller.EquipKnife());
 				Server.NextFrame(() =>
 				{
@@ -50,6 +48,8 @@ namespace CS2StratRoulette.Strategies
 						CSWeaponType.WEAPONTYPE_EQUIPMENT
 					);
 				});
+
+				var item = Items.Weapons[this.random.Next(Items.Weapons.Length)];
 
 				controller.GiveNamedItem(item);
 			});

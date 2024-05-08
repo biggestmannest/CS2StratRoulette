@@ -24,7 +24,7 @@ namespace CS2StratRoulette.Helpers
 
 		public static CCSPlayerController Get(int slot)
 		{
-			if (slot < 0 || slot > Player.Slots.Length)
+			if (slot < 0 || slot >= Player.Slots.Length)
 			{
 				throw new System.Exception("Slot is out of bounds");
 			}
@@ -34,7 +34,7 @@ namespace CS2StratRoulette.Helpers
 
 		public static void Replace(CCSPlayerController controller)
 		{
-			if (controller.Slot < 0 || controller.Slot > Player.Slots.Length)
+			if (controller.Slot < 0 || controller.Slot >= Player.Slots.Length)
 			{
 				throw new System.Exception("Slot is out of bounds");
 			}
@@ -44,7 +44,7 @@ namespace CS2StratRoulette.Helpers
 
 		public static void Replace(CCSPlayerController controller, int slot)
 		{
-			if (slot < 0 || slot > Player.Slots.Length)
+			if (slot < 0 || slot >= Player.Slots.Length)
 			{
 				throw new System.Exception("Slot is out of bounds");
 			}
@@ -60,7 +60,7 @@ namespace CS2StratRoulette.Helpers
 
 		public static void Remove(int slot)
 		{
-			if (slot < 0 || slot > Player.Slots.Length)
+			if (slot < 0 || slot >= Player.Slots.Length)
 			{
 				throw new System.Exception("Slot is out of bounds");
 			}
