@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=codesandbox&logoColor=eeeeee&color=aaff44&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/blob/master/LICENSE)
 [![Stars](https://img.shields.io/github/stars/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=starship&logoColor=eeeeee&color=ffcc11&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/stargazers)
 [![Issues](https://img.shields.io/github/issues-raw/biggestmannest/CS2StratRoulette?style=for-the-badge&logo=gitbook&logoColor=eeeeee&color=9c0000&labelColor=222222)](https://github.com/biggestmannest/CS2StratRoulette/issues)
-[![CounterStrikeSharp](https://img.shields.io/github/v/release/roflmuffin/CounterStrikeSharp?label=CounterStrikeSharp&style=for-the-badge&logo=csharp&logoColor=eeeeee&color=004cc7&labelColor=222222)](https://github.com/roflmuffin/CounterStrikeSharp)
+[![CounterStrikeSharp](https://img.shields.io/badge/Counter_Strike_Sharp-v232-blue?style=for-the-badge&logo=csharp&logoColor=eeeeee&logoSize=2&label=CounterStrikeSharp&labelColor=222222&color=004cc7)](https://github.com/roflmuffin/CounterStrikeSharp/releases/tag/v232)
 
 <h3>Counter-Strike 2 plugin for getting random enforced strategies each round</h3>
 
