@@ -22,7 +22,7 @@ You can find an installation guide for the requirements on the [CounterStrikeSha
 - [SourceMod](https://www.sourcemm.net/downloads.php?branch=dev) @ ≥2.X.X
 
 ## Known issues
-During testing we are experiencing seemingly random crashes when a new round starts and a new strategy is selected and initialized. We will try to make an effort to eliminate this issue as it quite significant.
+During testing we are experiencing seemingly random crashes when a new round starts and a new strategy is selected and initialized. We will try to make an effort to eliminate this issue as it is quite significant.
 
 There are also cases where persons may have their weapons removed except for the knife but won't get their knife automatically equipped. We suspect this related to networking and might be solved by the use of `Server.NextFrame`.
 
